@@ -13,8 +13,8 @@ Our website will be invaluable to users in several ways:Easy Partner/Trainer Fin
 
 ## Core Features
 
--   Registration \* Streamlined registration process catering to both users and trainers, ensuring easy onboarding
-    for all.
+-   Registration
+    -   Streamlined registration process catering to both users and trainers, ensuring easy onboarding for all.
 -   Search and Matching
     -   Seamlessly connect users with compatible partners or trainers by considering factors such as location, preferred gym, and workout preferences.
 -   Profile Page
