@@ -1,5 +1,4 @@
 # CS-546-Final-Project
-My changes
 ---
 
 ## Gym Partner/Trainer Finder Website Proposal
