@@ -33,3 +33,8 @@ npm-debug.log
 .DS_Store
 
 .env
+
+utils/signUpAdmin.js
+utils/setJWTSecret.js
+
+uploads/*

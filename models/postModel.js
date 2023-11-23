@@ -90,10 +90,9 @@ const postSchema = new mongoose.Schema({
       },
     ],
   },
-
   user: {
-    type: mongoose.Schema.ObjectId,
-    ref: "User" || "Admin" || "Trainer" || "Gym",
+    userId: String,
+    userType: String,
   },
 });
 
