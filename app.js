@@ -7,7 +7,8 @@ const eventRouter = require("./routes/eventRoutes");
 const gymRouter = require("./routes/gymRoutes");
 const postRouter = require("./routes/postRoutes");
 const userRouter = require("./routes/userRoutes");
-const adminRouter = require("./routes/adminRoutes");
+const trainerRouter = require("./routes/trainerRoutes");
+
 // Express app
 const app = express();
 
