@@ -118,7 +118,8 @@ exports.deletePost = async (req, res) => {
 };
 
 exports.addComment = async (req, res) => {
-  const { comment, user } = req.body;
+  const { comment } = req.body;
+  const user = req.user;
   try {
     const post = await Post.findById(req.params.id);
     if (!post) {
@@ -127,17 +128,17 @@ exports.addComment = async (req, res) => {
         message: "No post found with that ID",
       });
     }
-    console.log(req.user);
-    const commentsKey = commentedBy(req.user);
+    const commentsKey = commentedBy(user);
     const updatedPost = await Post.findByIdAndUpdate(
       req.params.id,
       {
         $push: {
-          [`comments.${commentsKey}`]: { comment, userId: req.user._id },
+          [`comments.${commentsKey}`]: { comment, userId: user._id },
         },
       },
       { new: true }
     );
+    console.log(updatedPost);
     return res.status(200).json({
       status: "success",
       data: {

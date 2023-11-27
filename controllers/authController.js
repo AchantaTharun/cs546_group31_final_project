@@ -10,12 +10,148 @@ const s3 = require("../utils/s3");
 const multer = require("multer");
 const upload = multer({ dest: "uploads/" });
 
+// helpers
 const signJWT = (id, role) => {
   return jwt.sign({ id, role }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRATION_TIME,
   });
 };
 
+const checkTokenValid = (passwordChangedAt, tokenIssuedAt) => {
+  if (passwordChangedAt) {
+    const passwordChangedAtTimestamp = parseInt(
+      passwordChangedAt.getTime() / 1000,
+      10
+    );
+    return passwordChangedAtTimestamp > tokenIssuedAt;
+  }
+  return false;
+};
+
+exports.protectRoute = async (req, res, next) => {
+  try {
+    let token;
+
+    const authHeader = req.headers.authorization;
+    if (authHeader && authHeader.startsWith("Bearer")) {
+      token = authHeader.split(" ")[1];
+    }
+    if (!token) {
+      throw new Error("You are not logged in");
+    }
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+    switch (decoded.role) {
+      case "user":
+        const user = await User.findById(decoded.id);
+        if (!user) {
+          throw new Error("there is no user with this token");
+        }
+        console.log(user.passwordChangedAt);
+        if (
+          "passwordChangedAt" in user &&
+          checkTokenValid(user.passwordChangedAt, decoded.iat)
+        ) {
+          throw new Error(
+            "You have recently changed your password, please login again"
+          );
+        }
+        req.user = user;
+        break;
+      case "admin":
+        const admin = await Admin.findById(decoded.id);
+        if (!admin) {
+          throw new Error("there is no admin with this token");
+        }
+        if (
+          "passwordChangedAt" in admin &&
+          checkTokenValid(admin.passwordChangedAt, decoded.iat)
+        ) {
+          throw new Error(
+            "You have recently changed your password, please login again"
+          );
+        }
+        req.admin = admin;
+        break;
+      case "gym":
+        const gym = await Gym.findById(decoded.id);
+        if (!gym) {
+          throw new Error("there is no gym with this token");
+        }
+        if (
+          "passwordChangedAt" in gym &&
+          checkTokenValid(gym.passwordChangedAt, decoded.iat)
+        ) {
+          throw new Error(
+            "You have recently changed your password, please login again"
+          );
+        }
+        req.gym = gym;
+        break;
+      case "trainer":
+        const trainer = await Trainer.findById(decoded.id);
+        if (!trainer) {
+          throw new Error("there is no trainer with this token");
+        }
+        if (
+          "passwordChangedAt" in trainer &&
+          checkTokenValid(trainer.passwordChangedAt, decoded.iat)
+        ) {
+          throw new Error(
+            "You have recently changed your password, please login again"
+          );
+        }
+        req.trainer = trainer;
+        break;
+    }
+
+    next();
+  } catch (err) {
+    res.status(400).json({
+      status: "fail",
+      message: err.message,
+    });
+  }
+};
+
+exports.restrictTo = (role) => {
+  return (req, res, next) => {
+    try {
+      let token;
+
+      if (
+        role !== "user" &&
+        role !== "admin" &&
+        role !== "gym" &&
+        role !== "trainer"
+      ) {
+        throw new Error("invalid role");
+      }
+
+      const authHeader = req.headers.authorization;
+      if (authHeader && authHeader.startsWith("Bearer")) {
+        token = authHeader.split(" ")[1];
+      }
+      if (!token) {
+        throw new Error("You are not logged in");
+      }
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+      if (decoded.role !== role) {
+        throw new Error("You are not allowed to perform this action");
+      }
+
+      next();
+    } catch (err) {
+      res.status(400).json({
+        status: "fail",
+        message: err.message,
+      });
+    }
+  };
+};
+
+// user
 exports.userSignup = async (req, res) => {
   try {
     const { firstName, lastName, email, password, passwordConfirm } = req.body;
@@ -71,32 +207,6 @@ exports.userLogin = async (req, res) => {
   }
 };
 
-exports.protect = async (req, res, next) => {
-  try {
-    let token;
-    const authHeader = req.headers.authorization;
-    if (authHeader && authHeader.startsWith("Bearer")) {
-      token = authHeader.split(" ")[1];
-    }
-    if (!token) {
-      throw new Error("You are not logged in");
-    }
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const user = await User.findById(decoded.id);
-    if (!user) {
-      throw new Error("there is no user with this token");
-    }
-
-    req.user = user;
-    next();
-  } catch (err) {
-    res.status(400).json({
-      status: "fail",
-      message: err.message,
-    });
-  }
-};
-
 exports.adminLogin = async (req, res) => {
   const { email, password } = req.body;
   try {
@@ -125,6 +235,7 @@ exports.adminLogin = async (req, res) => {
   }
 };
 
+// gym
 exports.gymSignup = async (req, res) => {
   // const file = req.file;
   // console.log(file);
@@ -179,37 +290,7 @@ exports.gymSignup = async (req, res) => {
   }
 };
 
-exports.restrictTo = (role) => {
-  return (req, res, next) => {
-    try {
-      let token;
-      const authHeader = req.headers.authorization;
-      if (authHeader && authHeader.startsWith("Bearer")) {
-        token = authHeader.split(" ")[1];
-      }
-      if (!token) {
-        throw new Error("You are not logged in");
-      }
-      const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
-      if (decoded.role !== role) {
-        throw new Error("You are not allowed to perform this action");
-      }
-      const admin = Admin.findById(decoded.id);
-      if (!admin) {
-        throw new Error("there is no admin with this token");
-      }
-
-      next();
-    } catch (err) {
-      res.status(400).json({
-        status: "fail",
-        message: err.message,
-      });
-    }
-  };
-};
-
+// trainer
 exports.trainerSignup = async (req, res) => {
   try {
     const { trainerName, email, password, passwordConfirm, address, phone } =

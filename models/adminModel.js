@@ -51,7 +51,7 @@ const adminSchema = new mongoose.Schema({
     type: Date,
   },
   contactNumber: {
-    type: Number,
+    type: String,
     required: [true, "Please enter your contact number"],
     trim: true,
     validate: [validator.isMobilePhone, "Please enter a valid contact number"],

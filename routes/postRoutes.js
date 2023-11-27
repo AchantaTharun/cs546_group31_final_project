@@ -5,17 +5,17 @@ const router = express.Router();
 router
   .route("/")
   .get(postsController.getAllPosts)
-  .post(authController.protect, postsController.createPost);
+  .post(authController.protectRoute, postsController.createPost);
 
 router
   .route("/:id")
-  .get(authController.protect, postsController.getPostById)
-  .patch(authController.protect, postsController.updatePost)
-  .delete(authController.protect, postsController.deletePost);
+  .get(authController.protectRoute, postsController.getPostById)
+  .patch(authController.protectRoute, postsController.updatePost)
+  .delete(authController.protectRoute, postsController.deletePost);
 
 router
   .route("/:id/comments")
-  .post(authController.protect, postsController.addComment)
-  .delete(authController.protect, postsController.deleteComment)
-  .patch(authController.protect, postsController.updateComment);
+  .post(authController.protectRoute, postsController.addComment)
+  .delete(authController.protectRoute, postsController.deleteComment)
+  .patch(authController.protectRoute, postsController.updateComment);
 module.exports = router;
