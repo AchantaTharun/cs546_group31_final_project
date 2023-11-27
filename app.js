@@ -4,6 +4,7 @@ const dotenv = require("dotenv");
 const morgan = require("morgan");
 const fileURLToPath = require("url").fileURLToPath;
 const dirname = require("path").dirname;
+const hpp = require('hpp');
 const handlebars = require("express-handlebars");
 
 // const __filename = fileURLToPath(import.meta.url);
@@ -23,6 +24,9 @@ const app = express();
 app.use(express.json());
 dotenv.config({ path: "./.env" });
 app.use(morgan("dev"));
+
+//For avoiding parameter pollution
+app.use(hpp());
 // Middleware for preventing NoSQL query injection
 app.use(mongoSanitizer());
 
