@@ -1,13 +1,3 @@
-<<<<<<< HEAD
-const express = require("express");
-const mongoSanitizer = require("express-mongo-sanitize");
-const dotenv = require("dotenv");
-const morgan = require("morgan");
-const fileURLToPath = require("url").fileURLToPath;
-const dirname = require("path").dirname;
-const hpp = require('hpp');
-const handlebars = require("express-handlebars");
-=======
 import express from "express";
 import { engine as handlebarsEngine } from "express-handlebars";
 import mongoSanitizer from "express-mongo-sanitize";
@@ -15,7 +5,6 @@ import dotenv from "dotenv";
 import morgan from "morgan";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
->>>>>>> origin/main
 
 import adminRouter from "./routes/adminRoutes.js";
 import eventRouter from "./routes/eventRoutes.js";
