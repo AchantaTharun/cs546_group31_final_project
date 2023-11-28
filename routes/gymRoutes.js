@@ -1,8 +1,12 @@
-const express = require("express");
-const authController = require("../controllers/authController");
-const router = express.Router();
-const multer = require("multer");
-const upload = multer({ dest: "uploads/" });
+import express from "express";
+import * as authController from "../controllers/authController.js";
+
+import { Router } from "express";
+
+const router = Router();
+
+// import multer from "multer";
+// import upload from "../utils/multer.js";
 
 router.post(
   "/signup",
@@ -15,4 +19,4 @@ router.get("/signup", (req, res) => {
 });
 router.post("/login", authController.gymLogin);
 
-module.exports = router;
+export default router;

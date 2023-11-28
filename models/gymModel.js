@@ -1,6 +1,6 @@
-const mongoose = require("mongoose");
-const validator = require("validator");
-const bcrypt = require("bcryptjs");
+import mongoose from "mongoose";
+import validator from "validator";
+import bcrypt from "bcryptjs";
 
 const gymSchema = new mongoose.Schema({
   gymName: {
@@ -151,4 +151,4 @@ gymSchema.methods.isPasswordCorrect = async function (
 
 const Gym = mongoose.model("Gym", gymSchema);
 
-module.exports = Gym;
+export default Gym;

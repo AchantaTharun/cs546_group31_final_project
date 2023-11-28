@@ -1,7 +1,11 @@
-const express = require("express");
-const postsController = require("../controllers/postsController");
-const authController = require("../controllers/authController");
-const router = express.Router();
+import express from "express";
+import * as postsController from "../controllers/postsController.js";
+import * as authController from "../controllers/authController.js";
+
+import { Router } from "express";
+
+const router = Router();
+
 router
   .route("/")
   .get(postsController.getAllPosts)
@@ -18,4 +22,5 @@ router
   .post(authController.protectRoute, postsController.addComment)
   .delete(authController.protectRoute, postsController.deleteComment)
   .patch(authController.protectRoute, postsController.updateComment);
-module.exports = router;
+
+export default router;

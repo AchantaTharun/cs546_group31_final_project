@@ -1,6 +1,6 @@
-const Post = require("../models/postModel");
+import Post from "../models/postModel.js";
 
-exports.getAllPosts = async (req, res) => {
+export const getAllPosts = async (req, res) => {
   try {
     const posts = await Post.find();
     if (!posts) {
@@ -24,7 +24,7 @@ exports.getAllPosts = async (req, res) => {
   }
 };
 
-exports.createPost = async (req, res) => {
+export const createPost = async (req, res) => {
   console.log("first");
   try {
     const { title, description, author, img } = req.body;
@@ -43,7 +43,7 @@ exports.createPost = async (req, res) => {
   }
 };
 
-exports.getPostById = async (req, res) => {
+export const getPostById = async (req, res) => {
   try {
     const post = await Post.findById(req.params.id);
     if (!post) {
@@ -66,7 +66,7 @@ exports.getPostById = async (req, res) => {
   }
 };
 
-exports.updatePost = async (req, res) => {
+export const updatePost = async (req, res) => {
   try {
     const post = await Post.findById(req.params.id);
     if (!post) {
@@ -95,7 +95,7 @@ exports.updatePost = async (req, res) => {
   }
 };
 
-exports.deletePost = async (req, res) => {
+export const deletePost = async (req, res) => {
   try {
     const post = await Post.findById(req.params.id);
     if (!post) {
@@ -117,7 +117,7 @@ exports.deletePost = async (req, res) => {
   }
 };
 
-exports.addComment = async (req, res) => {
+export const addComment = async (req, res) => {
   const { comment } = req.body;
   const user = req.user;
   try {
@@ -153,11 +153,11 @@ exports.addComment = async (req, res) => {
   }
 };
 
-exports.deleteComment = async (req, res) => {
+export const deleteComment = async (req, res) => {
   res.send("this route is not yet defined");
 };
 
-exports.updateComment = async (req, res) => {
+export const updateComment = async (req, res) => {
   res.send("this route is not yet defined");
 };
 

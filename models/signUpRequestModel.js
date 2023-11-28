@@ -1,5 +1,4 @@
-const mongoose = require("mongoose");
-
+import mongoose from "mongoose";
 const signUpRequestSchema = new mongoose.Schema({
   requestType: {
     type: String,
@@ -17,4 +16,4 @@ const signUpRequestSchema = new mongoose.Schema({
 
 const SignUpRequest = mongoose.model("SignUpRequest", signUpRequestSchema);
 
-module.exports = SignUpRequest;
+export default SignUpRequest;

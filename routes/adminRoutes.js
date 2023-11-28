@@ -1,8 +1,10 @@
-const express = require("express");
-const mongoose = require("mongoose");
-const router = express.Router();
-const authController = require("../controllers/authController");
-const adminController = require("../controllers/adminController");
+import express from "express";
+import mongoose from "mongoose";
+import * as authController from "../controllers/authController.js";
+import * as adminController from "../controllers/adminController.js";
+import { Router } from "express";
+
+const router = Router();
 
 router.post("/login", authController.adminLogin);
 
@@ -59,4 +61,5 @@ router.get(
   authController.protectRoute,
   adminController.getAllRejectedRequestsTrainers
 );
-module.exports = router;
+
+export default router;

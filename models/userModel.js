@@ -1,6 +1,7 @@
-const mongoose = require("mongoose");
-const validator = require("validator");
-const bcrypt = require("bcryptjs");
+import mongoose from "mongoose";
+import validator from "validator";
+import bcrypt from "bcryptjs";
+
 // Not Complete
 const userSchema = new mongoose.Schema({
   firstName: {
@@ -86,4 +87,4 @@ userSchema.methods.changedAfter = function (JWTTimestamp) {
 };
 
 const User = mongoose.model("User", userSchema);
-module.exports = User;
+export default User;

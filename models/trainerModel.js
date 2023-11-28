@@ -1,6 +1,7 @@
-const mongoose = require("mongoose");
-const validator = require("validator");
-const bcrypt = require("bcryptjs");
+import mongoose from "mongoose";
+import validator from "validator";
+import bcrypt from "bcryptjs";
+
 const trainerSchema = new mongoose.Schema({
   trainerName: {
     type: String,
@@ -108,4 +109,4 @@ trainerSchema.methods.isPasswordCorrect = async function (
 
 const Trainer = mongoose.model("Trainer", trainerSchema);
 
-module.exports = Trainer;
+export default Trainer;

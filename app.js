@@ -1,21 +1,23 @@
-const express = require("express");
-const mongoSanitizer = require("express-mongo-sanitize");
-const dotenv = require("dotenv");
-const morgan = require("morgan");
-const fileURLToPath = require("url").fileURLToPath;
-const dirname = require("path").dirname;
-const handlebars = require("express-handlebars");
+import express from "express";
+import { engine as handlebarsEngine } from "express-handlebars";
+import mongoSanitizer from "express-mongo-sanitize";
+import dotenv from "dotenv";
+import morgan from "morgan";
+import { fileURLToPath } from "url";
+import { dirname } from "path";
 
-// const __filename = fileURLToPath(import.meta.url);
-// const __dirname = dirname(__filename);
+import adminRouter from "./routes/adminRoutes.js";
+import eventRouter from "./routes/eventRoutes.js";
+import gymRouter from "./routes/gymRoutes.js";
+import postRouter from "./routes/postRoutes.js";
+import userRouter from "./routes/userRoutes.js";
+import trainerRouter from "./routes/trainerRoutes.js";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 // Routers
-const adminRouter = require("./routes/adminRoutes");
-const eventRouter = require("./routes/eventRoutes");
-const gymRouter = require("./routes/gymRoutes");
-const postRouter = require("./routes/postRoutes");
-const userRouter = require("./routes/userRoutes");
-const trainerRouter = require("./routes/trainerRoutes");
+
 // Express app
 const app = express();
 
@@ -27,14 +29,10 @@ app.use(morgan("dev"));
 app.use(mongoSanitizer());
 
 const rewriteUnsupportedBrowserMethods = (req, res, next) => {
-  // If the user posts to the server with a property called _method, rewrite the request's method
-  // To be that method; so if they post _method=PUT you can now allow browsers to POST to a route that gets
-  // rewritten in this middleware to a PUT route
   if (req.body && req.body._method) {
     req.method = req.body._method;
     delete req.body._method;
   }
-  // let the next middleware run:
   next();
 };
 
@@ -42,7 +40,7 @@ const staticDir = express.static(__dirname + "/public");
 app.use("/public", staticDir);
 app.use(express.urlencoded({ extended: true }));
 app.use(rewriteUnsupportedBrowserMethods);
-app.engine("handlebars", handlebars.engine({ defaultLayout: "main" }));
+app.engine("handlebars", handlebarsEngine({ defaultLayout: "main" }));
 app.set("view engine", "handlebars");
 
 // Routes
@@ -60,4 +58,4 @@ app.all("*", (req, res) => {
   });
 });
 
-module.exports = app;
+export default app;

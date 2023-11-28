@@ -1,14 +1,14 @@
-const jwt = require("jsonwebtoken");
-const User = require("../models/userModel");
-const Admin = require("../models/adminModel");
-const Gym = require("../models/gymModel");
-const Trainer = require("../models/trainerModel");
-const SignUpRequest = require("../models/signUpRequestModel");
+import jwt from "jsonwebtoken";
+import User from "../models/userModel.js";
+import Admin from "../models/adminModel.js";
+import Gym from "../models/gymModel.js";
+import Trainer from "../models/trainerModel.js";
+import SignUpRequest from "../models/signUpRequestModel.js";
 
-const s3 = require("../utils/s3");
+// const s3 = require("../utils/s3");
 
-const multer = require("multer");
-const upload = multer({ dest: "uploads/" });
+// const multer = require("multer");
+// const upload = multer({ dest: "uploads/" });
 
 // helpers
 const signJWT = (id, role) => {
@@ -28,7 +28,7 @@ const checkTokenValid = (passwordChangedAt, tokenIssuedAt) => {
   return false;
 };
 
-exports.protectRoute = async (req, res, next) => {
+export const protectRoute = async (req, res, next) => {
   try {
     let token;
 
@@ -114,7 +114,7 @@ exports.protectRoute = async (req, res, next) => {
   }
 };
 
-exports.restrictTo = (role) => {
+export const restrictTo = (role) => {
   return (req, res, next) => {
     try {
       let token;
@@ -152,7 +152,7 @@ exports.restrictTo = (role) => {
 };
 
 // user
-exports.userSignup = async (req, res) => {
+export const userSignup = async (req, res) => {
   try {
     const { firstName, lastName, email, password, passwordConfirm } = req.body;
     const newUser = await User.create({
@@ -180,7 +180,7 @@ exports.userSignup = async (req, res) => {
   }
 };
 
-exports.userLogin = async (req, res) => {
+export const userLogin = async (req, res) => {
   try {
     const { email, password } = req.body;
 
@@ -207,7 +207,7 @@ exports.userLogin = async (req, res) => {
   }
 };
 
-exports.adminLogin = async (req, res) => {
+export const adminLogin = async (req, res) => {
   const { email, password } = req.body;
   try {
     if (!email || !password) {
@@ -236,7 +236,7 @@ exports.adminLogin = async (req, res) => {
 };
 
 // gym
-exports.gymSignup = async (req, res) => {
+export const gymSignup = async (req, res) => {
   // const file = req.file;
   // console.log(file);
   // try {
@@ -290,7 +290,7 @@ exports.gymSignup = async (req, res) => {
   }
 };
 
-exports.gymLogin = async (req, res) => {
+export const gymLogin = async (req, res) => {
   try {
     const { email, password } = req.body;
     if (!email || !password) {
@@ -317,7 +317,7 @@ exports.gymLogin = async (req, res) => {
 };
 
 // trainer
-exports.trainerSignup = async (req, res) => {
+export const trainerSignup = async (req, res) => {
   try {
     const { trainerName, email, password, passwordConfirm, address, phone } =
       req.body;
@@ -351,7 +351,7 @@ exports.trainerSignup = async (req, res) => {
   }
 };
 
-exports.trainerLogin = async (req, res) => {
+export const trainerLogin = async (req, res) => {
   try {
     const { email, password } = req.body;
     if (!email || !password) {
