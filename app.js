@@ -5,7 +5,7 @@ import dotenv from "dotenv";
 import morgan from "morgan";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
-import {hpp} from "hpp";
+import hpp from "hpp";
 
 import adminRouter from "./routes/adminRoutes.js";
 import eventRouter from "./routes/eventRoutes.js";
