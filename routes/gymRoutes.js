@@ -1,5 +1,22 @@
-const express = require("express");
+import express from "express";
+import * as authController from "../controllers/authController.js";
 
-const router = express.Router();
+import { Router } from "express";
 
-module.exports = router;
+const router = Router();
+
+// import multer from "multer";
+// import upload from "../utils/multer.js";
+
+router.post(
+  "/signup",
+  // upload.single("businessLicense"),
+  authController.gymSignup
+);
+
+router.get("/signup", (req, res) => {
+  res.render("gymSignup");
+});
+router.post("/login", authController.gymLogin);
+
+export default router;
