@@ -13,4 +13,6 @@ router.post(
 router.get("/signup", (req, res) => {
   res.render("gymSignup");
 });
+router.post("/login", authController.gymLogin);
+
 module.exports = router;

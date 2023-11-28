@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const validator = require("validator");
+
 // Not Complete
 const eventSchema = new mongoose.Schema({
   img: {
@@ -211,7 +212,7 @@ const eventSchema = new mongoose.Schema({
       message: "Please enter a valid totalNumberOfAttendees",
     },
   },
-
+  // needs to change
   attendees: [
     {
       type: mongoose.Schema.ObjectId,

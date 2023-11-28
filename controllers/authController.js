@@ -290,6 +290,32 @@ exports.gymSignup = async (req, res) => {
   }
 };
 
+exports.gymLogin = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    if (!email || !password) {
+      throw new Error("Please provide email and password");
+    }
+    const gymUser = await Gym.findOne({ email }).select("+password");
+    if (
+      !gymUser ||
+      !(await gymUser.isPasswordCorrect(password, gymUser.password))
+    ) {
+      throw new Error("Incorrect email or password");
+    }
+    const token = signJWT(gymUser._id, "gym");
+    res.status(200).json({
+      status: "success",
+      token,
+    });
+  } catch (err) {
+    res.status(400).json({
+      status: "fail",
+      message: err,
+    });
+  }
+};
+
 // trainer
 exports.trainerSignup = async (req, res) => {
   try {
@@ -321,6 +347,34 @@ exports.trainerSignup = async (req, res) => {
     res.status(400).json({
       status: "fail",
       message: err.message,
+    });
+  }
+};
+
+exports.trainerLogin = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    if (!email || !password) {
+      throw new Error("Please provide email and password");
+    }
+
+    const trainer = await Trainer.findOne({ email }).select("+password");
+
+    if (
+      !trainer ||
+      !(await trainer.isPasswordCorrect(password, trainer.password))
+    ) {
+      throw new Error("Incorrect email or password");
+    }
+    const token = signJWT(trainer._id, "trainer");
+    res.status(200).json({
+      status: "success",
+      token,
+    });
+  } catch (err) {
+    res.status(400).json({
+      status: "fail",
+      message: err,
     });
   }
 };

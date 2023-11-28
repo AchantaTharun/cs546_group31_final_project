@@ -5,6 +5,7 @@ const RejectedRequest = require("../models/rejectedRequestModel.js");
 const SignUpRequest = require("../models/signUpRequestModel.js");
 const Trainer = require("../models/trainerModel.js");
 
+// for creating admins manually
 exports.makeAdmin = async (firstAdmin) => {
   await mongoose.connect("mongodb://localhost:27017/GymMate", {
     useNewUrlParser: true,

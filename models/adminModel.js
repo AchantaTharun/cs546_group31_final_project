@@ -57,6 +57,9 @@ const adminSchema = new mongoose.Schema({
     validate: [validator.isMobilePhone, "Please enter a valid contact number"],
     unique: true,
   },
+  passwordChangedAt: {
+    type: Date,
+  },
 });
 
 adminSchema.pre("save", async function (next) {

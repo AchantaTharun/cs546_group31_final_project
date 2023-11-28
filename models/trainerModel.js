@@ -14,6 +14,7 @@ const trainerSchema = new mongoose.Schema({
     required: [true, "Please enter your email"],
     trim: true,
     validate: [validator.isEmail, "Please enter a valid email"],
+    unique: true,
   },
   password: {
     type: String,
@@ -64,6 +65,7 @@ const trainerSchema = new mongoose.Schema({
     required: [true, "Please enter your phone number"],
     trim: true,
     validate: [validator.isMobilePhone, "Please enter a valid phone number"],
+    unique: true,
   },
   status: {
     type: String,
@@ -81,6 +83,9 @@ const trainerSchema = new mongoose.Schema({
   isTrainer: {
     type: Boolean,
     default: true,
+  },
+  passwordChangedAt: {
+    type: Date,
   },
   //   businessLicense: {
   //     type: String,
