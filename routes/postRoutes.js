@@ -1,21 +1,26 @@
-const express = require("express");
-const postsController = require("../controllers/postsController");
-const authController = require("../controllers/authController");
-const router = express.Router();
+import express from "express";
+import * as postsController from "../controllers/postsController.js";
+import * as authController from "../controllers/authController.js";
+
+import { Router } from "express";
+
+const router = Router();
+
 router
   .route("/")
   .get(postsController.getAllPosts)
-  .post(authController.protect, postsController.createPost);
+  .post(authController.protectRoute, postsController.createPost);
 
 router
   .route("/:id")
-  .get(authController.protect, postsController.getPostById)
-  .patch(authController.protect, postsController.updatePost)
-  .delete(authController.protect, postsController.deletePost);
+  .get(authController.protectRoute, postsController.getPostById)
+  .patch(authController.protectRoute, postsController.updatePost)
+  .delete(authController.protectRoute, postsController.deletePost);
 
 router
   .route("/:id/comments")
-  .post(authController.protect, postsController.addComment)
-  .delete(authController.protect, postsController.deleteComment)
-  .patch(authController.protect, postsController.updateComment);
-module.exports = router;
+  .post(authController.protectRoute, postsController.addComment)
+  .delete(authController.protectRoute, postsController.deleteComment)
+  .patch(authController.protectRoute, postsController.updateComment);
+
+export default router;

@@ -1,5 +1,5 @@
-const mongoose = require("mongoose");
-const validator = require("validator");
+import mongoose from "mongoose";
+import validator from "validator";
 
 // Not Complete
 const postSchema = new mongoose.Schema({
@@ -97,4 +97,4 @@ const postSchema = new mongoose.Schema({
 });
 
 const Post = mongoose.model("Post", postSchema);
-module.exports = Post;
+export default Post;

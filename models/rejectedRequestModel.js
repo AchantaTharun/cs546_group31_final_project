@@ -1,5 +1,5 @@
-const mongoose = require("mongoose");
-const validator = require("validator");
+import mongoose from "mongoose";
+import validator from "validator";
 
 const rejectedRequestSchema = new mongoose.Schema({
   requestType: {
@@ -58,4 +58,4 @@ const RejectedRequest = mongoose.model(
   rejectedRequestSchema
 );
 
-module.exports = RejectedRequest;
+export default RejectedRequest;

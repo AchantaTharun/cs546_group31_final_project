@@ -1,6 +1,6 @@
-const mongoose = require("mongoose");
-const validator = require("validator");
-const bcrypt = require("bcryptjs");
+import mongoose from "mongoose";
+import validator from "validator";
+import bcrypt from "bcryptjs";
 
 const gymSchema = new mongoose.Schema({
   gymName: {
@@ -15,6 +15,7 @@ const gymSchema = new mongoose.Schema({
     required: [true, "Please enter your email"],
     trim: true,
     validate: [validator.isEmail, "Please enter a valid email"],
+    unique: true,
   },
   password: {
     type: String,
@@ -66,6 +67,7 @@ const gymSchema = new mongoose.Schema({
     required: [true, "Please enter your phone number"],
     trim: true,
     length: [10, "Phone number must be 10 characters long"],
+    unique: true,
   },
   ownerFName: {
     type: String,
@@ -86,6 +88,9 @@ const gymSchema = new mongoose.Schema({
     enum: ["pending", "approved", "rejected"],
     default: "pending",
   },
+  passwordChangedAt: {
+    type: Date,
+  },
   // businessLicense: {
   //   type: String,
   //   required: [true, "Please upload your business license"],
@@ -97,6 +102,34 @@ const gymSchema = new mongoose.Schema({
   reason: {
     type: String,
     trim: true,
+  },
+  ratings: [
+    {
+      comment: {
+        type: String,
+        trim: true,
+      },
+      rating: {
+        type: Number,
+        min: 1,
+        max: 5,
+      },
+      createdAt: {
+        type: Date,
+        default: Date.now,
+      },
+      ratedBy: {
+        type: String,
+      },
+      raterType: {
+        type: String,
+        enum: ["User", "Trainer", "Gym"],
+      },
+    },
+  ],
+  ratingAvg: {
+    type: Number,
+    default: 0,
   },
 });
 
@@ -118,4 +151,4 @@ gymSchema.methods.isPasswordCorrect = async function (
 
 const Gym = mongoose.model("Gym", gymSchema);
 
-module.exports = Gym;
+export default Gym;

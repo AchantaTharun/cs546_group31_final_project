@@ -1,6 +1,6 @@
-const mongoose = require("mongoose");
-const bcrypt = require("bcryptjs");
-const validator = require("validator");
+import validator from "validator";
+import bcrypt from "bcryptjs";
+import mongoose from "mongoose";
 
 const adminSchema = new mongoose.Schema({
   firstName: {
@@ -51,11 +51,14 @@ const adminSchema = new mongoose.Schema({
     type: Date,
   },
   contactNumber: {
-    type: Number,
+    type: String,
     required: [true, "Please enter your contact number"],
     trim: true,
     validate: [validator.isMobilePhone, "Please enter a valid contact number"],
     unique: true,
+  },
+  passwordChangedAt: {
+    type: Date,
   },
 });
 
@@ -77,4 +80,4 @@ adminSchema.methods.isPasswordCorrect = async function (
 
 const Admin = mongoose.model("Admin", adminSchema);
 
-module.exports = Admin;
+export default Admin;

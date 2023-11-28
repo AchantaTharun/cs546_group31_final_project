@@ -1,6 +1,7 @@
-const mongoose = require("mongoose");
-const validator = require("validator");
-const bcrypt = require("bcryptjs");
+import mongoose from "mongoose";
+import validator from "validator";
+import bcrypt from "bcryptjs";
+
 const trainerSchema = new mongoose.Schema({
   trainerName: {
     type: String,
@@ -14,6 +15,7 @@ const trainerSchema = new mongoose.Schema({
     required: [true, "Please enter your email"],
     trim: true,
     validate: [validator.isEmail, "Please enter a valid email"],
+    unique: true,
   },
   password: {
     type: String,
@@ -64,6 +66,7 @@ const trainerSchema = new mongoose.Schema({
     required: [true, "Please enter your phone number"],
     trim: true,
     validate: [validator.isMobilePhone, "Please enter a valid phone number"],
+    unique: true,
   },
   status: {
     type: String,
@@ -81,6 +84,9 @@ const trainerSchema = new mongoose.Schema({
   isTrainer: {
     type: Boolean,
     default: true,
+  },
+  passwordChangedAt: {
+    type: Date,
   },
   //   businessLicense: {
   //     type: String,
@@ -103,4 +109,4 @@ trainerSchema.methods.isPasswordCorrect = async function (
 
 const Trainer = mongoose.model("Trainer", trainerSchema);
 
-module.exports = Trainer;
+export default Trainer;

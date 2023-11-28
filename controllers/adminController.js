@@ -1,11 +1,12 @@
-const Admin = require("../models/adminModel.js");
-const mongoose = require("mongoose");
-const Gym = require("../models/gymModel.js");
-const RejectedRequest = require("../models/rejectedRequestModel.js");
-const SignUpRequest = require("../models/signUpRequestModel.js");
-const Trainer = require("../models/trainerModel.js");
+import Admin from "../models/adminModel.js";
+import Gym from "../models/gymModel.js";
+import Trainer from "../models/trainerModel.js";
+import SignUpRequest from "../models/signUpRequestModel.js";
+import RejectedRequest from "../models/rejectedRequestModel.js";
+import mongoose from "mongoose";
 
-exports.makeAdmin = async (firstAdmin) => {
+// for creating admins manually
+export const makeAdmin = async (firstAdmin) => {
   await mongoose.connect("mongodb://localhost:27017/GymMate", {
     useNewUrlParser: true,
     useUnifiedTopology: true,
@@ -21,7 +22,7 @@ exports.makeAdmin = async (firstAdmin) => {
   }
 };
 
-exports.approveGym = async (req, res) => {
+export const approveGym = async (req, res) => {
   try {
     const gym = await Gym.findByIdAndUpdate(req.params.gymId, {
       status: "approved",
@@ -49,7 +50,7 @@ exports.approveGym = async (req, res) => {
   }
 };
 
-exports.rejectGym = async (req, res) => {
+export const rejectGym = async (req, res) => {
   try {
     const gym = await Gym.findByIdAndUpdate(req.params.gymId, {
       status: "rejected",
@@ -90,7 +91,7 @@ exports.rejectGym = async (req, res) => {
   }
 };
 
-exports.approveTrainer = async (req, res) => {
+export const approveTrainer = async (req, res) => {
   try {
     const trainer = await Trainer.findByIdAndUpdate(req.params.trainerId, {
       status: "approved",
@@ -118,7 +119,7 @@ exports.approveTrainer = async (req, res) => {
   }
 };
 
-exports.rejectTrainer = async (req, res) => {
+export const rejectTrainer = async (req, res) => {
   try {
     if (!req.body.reason) {
       throw new Error("Please provide a reason");
@@ -164,7 +165,7 @@ exports.rejectTrainer = async (req, res) => {
   }
 };
 
-exports.getAllGymsRequests = async (req, res) => {
+export const getAllGymsRequests = async (req, res) => {
   try {
     const requests = await SignUpRequest.find({ requestType: "gym" });
     if (!requests) {
@@ -184,7 +185,7 @@ exports.getAllGymsRequests = async (req, res) => {
   }
 };
 
-exports.getAllTrainersRequests = async (req, res) => {
+export const getAllTrainersRequests = async (req, res) => {
   try {
     const requests = await SignUpRequest.find({ requestType: "trainer" });
     if (!requests) {
@@ -204,7 +205,7 @@ exports.getAllTrainersRequests = async (req, res) => {
   }
 };
 
-exports.getAllRejectedRequestsGyms = async (req, res) => {
+export const getAllRejectedRequestsGyms = async (req, res) => {
   try {
     const requests = await RejectedRequest.find({ requestType: "gym" });
     if (!requests) {
@@ -224,7 +225,7 @@ exports.getAllRejectedRequestsGyms = async (req, res) => {
   }
 };
 
-exports.getAllRejectedRequestsTrainers = async (req, res) => {
+export const getAllRejectedRequestsTrainers = async (req, res) => {
   try {
     const requests = await RejectedRequest.find({ requestType: "trainer" });
     if (!requests) {
