@@ -4,6 +4,8 @@ import Trainer from "../models/trainerModel.js";
 import SignUpRequest from "../models/signUpRequestModel.js";
 import RejectedRequest from "../models/rejectedRequestModel.js";
 import mongoose from "mongoose";
+import * as help from "../Helpers.js";
+import * as e_valid from 'email-validator'
 
 // for creating admins manually
 export const makeAdmin = async (firstAdmin) => {
@@ -11,16 +13,33 @@ export const makeAdmin = async (firstAdmin) => {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   });
-
-  try {
-    const admin = await Admin.create(firstAdmin);
-    console.log("Admin created successfully", admin);
-  } catch (err) {
-    console.error(err);
-  } finally {
-    mongoose.disconnect();
-  }
+  const admin = await Admin.create(firstAdmin);
+  console.log("Admin created successfully", admin);
+  mongoose.disconnect();
 };
+
+export const adminLogin = async (emailAddress, password) => {
+  if(!emailAddress || !password) throw "Both email Address and Password has to be provided";
+  
+  //Initial modifications
+  if(typeof emailAddress!=='string') throw "Email address is not of valid data type";
+  emailAddress = emailAddress.trim().toLowerCase();
+
+  //Validations
+  if(!e_valid.validate(emailAddress)) throw "Email address invalid";
+  password = help.checkPassword(password);
+  //Everything Validated
+  const adminUser = await Admin.findOne({ email:emailAddress })//.select("+password");
+  if (
+      !adminUser ||
+      !(await adminUser.isPasswordCorrect(password, adminUser.password))
+    ) 
+    {
+      throw  "Incorrect email or password";
+    }
+  return  adminUser;
+};
+
 
 export const approveGym = async (req, res) => {
   try {

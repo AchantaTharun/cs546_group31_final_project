@@ -18,12 +18,12 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 // Routers
-const adminRouter = require("./routes/adminRoutes");
-const eventRouter = require("./routes/eventRoutes");
-const gymRouter = require("./routes/gymRoutes");
-const postRouter = require("./routes/postRoutes");
-const userRouter = require("./routes/userRoutes");
-const adminRouter = require("./routes/adminRoutes");
+// const adminRouter = require("./routes/adminRoutes");
+// const eventRouter = require("./routes/eventRoutes");
+// const gymRouter = require("./routes/gymRoutes");
+// const postRouter = require("./routes/postRoutes");
+// const userRouter = require("./routes/userRoutes");
+// const adminRouter = require("./routes/adminRoutes");
 // Express app
 const app = express();
 
@@ -52,6 +52,19 @@ app.use(rewriteUnsupportedBrowserMethods);
 app.engine("handlebars", handlebarsEngine({ defaultLayout: "main" }));
 app.set("view engine", "handlebars");
 
+//All the middlewares
+//This is the logging middleware
+// app.use((req,res,next) =>{
+//   //Logging
+//   let timestamp = new Date().toUTCString();
+//   let method = req.method.toUpperCase();
+//   let route_ = req.originalUrl;
+
+//   console.log(`${timestamp} : ${method} , ${route_}`);
+//   next();
+// });
+
+
 // Routes
 app.use("/api/v1/admin", adminRouter);
 app.use("/api/v1/events", eventRouter);
@@ -61,7 +74,7 @@ app.use("/api/v1/user", userRouter);
 app.use("/api/v1/trainer", trainerRouter);
 
 app.all("*", (req, res) => {
-  res.status(404).json({
+  res.status(404).render("error",{
     status: "fail",
     message: `Can't find ${req.originalUrl} on this server!`,
   });
