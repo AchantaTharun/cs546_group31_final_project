@@ -18,7 +18,12 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 // Routers
-
+const adminRouter = require("./routes/adminRoutes");
+const eventRouter = require("./routes/eventRoutes");
+const gymRouter = require("./routes/gymRoutes");
+const postRouter = require("./routes/postRoutes");
+const userRouter = require("./routes/userRoutes");
+const adminRouter = require("./routes/adminRoutes");
 // Express app
 const app = express();
 
