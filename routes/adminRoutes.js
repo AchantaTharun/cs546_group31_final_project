@@ -27,20 +27,26 @@ const checkTokenValid = (passwordChangedAt, tokenIssuedAt) => {
 
 let restrict = (req,res,next) =>{
   //First we need to check for a token.
-  try{
   let token;
-  const authHeader = req.headers.authorization;
-  if (authHeader && authHeader.startsWith("Bearer")) {
-    token = authHeader.split(" ")[1];
+  try{
+  // const authHeader = req.headers.authorization;
+  // if (authHeader && authHeader.startsWith("Bearer")) {
+  //   token = authHeader.split(" ")[1];
+  // }
+  if(!req.cookies.adminjwt)
+  {
+    console.log("12");
+    res.redirect("api/v1/admin/admin-login");
   }
-  if (!token) {
-    console.log("0\n");
-    return res.redirect('/api/v1/admin/admin-login');   //check for the status message
-  }
+  token = req.cookies.adminjwt;
+  // if (!token) {
+  //   console.log("13");
+  //   return res.redirect('/api/v1/admin/admin-login');   //check for the status message
+  // }
 } catch(e)
 {
-  console.log("1");
-  return res.status(401).render('admin-login',{title:"ADMIN LOGIN",error:`Some Kind of a Token Error | ${e}`});
+  //console.log("14");
+  return res.status(401).render('admin-login',{title:"ADMIN LOGIN",error:`Some Kind of a Cookie Error | ${e}`});
 }
   jwt.verify(token, process.env.JWT_SECRET,async (err,data)=>{
     if(err) 
@@ -55,24 +61,25 @@ let restrict = (req,res,next) =>{
     //Now check if the admin is there in the database
     const admin = await Admin.findById(data.id);
     if (!admin) {
-      console.log("2");
+      //console.log("15");
       return res.status(404).render('admin-login',{title:"ADMIN LOGIN",error:"No Such Admin user was in the database"});
     }
     if (
       "passwordChangedAt" in admin &&
       checkTokenValid(admin.passwordChangedAt, data.iat)
     ) {
-      console.log("3");
+      //console.log("16");
       return res.status(404).render('admin-login',{title:"ADMIN LOGIN",error:"Password was changed recently"});
     }
     req.admin = admin;
-    if(req.path==='/apq/v1/admin/admin-login');
+    if(req.path==='/api/v1/admin/admin-login')
     {
+      //console.log("17");
       return res.redirect('/api/v1/admin/admin-homepage');
     } 
   } catch(e)
   {
-    console.log("4");
+    //console.log("18");
     return res.status(400).render('admin-login',{title:"ADMIN LOGIN",error:e});
   }
     next();
@@ -117,7 +124,7 @@ router
     let admin_;
     try
     {
-      admin_ = await adminController.adminLogin(emailAddressInput,passwordInput);
+      admin_ = await adminController.adminLogin(emailAddressInput,passwordInput); //This is where the main controller  function will be used.
       
     } catch(e)
     {
@@ -126,8 +133,13 @@ router
     if(admin_)
     {
       const token = signJWT(admin_._id, "admin");
-      return res.status(200).json({status:"Completed",token:token});
-
+      // res.status(200).json({token});
+      res.cookie("adminjwt", token, {
+        httpOnly: true,
+        secure: false, 
+        sameSite: "Strict",
+      })
+      res.redirect("/api/v1/admin/admin-homepage");
     }
     else
     {

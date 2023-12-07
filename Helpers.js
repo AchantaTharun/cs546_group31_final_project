@@ -1,3 +1,17 @@
+//This is General Purpose
+import * as e_valid from 'email-validator';
+
+let emailc = mail => {
+    try
+    {
+        if(!e_valid.validate(mail)) return false;
+        return true;
+
+    }catch(e)
+    {
+        return false;
+    }
+}
 let checkName = name => {
     if(typeof name==='string'){
         name = name.trim();
@@ -11,6 +25,21 @@ let checkName = name => {
         throw "The Name is not a string type";
     }
     return name;
+}
+
+//This is Mongoose Specific
+let checkNametf = name => {
+    if(typeof name==='string'){
+        if(name==="") return false;
+        let re = /^[^0-9\s]+$/gi;
+        let results = name.match(re);
+        if(results===null) return false;
+        if(name.length<2 || name.length>25) return false;
+    }
+    else{
+        return false;
+    }
+    return true;
 }
 
 let checkPassword = password => {
@@ -40,6 +69,32 @@ let checkPassword = password => {
     return password;
 }
 
+let checkPasswordtf = password => {
+    if(typeof password === 'string'){
+        if(password==="") return false;
+        let re = /^[^\s]+$/gi;
+        let results = password.match(re);
+        if(results===null) return false;
+        re = /[0-9]/g;
+        results = [];
+        results = password.match(re);
+        if(results === null) return false;
+        re = /[A-Z]/g;
+        results=[];
+        results = password.match(re);
+        if(results === null) return false;
+        re = /^[a-z0-9]+$/gi;
+        results=[];
+        results = password.match(re);
+        if(results !== null) return false;
+        if(password.length <  8) return false;
+    }
+    else{
+        return false;
+    }
+    return true;
+}
 
 
-export {checkName,checkPassword};
+
+export {checkName,checkNametf,checkPassword,checkPasswordtf,emailc};

@@ -5,15 +5,16 @@ import SignUpRequest from "../models/signUpRequestModel.js";
 import RejectedRequest from "../models/rejectedRequestModel.js";
 import mongoose from "mongoose";
 import * as help from "../Helpers.js";
-import * as e_valid from 'email-validator'
+import * as e_valid from 'email-validator';
+import {ObjectId} from 'mongodb';
 
-// for creating admins manually
+// This is the one and only Administrator created during the running of the seed file.
 export const makeAdmin = async (firstAdmin) => {
   await mongoose.connect("mongodb://localhost:27017/GymMate", {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   });
-  const admin = await Admin.create(firstAdmin);
+  const admin = await Admin.create(firstAdmin); //Mongoose will automatically validate the data itself.
   console.log("Admin created successfully", admin);
   mongoose.disconnect();
 };
@@ -40,8 +41,50 @@ export const adminLogin = async (emailAddress, password) => {
   return  adminUser;
 };
 
+export const passwordChange = async (emailAddress, oldPassword, newPassword,confirmPassword) => {
+  if(!emailAddress || !oldPassword || !newPassword || !confirmPassword) throw "Some Fields are missing";
+  
+  //Initial modifications
+  if(typeof emailAddress!=='string') throw "Email address is not of valid data type";
+  emailAddress = emailAddress.trim().toLowerCase();
 
-export const approveGym = async (req, res) => {
+  //Validations
+  if(!e_valid.validate(emailAddress)) throw "Email address invalid";
+  oldPassword = help.checkPassword(oldPassword);
+  newPassword = help.checkPassword(newPassword);
+  confirmPassword = help.checkPassword(confirmPassword);
+  //Everything Validated
+
+  const adminUser = await Admin.findOne({ email:emailAddress })
+  // console.log("Initial Instance",adminUser);
+  if (
+      !adminUser ||
+      !(await adminUser.isPasswordCorrect(oldPassword, adminUser.password))
+    ) 
+    {
+      throw  "Incorrect email or password";
+    }
+
+  //We also have to check if the new password is not the same as the old password
+  if (
+    !adminUser ||
+    (await adminUser.isPasswordCorrect(newPassword, adminUser.password))
+  ) 
+  {
+    throw  "New Password cannot be same as the Old Password";
+  }
+  // we have the adminUser object and now we can change the password.
+  adminUser.password = newPassword;
+  adminUser.passwordConfirm = confirmPassword;
+  let currentTimestamp = Date.now();
+  adminUser.passwordChangedAt = currentTimestamp;  //So that the old token can be revoked and the new one can be generated.
+  adminUser.updatedAt = currentTimestamp;
+  adminUser.save();
+  return  { changedPasswordAdmin: true };
+};
+
+
+export const approveGym = async (req,res) => {
   try {
     const gym = await Gym.findByIdAndUpdate(req.params.gymId, {
       status: "approved",

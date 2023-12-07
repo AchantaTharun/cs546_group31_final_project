@@ -1,6 +1,7 @@
 import express from "express";
 import { engine as handlebarsEngine } from "express-handlebars";
 import mongoSanitizer from "express-mongo-sanitize";
+import cookieParser from 'cookie-parser';
 import dotenv from "dotenv";
 import morgan from "morgan";
 import { fileURLToPath } from "url";
@@ -17,20 +18,13 @@ import trainerRouter from "./routes/trainerRoutes.js";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-// Routers
-// const adminRouter = require("./routes/adminRoutes");
-// const eventRouter = require("./routes/eventRoutes");
-// const gymRouter = require("./routes/gymRoutes");
-// const postRouter = require("./routes/postRoutes");
-// const userRouter = require("./routes/userRoutes");
-// const adminRouter = require("./routes/adminRoutes");
-// Express app
 const app = express();
 
 // Middlewares
 app.use(express.json());
 dotenv.config({ path: "./.env" });
 app.use(morgan("dev"));
+app.use(cookieParser());
 
 //For avoiding parameter pollution
 app.use(hpp());
@@ -51,18 +45,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use(rewriteUnsupportedBrowserMethods);
 app.engine("handlebars", handlebarsEngine({ defaultLayout: "main" }));
 app.set("view engine", "handlebars");
-
-//All the middlewares
-//This is the logging middleware
-// app.use((req,res,next) =>{
-//   //Logging
-//   let timestamp = new Date().toUTCString();
-//   let method = req.method.toUpperCase();
-//   let route_ = req.originalUrl;
-
-//   console.log(`${timestamp} : ${method} , ${route_}`);
-//   next();
-// });
 
 
 // Routes
