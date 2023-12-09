@@ -8,6 +8,54 @@ import * as help from "../Helpers.js";
 
 const router = Router();
 
+//This is for file catching
+// const storage = multer.memoryStorage();
+// const upload = multer({ storage: storage });
+// // Route to handle file upload
+// app.post('/upload', upload.single('image'), async (req, res) => {
+//   try {
+//     const { originalname, buffer } = req.file;
+    
+//     // Create a new image instance
+//     const newImage = new Image({
+//       imageName: originalname,
+//       imageData: buffer,
+//     });
+    
+//     // Save the image to the database
+//     await newImage.save();
+
+//     // Now, you can store the newImage._id in another model
+//     const otherModelInstance = new OtherModel({
+//       // Other fields in your model
+//       // ...
+//       image: newImage._id,
+//     });
+
+//     await otherModelInstance.save();
+
+//     res.send('Image uploaded and data stored successfully!');
+//   } catch (error) {
+//     res.status(500).send(error.message);
+//   }
+// });
+
+//SENDING IMAGE DATA THROUGH HANDLEBARS
+// app.get('/displayImage/:id', async (req, res) => {
+//   try {
+//     const imageId = req.params.id;
+    
+//     // Fetch the image data from the database using the image ID
+//     const image = await Image.findById(imageId);
+
+//     // Render the Handlebars template passing the image data
+//     res.render('imagePage', { imageData: image.imageData.toString('base64') });
+//   } catch (error) {
+//     res.status(500).send(error.message);
+//   }
+// });
+
+
 const signJWT = (id, role) => {
   return jwt.sign({ id, role }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRATION_TIME,

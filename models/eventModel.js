@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import validator from "validator";
+import * as help from "../Helpers.js";
 
 // Not Complete
 const eventSchema = new mongoose.Schema({
@@ -7,6 +8,7 @@ const eventSchema = new mongoose.Schema({
     type: String,
     required: [true, "Please enter the image"],
     trim: true,
+    validate:[help.checkIdtf,"Enter a valid Image Id"]
   },
   title: {
     type: String,
@@ -22,7 +24,15 @@ const eventSchema = new mongoose.Schema({
     type: String,
     required: [true, "Please enter the contactEmail"],
     trim: true,
-    validate: [validator.isEmail, "Please enter a valid email"],
+    validate: [
+    {
+      validator:validator.isEmail, 
+      message:"Please enter a valid email"},
+    {
+      validator:help.emailc,
+      message:"Enter Valid Email Address"
+    }
+  ]
   },
   eventLocation: {
     streetAddress: {
@@ -160,17 +170,6 @@ const eventSchema = new mongoose.Schema({
       type: String,
     },
   },
-  eventDate: {
-    type: Date,
-    required: [true, "Please enter the eventDate"],
-    trim: true,
-    validate: {
-      validator: function (el) {
-        return el >= Date.now();
-      },
-      message: "Please enter a valid eventDate",
-    },
-  },
   createdAt: {
     type: Date,
     default: Date.now,
@@ -182,23 +181,33 @@ const eventSchema = new mongoose.Schema({
     type: String,
     required: [true, "Please enter the startTime"],
     trim: true,
-    validate: {
+    validate: [{
       validator: function (el) {
-        return el >= Date.now();
+        return ((new Date(el) ) >= (new Date()));
       },
       message: "Please enter a valid startTime",
     },
+    {
+      validator: help.dateCheck,
+      message: "You have to enter a valid startTime"
+    }
+  ]
   },
   endTime: {
     type: String,
     required: [true, "Please enter the endTime"],
     trim: true,
-    validate: {
+    validate: [{
       validator: function (el) {
-        return el >= this.startTime;
+        return (new Date(el)) > new Date(this.startTime);
       },
-      message: "Please enter a valid endTime",
+      message: "The End time is not ordered properly",
     },
+    {
+      validator:help.dateCheck,
+      message: "The End time is invalid"
+    }
+  ]
   },
 
   totalNumberOfAttendees: {
@@ -220,6 +229,7 @@ const eventSchema = new mongoose.Schema({
     },
   ],
 });
+
 
 const Event = mongoose.model("Event", eventSchema);
 

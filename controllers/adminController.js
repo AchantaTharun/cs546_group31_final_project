@@ -1,5 +1,6 @@
 import Admin from "../models/adminModel.js";
 import Gym from "../models/gymModel.js";
+import Event from "../models/eventModel.js"
 import Trainer from "../models/trainerModel.js";
 import SignUpRequest from "../models/signUpRequestModel.js";
 import RejectedRequest from "../models/rejectedRequestModel.js";
@@ -7,6 +8,10 @@ import mongoose from "mongoose";
 import * as help from "../Helpers.js";
 import * as e_valid from 'email-validator';
 import {ObjectId} from 'mongodb';
+import  nodemailer from "nodemailer";
+import dotenv from "dotenv";
+dotenv.config({ path: "../.env" });   //This was the issue, why my Emails were not being sent.
+import Image from "../models/imageModel.js";
 
 // This is the one and only Administrator created during the running of the seed file.
 export const makeAdmin = async (firstAdmin) => {
@@ -17,6 +22,40 @@ export const makeAdmin = async (firstAdmin) => {
   const admin = await Admin.create(firstAdmin); //Mongoose will automatically validate the data itself.
   console.log("Admin created successfully", admin);
   mongoose.disconnect();
+};
+
+export const sendEmail = (sendto,decision,reason) => 
+{
+  const transporter = nodemailer.createTransport({
+    service: "gmail",
+    host: "smtp.gmail.com",
+    port: 587,
+    secure: false,
+    auth: {
+      user: process.env.MAILUSER,
+      pass: process.env.MAILPASSWORD
+    },
+  });
+  const mailOptions = {
+    from:{
+        name: "Gym Mate Application",
+        address: process.env.MAILUSER
+    },
+    to : sendto,
+    subject: `Status Change For your account`,
+    text: `Your Account request has been ${decision} | The reason is : ${reason}`
+}
+// console.log(process.env.MAILUSER);
+// console.log(process.env.MAILPASSWORD);
+
+  try{
+    transporter.sendMail(mailOptions);
+    console.log("The Mail Was Sent");
+  } catch(e)
+  {
+    throw "Problem in Sending the Email";
+  }
+
 };
 
 export const adminLogin = async (emailAddress, password) => {
@@ -84,225 +123,209 @@ export const passwordChange = async (emailAddress, oldPassword, newPassword,conf
 };
 
 
-export const approveGym = async (req,res) => {
-  try {
-    const gym = await Gym.findByIdAndUpdate(req.params.gymId, {
-      status: "approved",
-    });
+export const statusChange = async (status,id,type,reason) => {
+    let object = undefined;
 
-    if (!gym) {
-      throw new Error("No gym found with this id");
+    if(!status || !id || !type || !reason) throw "Some Fields are missing";
+    if(typeof reason!=="string" || reason.trim()==="") throw "Reason is not reasonable";
+
+
+    //Initial validations
+    if(status !=="approved" && status !=="rejected") throw "Status has to be either Accepted or Rejected";
+    id = help.checkId(id);
+    if(type!=="trainer" && type!=="gym") throw "Type has to be either trainer or gym in this very case scenario";
+    
+    if(type==="trainer")
+    {
+      object = await Trainer.findByIdAndUpdate(id,{status: status},{new:true});
     }
-    const removeRequest = await SignUpRequest.findOneAndDelete({
-      requestedBy: gym._id,
-    });
+    else if(type==="gym")
+    {
+      object = await Gym.findByIdAndUpdate(id,{status: status},{new:true});
+    }
+
+    //It has to be initialized by this point.
+    if (!object) {
+      throw `No ${type} found with ${id} ID`;
+    }
+
+    //Add the information above into the reject request panel, but only if the value is rejected
+    if(status==="rejected"){
+      let rejectedRequestObject = {requestType: type,
+      email: object.email,
+      phone:object.phone,
+      reason: reason,
+      address: {
+        street: object.address.street,
+        city: object.address.city,
+        state: object.address.state,
+        zip: object.address.zip
+      }};
+
+      const results = await RejectedRequest.create(rejectedRequestObject); 
+      // console.log("Rejected Request Object created and saved successfully", results);
+    }
+
+    //send an email, using the nodemailer module
+    sendEmail(object.email,status,reason);
+
+    //Delete the main object now
+    if(status==="rejected")
+    {
+      //Somthing has to be deleted.
+      let removeObject = undefined;
+      if(type === "trainer"){
+        removeObject = await Trainer.findOneAndDelete({_id: object._id});
+      }
+      else if(type === "gym")
+      {
+        removeObject = await Gym.findOneAndDelete({_id: object._id});
+      }
+      if (!removeObject) {
+        throw `The ${type} data could not be deleted`;
+      }
+      console.log("The main object was deleted");
+
+    }
+    
+    //This is always supposed to be done 
+    const removeRequest = await SignUpRequest.findOneAndDelete({requestedBy: id});
     if (!removeRequest) {
-      throw new Error("No request found with this id");
+      throw "No Sign Up request could be found with this ID and hence nothing was deleted";
     }
 
-    res.status(200).json({
-      status: "success",
-      message: "Gym approved successfully",
-    });
-  } catch (err) {
-    res.status(400).json({
-      status: "fail",
-      message: err.message,
-    });
-  }
 };
 
-export const rejectGym = async (req, res) => {
-  try {
-    const gym = await Gym.findByIdAndUpdate(req.params.gymId, {
-      status: "rejected",
-      reason: req.body.reason,
-    });
-    if (!gym) {
-      throw new Error("No gym found with this id");
-    }
-    const deletedGym = await Gym.findByIdAndDelete(req.params.gymId);
-    if (!deletedGym) {
-      throw new Error("No gym found with this id");
-    }
-    const removeRequest = await SignUpRequest.findOneAndDelete({
-      requestedBy: gym._id,
-    });
-    if (!removeRequest) {
-      throw new Error("No request found with this id");
-    }
-    const rejectedRequest = await RejectedRequest.create({
-      requestType: "gym",
-      email: gym.email,
-      phone: gym.phone,
-      reason: req.body.reason,
-      address: gym.address,
-    });
-    if (!rejectedRequest) {
-      throw new Error("No request found with this id");
-    }
-    res.status(200).json({
-      status: "success",
-      message: "Gym rejected successfully",
-    });
-  } catch (err) {
-    res.status(400).json({
-      status: "fail",
-      message: err.message,
-    });
+export const getAllRequestReports = async () =>
+{
+  const reportRequests = await RejectedRequest.find({}).select('_id requestType email phone reason').sort({ rejectedAt: 'asc' }).exec();
+  if (!reportRequests) {
+    throw "No Rejected Requests are there in the system";
   }
+  return reportRequests;   
 };
 
-export const approveTrainer = async (req, res) => {
-  try {
-    const trainer = await Trainer.findByIdAndUpdate(req.params.trainerId, {
-      status: "approved",
-    });
-
-    if (!trainer) {
-      throw new Error("No trainer found with this id");
+export const getAllSignUpRequests = async () =>
+{
+  const signUpRequests = await SignUpRequest.find({}).select('-_id requestType requestedBy').sort({ createdAt: 'asc' }).exec();
+    if (!signUpRequests) {
+      throw "No Sign Up Requests are there in the system";
     }
-    const removeRequest = await SignUpRequest.findOneAndDelete({
-      requestedBy: trainer._id,
-    });
-    if (!removeRequest) {
-      throw new Error("No request found with this id");
-    }
-
-    res.status(200).json({
-      status: "success",
-      message: "Trainer approved successfully",
-    });
-  } catch (err) {
-    res.status(400).json({
-      status: "fail",
-      message: err.message,
-    });
-  }
+  return signUpRequests;
 };
 
-export const rejectTrainer = async (req, res) => {
-  try {
-    if (!req.body.reason) {
-      throw new Error("Please provide a reason");
-    }
-    const trainer = await Trainer.findByIdAndUpdate(req.params.trainerId, {
-      status: "rejected",
-      reason: req.body.reason,
-    });
-    if (!trainer) {
-      throw new Error("No trainer found with this id");
-    }
-    const deletedTrainer = await Trainer.findByIdAndDelete(
-      req.params.trainerId
-    );
-    if (!deletedTrainer) {
-      throw new Error("No trainer found with this id");
-    }
-    const removeRequest = await SignUpRequest.findOneAndDelete({
-      requestedBy: trainer._id,
-    });
-    if (!removeRequest) {
-      throw new Error("No request found with this id");
-    }
-    const rejectedRequest = await RejectedRequest.create({
-      requestType: "trainer",
-      email: trainer.email,
-      phone: trainer.phone,
-      reason: req.body.reason,
-      address: trainer.address,
-    });
-    if (!rejectedRequest) {
-      throw new Error("No request found with this id");
-    }
-    res.status(200).json({
-      status: "success",
-      message: "Trainer rejected successfully",
-    });
-  } catch (err) {
-    res.status(400).json({
-      status: "fail",
-      message: err.message,
-    });
+export const getOneRequestReport = async (id) =>{
+
+  //Validating the input parameters..
+  if(!id) throw "Id Parameter is missing";
+  id = help.checkId(id);
+
+  const rprtRequest = await RejectedRequest.findOne({ _id:id }).select('_id requestType email phone reason').exec();
+  if (!rprtRequest) {
+    throw "No Rejected Request found";
   }
+  return rprtRequest; 
 };
 
-export const getAllGymsRequests = async (req, res) => {
-  try {
-    const requests = await SignUpRequest.find({ requestType: "gym" });
-    if (!requests) {
-      throw new Error("No requests found");
-    }
-    res.status(200).json({
-      status: "success",
-      data: {
-        requests,
-      },
-    });
-  } catch (err) {
-    res.status(400).json({
-      status: "fail",
-      message: err.message,
-    });
+export const getOneSignUpRequest = async (id) =>{
+
+  //Validating the input parameters..
+  if(!id) throw "Id Parameter is missing";
+  id = help.checkId(id);
+
+  const signUpRequest = await SignUpRequest.findOne({ _id:id }).select('_id requestType requestedBy').exec();
+  if (!signUpRequest) {
+    throw "No Sign Up Request found";
   }
+  return signUpRequest; 
 };
 
-export const getAllTrainersRequests = async (req, res) => {
-  try {
-    const requests = await SignUpRequest.find({ requestType: "trainer" });
-    if (!requests) {
-      throw new Error("No requests found");
-    }
-    res.status(200).json({
-      status: "success",
-      data: {
-        requests,
-      },
-    });
-  } catch (err) {
-    res.status(400).json({
-      status: "fail",
-      message: err.message,
-    });
+//delete one user / gym / trainer /event 
+
+//get all users / gyms / trainers / events
+//get one user /gym / trainers / events 
+
+//create an event //Add the eventLocation field while submitting the object
+//Add the email validator //state must be uppercase
+
+export const createEvent = async (
+  img,
+  title,
+  description,
+  contactEmail,
+  streetAddress,
+  city,
+  state,
+  zipCode,
+  maxCapacity,
+  priceOfAdmission,
+  startTime,
+  endTime,
+  totalNumberOfAttendees
+) => {
+  // The actual function logic starts here 
+  //First will be the validation part.
+  if(!img || !title || !description || !contactEmail || !streetAddress || !city || !state || !zipCode
+    || !maxCapacity || (!priceOfAdmission && priceOfAdmission !== 0) || !startTime || !endTime || (!totalNumberOfAttendees && totalNumberOfAttendees !==0))
+    throw "Some input Parameters are missing";
+  
+  img = help.checkId(img);
+  title = help.checkString(title);
+  description = help.checkString(description);
+  if(typeof contactEmail !=='string') throw "Email has to be a string";
+  contactEmail = contactEmail.trim();
+  if(!e_valid.validate(contactEmail)) throw "The Email provided is not valid";
+  streetAddress = help.checkString(streetAddress);
+  city = help.checkString(city);
+  state = help.checkState(state);  //Remember that you still have to add these two functions.
+  zipCode = help.checkZip(zipCode);
+  if(typeof maxCapacity!=='number' || maxCapacity<=0 || !Number.isInteger(maxCapacity)) throw "Max capacity value is invalid";
+  if(typeof priceOfAdmission!=='number' || priceOfAdmission < 0) throw "Price of Admission has an invalid value";
+  // if(!help.isDate(eventDate)) throw "THe event date value is not proper";
+  startTime = help.checkString(startTime);
+  if(!help.dateCheck(startTime)) throw "Start time couldn't be parsed";
+  endTime = help.checkString(endTime);
+  if(!help.dateCheck(endTime)) throw "End time couldn't be parsed";
+  
+  if(((new Date(startTime)) > (new Date(endTime))) || ((new Date()) > (new Date(startTime)))) throw "The dates are not in an orderly fashion";  //!(help.isEarlierInSameDay(new Date(startTime),new Date(endTime))) This was removed from the conditions.
+  if(typeof totalNumberOfAttendees !=='number' || totalNumberOfAttendees > maxCapacity) throw "Number of attendees are invalid";
+  //Validations are completed
+
+  //Create an event and then just basically store it in the database.
+  const eventbyAdmin = {
+    img : img,
+    title : title,
+    description : description,
+    contactEmail : contactEmail,
+    eventLocation:
+    { 
+        streetAddress : streetAddress,
+        city : city,
+        state : state,
+        zipCode : zipCode
+    },
+    maxCapacity : maxCapacity,
+    priceOfAdmission : priceOfAdmission,
+    startTime : startTime,
+    endTime : endTime,
+    totalNumberOfAttendees : totalNumberOfAttendees
   }
+  const adminEvent = await Event.create(eventbyAdmin);
+  if(!adminEvent)
+  {
+    throw "Event couldn't be created";
+  } 
+  return adminEvent;
 };
 
-export const getAllRejectedRequestsGyms = async (req, res) => {
-  try {
-    const requests = await RejectedRequest.find({ requestType: "gym" });
-    if (!requests) {
-      throw new Error("No requests found");
-    }
-    res.status(200).json({
-      status: "success",
-      data: {
-        requests,
-      },
-    });
-  } catch (err) {
-    res.status(400).json({
-      status: "fail",
-      message: err.message,
-    });
-  }
+export const getOne = async (type,id) => {
+
 };
 
-export const getAllRejectedRequestsTrainers = async (req, res) => {
-  try {
-    const requests = await RejectedRequest.find({ requestType: "trainer" });
-    if (!requests) {
-      throw new Error("No requests found");
-    }
-    res.status(200).json({
-      status: "success",
-      data: {
-        requests,
-      },
-    });
-  } catch (err) {
-    res.status(400).json({
-      status: "fail",
-      message: err.message,
-    });
-  }
+export const getAll = async (type) => {
+
+};
+
+export const getSome = async (type,name) => {
+
 };
