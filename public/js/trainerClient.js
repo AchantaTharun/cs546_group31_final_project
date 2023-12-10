@@ -7,10 +7,12 @@ const section = document.querySelector('section'),
   overlay = document.querySelector('.overlay'),
   showBtn = document.querySelector('.show-modal'),
   closeBtn = document.querySelector('.close-btn');
+
 showBtn.addEventListener('click', () => {
   section.classList.add('active');
   inactiveSessionErrorDiv.hidden = true;
 });
+
 overlay.addEventListener('click', () => section.classList.remove('active'));
 
 closeBtn.addEventListener('click', () => {
@@ -51,21 +53,17 @@ document.getElementById('createSession').addEventListener('click', () => {
     endDate,
   };
 
-  // Call the createSession function with the form data
   createSession(formData);
 });
 
 async function createSession(formData) {
   try {
     const form = document.getElementById('createSessionForm');
-
     const apiUrl = '/session/createsession';
-
     const response = await apiRequest('post', apiUrl, formData);
 
     console.log('Session created successfully!', response);
     window.location.href = '/trainer/sessions';
-    // You can handle success actions like showing a success message, closing the modal, or redirecting the user.
   } catch (error) {
     console.error('Error creating session:', error);
     const errorsList = error.errors
@@ -73,7 +71,6 @@ async function createSession(formData) {
       .join('');
     createSessionErrorDiv.hidden = false;
     createSessionErrorDiv.innerHTML = `<p>Please correct the errors:</p><ul>${errorsList}</ul>`;
-    // You can handle error actions like showing an error message or highlighting the form fields with errors.
   }
 }
 
@@ -84,12 +81,10 @@ document.addEventListener('DOMContentLoaded', function () {
   );
   const addSessionSlotButton = document.getElementById('addSessionSlot');
 
-  // Add event listener for adding session slot
   addSessionSlotButton.addEventListener('click', function () {
     addSessionSlot();
   });
 
-  // Event delegation for removing session slot
   sessionSlotsContainer.addEventListener('click', function (event) {
     if (event.target.classList.contains('removeSlot')) {
       removeSessionSlot(event.target.parentNode);
@@ -196,7 +191,6 @@ async function endSession(sessionId, sessionType, registeredUsersCount) {
     const response = await apiRequest('post', apiUrl);
 
     console.log(`Session ${sessionId} ended successfully!`, response);
-    // You can handle success actions if needed.
     window.location.href = '/trainer/sessions';
   } catch (error) {
     console.error(`Error toggling session ${sessionId}:`, error);
@@ -205,10 +199,9 @@ async function endSession(sessionId, sessionType, registeredUsersCount) {
     );
     errorDiv.hidden = false;
     errorDiv.innerHTML = `Error: ${error.errors}`;
-    // You can handle error actions if needed.
   }
 }
 
 function clearSessionSlots() {
-  sessionSlotsContainer.innerHTML = ''; // Clear the session slots
+  sessionSlotsContainer.innerHTML = '';
 }
