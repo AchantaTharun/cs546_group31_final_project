@@ -17,6 +17,27 @@ export const createSession = async (req, res) => {
 
     const trainer = req.trainer;
 
+    const newSession = new Session({
+      name: sessionName,
+      place: sessionPlace,
+      isWeekly,
+      capacity: sessionCapacity,
+      sessionSlots,
+      workoutType,
+      startDate,
+      endDate,
+      isActive: true,
+    });
+
+    const validationErrors = newSession.validateSync();
+    if (validationErrors) {
+      const errors = Object.values(validationErrors.errors).map(
+        (error) => error.message
+      );
+      console.log(errors);
+      return res.status(400).json({ errors });
+    }
+
     const currentDate = new Date();
 
     if (new Date(startDate) < currentDate || new Date(endDate) < currentDate) {
@@ -46,35 +67,14 @@ export const createSession = async (req, res) => {
     });
 
     if (
-      trainer.sessions.indexOf(conflictingSession._id) !== -1 &&
-      conflictingSession
+      conflictingSession &&
+      trainer.sessions.indexOf(conflictingSession._id) !== -1
     ) {
       return res.status(400).json({
         errors: [
           'There is already an active session with conflicting time slots and weekdays',
         ],
       });
-    }
-
-    const newSession = new Session({
-      name: sessionName,
-      place: sessionPlace,
-      isWeekly,
-      capacity: sessionCapacity,
-      sessionSlots,
-      workoutType,
-      startDate,
-      endDate,
-      isActive: true,
-    });
-
-    const validationErrors = newSession.validateSync();
-    if (validationErrors) {
-      const errors = Object.values(validationErrors.errors).map(
-        (error) => error.message
-      );
-      console.log(errors);
-      return res.status(400).json({ errors });
     }
 
     const savedSession = await newSession.save();
@@ -115,6 +115,24 @@ export const updateSession = async (req, res) => {
       return res.status(404).json({ errors: ['Session not found'] });
     }
 
+    session.name = sessionName;
+    session.place = sessionPlace;
+    session.isWeekly = isWeekly;
+    session.capacity = sessionCapacity;
+    session.sessionSlots = sessionSlots;
+    session.workoutType = workoutType;
+    session.startDate = startDate;
+    session.endDate = endDate;
+    session.isActive = true;
+
+    const validationErrors = session.validateSync();
+    if (validationErrors) {
+      const errors = Object.values(validationErrors.errors).map(
+        (error) => error.message
+      );
+      return res.status(400).json({ errors });
+    }
+
     const currentDate = new Date();
 
     if (new Date(startDate) < currentDate || new Date(endDate) < currentDate) {
@@ -144,32 +162,14 @@ export const updateSession = async (req, res) => {
     });
 
     if (
-      trainer.sessions.indexOf(conflictingSession._id) !== -1 &&
-      conflictingSession
+      conflictingSession &&
+      trainer.sessions.indexOf(conflictingSession._id) !== -1
     ) {
       return res.status(400).json({
         errors: [
           'There is already an active session with conflicting time slots and weekdays',
         ],
       });
-    }
-
-    session.name = sessionName;
-    session.place = sessionPlace;
-    session.isWeekly = isWeekly;
-    session.capacity = sessionCapacity;
-    session.sessionSlots = sessionSlots;
-    session.workoutType = workoutType;
-    session.startDate = startDate;
-    session.endDate = endDate;
-    session.isActive = true;
-
-    const validationErrors = session.validateSync();
-    if (validationErrors) {
-      const errors = Object.values(validationErrors.errors).map(
-        (error) => error.message
-      );
-      return res.status(400).json({ errors });
     }
 
     const updatedSession = await session.save();
@@ -414,7 +414,7 @@ export const toggleSessionActivation = async (req, res) => {
     }
 
     if (
-      trainer.sessions.indexOf(new mongoose.Types.ObjectId(sessionId) === -1)
+      trainer.sessions.indexOf(new mongoose.Types.ObjectId(sessionId)) === -1
     ) {
       return res
         .status(400)
@@ -453,7 +453,10 @@ export const toggleSessionActivation = async (req, res) => {
         ],
       });
 
-      if (conflictingSession) {
+      if (
+        conflictingSession &&
+        trainer.sessions.indexOf(conflictingSession._id) !== -1
+      ) {
         return res.status(400).json({
           errors: [
             'There is already an active session with conflicting time slots and weekdays',
