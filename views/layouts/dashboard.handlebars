@@ -1,0 +1,58 @@
+<html lang='en'>
+  <head>
+    <meta charset='UTF-8' />
+    <meta name='viewport' content='width=device-width, initial-scale=1.0' />
+    <title>Dashboard Layout</title>
+
+    <link rel='stylesheet' href='/public/css/header.css' />
+    <link rel='stylesheet' href='/public/css/trainerSession.css' />
+  </head>
+  <body>
+    <header>
+      <div class='inner'>
+        <div class='logo'>
+          <div>
+            <h1>GymMate</h1>
+          </div>
+        </div>
+        <nav>
+          <li><span><a href='\logout' class='button'>Logout</a></span></li>
+        </nav>
+      </div>
+    </header>
+
+    <nav class='navbar-primary'>
+      <a href='#' class='user-name-navbar'><span
+          class='glyphicon glyphicon-menu-left'
+        >{{name}}</span></a>
+      <ul class='navbar-primary-menu'>
+        <li>
+          <a href='/{{type}}/dashboard'><span
+              class='glyphicon glyphicon-list-alt'
+            ></span><span class='nav-label'>Dashboard</span></a>
+          <a href='/{{type}}/gyms'><span
+              class='glyphicon glyphicon-envelope'
+            ></span><span class='nav-label'>Gyms</span></a>
+          <a href='/{{type}}/sessions'><span
+              class='glyphicon glyphicon-cog'
+            ></span><span class='nav-label'>Sessions</span></a>
+          <a href='/{{type}}/events'><span
+              class='glyphicon glyphicon-calendar'
+            ></span><span class='nav-label'>Events</span></a>
+          <a href='/{{type}}/profile'><span
+              class='glyphicon glyphicon-film'
+            ></span><span class='nav-label'>Profile</span></a>
+        </li>
+      </ul>
+    </nav>
+    <main>
+      {{{body}}}
+    </main>
+    <script
+      src='https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js'
+    ></script>
+    <script src='https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js'></script>
+    <script src='/public/js/helpersClient.js'></script>
+    <script src='/public/js/trainerClient.js'></script>
+  </body>
+</html>
