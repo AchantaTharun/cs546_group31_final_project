@@ -59,7 +59,7 @@ export const createSession = async (req, res) => {
       });
     }
 
-    const conflictingSession = await Session.findOne({
+    const conflictingSessions = await Session.find({
       isActive: true,
       $and: [
         {
@@ -75,11 +75,11 @@ export const createSession = async (req, res) => {
           },
         },
       ],
-    });
+    }).lean();
 
     if (
-      conflictingSession &&
-      trainer.sessions.indexOf(conflictingSession._id) !== -1
+      conflictingSessions &&
+      conflictingSessions.some((ses) => trainer.sessions.includes(ses._id))
     ) {
       return res.status(400).json({
         errors: [
