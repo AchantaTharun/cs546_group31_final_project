@@ -2,6 +2,8 @@ import Admin from "../models/adminModel.js";
 import Gym from "../models/gymModel.js";
 import Event from "../models/eventModel.js"
 import Trainer from "../models/trainerModel.js";
+import Post from "../models/postModel.js";
+import User from "../models/userModel.js";
 import SignUpRequest from "../models/signUpRequestModel.js";
 import RejectedRequest from "../models/rejectedRequestModel.js";
 import mongoose from "mongoose";
@@ -43,7 +45,7 @@ export const sendEmail = (sendto,decision,reason) =>
     },
     to : sendto,
     subject: `Status Change For your account`,
-    text: `Your Account request has been ${decision} | The reason is : ${reason}`
+    text: `Your Account has been ${decision} | The reason is : ${reason}`
 }
 // console.log(process.env.MAILUSER);
 // console.log(process.env.MAILPASSWORD);
@@ -239,14 +241,7 @@ export const getOneSignUpRequest = async (id) =>{
   }
   return signUpRequest; 
 };
-
-//delete one user / gym / trainer /event 
-
-//get all users / gyms / trainers / events
-//get one user /gym / trainers / events 
-
-//create an event //Add the eventLocation field while submitting the object
-//Add the email validator //state must be uppercase
+//Add the email validator   -- ? Don't remember this 
 
 export const createEvent = async (
   img,
@@ -319,13 +314,143 @@ export const createEvent = async (
 };
 
 export const getOne = async (type,id) => {
+  //validations
+  if(!type || !id) throw "Certain input parameters are missing";
+  if(typeof type!=='string') throw "Collection type must be in string format";
+  type=type.trim();
+  if(type!=='user' && type!=='trainer' && type!=='gym' && type!=='event' && type!=='post') throw "Invalid Collection type was passed";
+  id = help.checkId(id);
 
+  let object = undefined; 
+  if(type==='user')
+  {
+    object = await User.findById(id).select('-password').exec();
+  }
+  else if(type==='trainer')
+  {
+    object = await Trainer.findById(id).select('-password').exec();
+  }
+  if(type==='gym')
+  {
+    object = await Gym.findById(id).select('-password').exec();
+  }
+  else if(type==='event')
+  {
+    object = await Event.findById(id);
+  }
+  if(type==='post')
+  {
+    object = await Post.findById(id);
+  }
+
+  if(!object) throw `No ${type} found with that Id`;
+  return object;
+  
 };
 
 export const getAll = async (type) => {
+  //validations
+  if(!type) throw "Input missing";
+  if(typeof type!=='string') throw "Collection type must be in string format";
+  type=type.trim();
+  if(type!=='user' && type!=='trainer' && type!=='gym' && type!=='event' && type!=='post') throw "Invalid Collection type was passed";
+
+  let object = undefined; 
+  if(type==='user')
+  {
+    object = await User.find({}).select('-password').exec();
+  }
+  else if(type==='trainer')
+  {
+    object = await Trainer.find({}).select('-password').exec();
+  }
+  if(type==='gym')
+  {
+    object = await Gym.find({}).select('-password').exec();
+  }
+  else if(type==='event')
+  {
+    object = await Event.find({});
+  }
+  if(type==='post')
+  {
+    object = await Post.find({});
+  }
+
+  if(!object) throw `No ${type} list could be found in the Database`;
+  return object;
 
 };
 
 export const getSome = async (type,name) => {
+  if(!type || !name ) throw "Certain input parameters are missing";
+  if(typeof type!=='string') throw "Collection type must be in string format";
+  type=type.trim();
+  if(type!=='user' && type!=='trainer' && type!=='gym' && type!=='event' && type!=='post') throw "Invalid Collection type was passed";
+  name = help.checkString(name);
 
+  name = new RegExp(name,'gi');
+
+  let object = undefined; 
+  if(type==='user')
+  {
+    object = await User.find({lastName:name}).select('-password').exec();
+  }
+  else if(type==='trainer')
+  {
+    object = await Trainer.find({trainerName: name}).select('-password').exec();
+  }
+  if(type==='gym')
+  {
+    object = await Gym.find({gymName: name}).select('-password').exec();
+  }
+  else if(type==='event')
+  {
+    object = await Event.find({title: name});
+  }
+  if(type==='post')
+  {
+    object = await Post.find({title: name});
+  }
+
+  if(!object) throw `Not one ${type} found with that description`;
+  return object;
 };
+
+export const deleteOne = async (type,id) => {
+  //validations
+  if(!type || !id) throw "Certain input parameters are missing";
+  if(typeof type!=='string') throw "Collection type must be in string format";
+  type=type.trim();
+  if(type!=='user' && type!=='trainer' && type!=='gym' && type!=='event' && type!=='post') throw "Invalid Collection type was passed";
+  id = help.checkId(id);
+
+  let object = undefined; 
+  if(type==='user')
+  {
+    object = await User.findOneAndDelete({_id: id});
+    sendEmail(object.email,'eliminated',"You have broken the application's policy.");
+  }
+  else if(type==='trainer')
+  {
+    object = await Trainer.findOneAndDelete({_id: id});
+    sendEmail(object.email,'eliminated',"You have broken the application's policy.");
+  }
+  if(type==='gym')
+  {
+    object = await Gym.findOneAndDelete({_id: id});
+    sendEmail(object.email,'eliminated',"You have broken the application's policy.");
+  }
+  else if(type==='event')
+  {
+    object = await Event.findOneAndDelete({_id: id});
+  }
+  if(type==='post')
+  {
+    object = await Post.findOneAndDelete({_id: id});
+  }
+
+  if(!object) throw `${type} type object with id: ${id} could not be deleted`;
+  return object;
+  
+}
