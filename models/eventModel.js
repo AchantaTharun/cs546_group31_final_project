@@ -182,23 +182,23 @@ const eventSchema = new mongoose.Schema({
     type: String,
     required: [true, "Please enter the startTime"],
     trim: true,
-    validate: {
-      validator: function (el) {
-        return el >= Date.now();
-      },
-      message: "Please enter a valid startTime",
-    },
+    // validate: {
+    //   validator: function (el) {
+    //     return el >= Date.now();
+    //   },
+    //   message: "Please enter a valid startTime",
+    // },
   },
   endTime: {
     type: String,
     required: [true, "Please enter the endTime"],
     trim: true,
-    validate: {
-      validator: function (el) {
-        return el >= this.startTime;
-      },
-      message: "Please enter a valid endTime",
-    },
+    // validate: {
+    //   validator: function (el) {
+    //     return el >= this.startTime;
+    //   },
+    //   message: "Please enter a valid endTime",
+    // },
   },
 
   totalNumberOfAttendees: {

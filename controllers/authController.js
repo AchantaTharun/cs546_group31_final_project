@@ -1,9 +1,9 @@
-import jwt from 'jsonwebtoken';
-import User from '../models/userModel.js';
-import Admin from '../models/adminModel.js';
-import Gym from '../models/gymModel.js';
-import Trainer from '../models/trainerModel.js';
-import SignUpRequest from '../models/signUpRequestModel.js';
+import jwt from "jsonwebtoken";
+import User from "../models/userModel.js";
+import Admin from "../models/adminModel.js";
+import Gym from "../models/gymModel.js";
+import Trainer from "../models/trainerModel.js";
+import SignUpRequest from "../models/signUpRequestModel.js";
 
 // const s3 = require("../utils/s3");
 
@@ -31,69 +31,67 @@ const checkTokenValid = (passwordChangedAt, tokenIssuedAt) => {
 export const protectRoute = async (req, res, next) => {
   try {
     let token;
-
+    console.log(req.cookies);
     if (!req.cookies.jwt) {
-      return res.redirect('/login');
+      return res.redirect("/user/login");
     }
 
     token = req.cookies.jwt;
-
     if (!token) {
-      return res.redirect('/login');
+      return res.redirect("/user/login");
     }
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
     switch (decoded.role) {
-      case 'user':
+      case "user":
         const user = await User.findById(decoded.id);
         if (!user) {
-          return res.redirect('/login');
+          return res.redirect("/user/login");
         }
-        console.log(user.passwordChangedAt);
         if (
-          'passwordChangedAt' in user &&
+          "passwordChangedAt" in user &&
           checkTokenValid(user.passwordChangedAt, decoded.iat)
         ) {
-          return res.redirect('/login');
+          return res.redirect("/login");
         }
         req.user = user;
         break;
-      case 'admin':
+      case "admin":
         const admin = await Admin.findById(decoded.id);
         if (!admin) {
-          throw new Error('there is no admin with this token');
+          throw new Error("there is no admin with this token");
         }
         if (
-          'passwordChangedAt' in admin &&
+          "passwordChangedAt" in admin &&
           checkTokenValid(admin.passwordChangedAt, decoded.iat)
         ) {
-          return res.redirect('/login');
+          return res.redirect("/login");
         }
         req.admin = admin;
         break;
-      case 'gym':
+      case "gym":
         const gym = await Gym.findById(decoded.id);
         if (!gym) {
-          throw new Error('there is no gym with this token');
+          throw new Error("there is no gym with this token");
         }
         if (
-          'passwordChangedAt' in gym &&
+          "passwordChangedAt" in gym &&
           checkTokenValid(gym.passwordChangedAt, decoded.iat)
         ) {
-          return res.redirect('/login');
+          return res.redirect("/login");
         }
         req.gym = gym;
         break;
-      case 'trainer':
+      case "trainer":
         const trainer = await Trainer.findById(decoded.id);
         if (!trainer) {
-          throw new Error('there is no trainer with this token');
+          throw new Error("there is no trainer with this token");
         }
         if (
-          'passwordChangedAt' in trainer &&
+          "passwordChangedAt" in trainer &&
           checkTokenValid(trainer.passwordChangedAt, decoded.iat)
         ) {
-          return res.redirect('/login');
+          return res.redirect("/login");
         }
         req.trainer = trainer;
         break;
@@ -106,7 +104,7 @@ export const protectRoute = async (req, res, next) => {
     //   message: err.message,
     // });
 
-    return res.redirect('/login');
+    return res.redirect("/user/login");
   }
 };
 
@@ -116,32 +114,32 @@ export const restrictTo = (role) => {
       let token;
 
       if (
-        role !== 'user' &&
-        role !== 'admin' &&
-        role !== 'gym' &&
-        role !== 'trainer'
+        role !== "user" &&
+        role !== "admin" &&
+        role !== "gym" &&
+        role !== "trainer"
       ) {
-        throw new Error('invalid role');
+        throw new Error("invalid role");
       }
 
       if (!req.cookies.jwt) {
-        return res.redirect('/login');
+        return res.redirect("/login");
       }
 
       token = req.cookies.jwt;
       if (!token) {
-        throw new Error('You are not logged in');
+        throw new Error("You are not logged in");
       }
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
       if (decoded.role !== role) {
-        throw new Error('You are not allowed to perform this action');
+        throw new Error("You are not allowed to perform this action");
       }
 
       next();
     } catch (err) {
       res.status(400).json({
-        status: 'fail',
+        status: "fail",
         message: err.message,
       });
     }
@@ -151,28 +149,42 @@ export const restrictTo = (role) => {
 // user
 export const userSignup = async (req, res) => {
   try {
-    const { firstName, lastName, email, password, passwordConfirm } = req.body;
+    const {
+      firstName,
+      lastName,
+      email,
+      password,
+      passwordConfirm,
+      latitude,
+      longitude,
+    } = req.body;
+    const location = {
+      coordinates: [latitude, longitude],
+    };
     const newUser = await User.create({
       firstName,
       lastName,
       email,
       password,
       passwordConfirm,
+      location,
     });
-
-    const token = signJWT(newUser._id, 'user');
-
-    res.status(201).json({
-      status: 'success',
-      token,
-      data: {
-        user: newUser,
-      },
-    });
+    if (!newUser) {
+      throw new Error("User not created");
+    }
+    res.redirect("/login");
   } catch (err) {
-    res.status(400).json({
-      status: 'fail',
-      message: err.message,
+    if (err.code === 11000) {
+      return res.render("user/userSignUp", {
+        errors: ["User already exists with the given email"],
+        hasErrors: true,
+        layout: "main",
+      });
+    }
+    res.render("user/userSignUp", {
+      errors: [err.message],
+      hasErrors: true,
+      layout: "main",
     });
   }
 };
@@ -182,25 +194,29 @@ export const userLogin = async (req, res) => {
     const { email, password } = req.body;
 
     if (!email || !password) {
-      throw new Error('Please provide email and password');
+      throw new Error("Please provide email and password");
     }
 
-    const user = await User.findOne({ email }).select('+password');
+    const user = await User.findOne({ email }).select("+password");
 
     if (!user || !(await user.isPasswordCorrect(password, user.password))) {
-      throw new Error('Incorrect email or password');
+      throw new Error("Incorrect email or password");
     }
 
-    const token = signJWT(user._id, 'user');
-    res.cookie('jwt', token, {
+    const token = signJWT(user._id, "user");
+    res.cookie("jwt", token, {
       httpOnly: true,
       secure: true,
-      sameSite: 'Strict',
+      sameSite: "Strict",
     });
 
-    res.redirect('/user/dashboard');
+    res.redirect("/user/home");
   } catch (err) {
-    res.render('accountSignIn', { errors: [err.message], hasErrors: true });
+    res.render("user/userLogin", {
+      errors: [err.message],
+      hasErrors: true,
+      layout: "main",
+    });
   }
 };
 
@@ -208,27 +224,27 @@ export const adminLogin = async (req, res) => {
   const { email, password } = req.body;
   try {
     if (!email || !password) {
-      throw new Error('Please provide email and password');
+      throw new Error("Please provide email and password");
     }
-    const adminUser = await Admin.findOne({ email }).select('+password');
+    const adminUser = await Admin.findOne({ email }).select("+password");
 
     if (
       !adminUser ||
       !(await adminUser.isPasswordCorrect(password, adminUser.password))
     ) {
-      throw new Error('Incorrect email or password');
+      throw new Error("Incorrect email or password");
     }
 
-    const token = signJWT(adminUser._id, 'admin');
-    res.cookie('jwt', token, {
+    const token = signJWT(adminUser._id, "admin");
+    res.cookie("jwt", token, {
       httpOnly: true,
       secure: true,
-      sameSite: 'Strict',
+      sameSite: "Strict",
     });
 
-    res.redirect('/admin/dashboard');
+    res.redirect("/admin/dashboard");
   } catch (err) {
-    res.render('adminSignIn', { errors: [err.message], hasErrors: true });
+    res.render("adminSignIn", { errors: [err.message], hasErrors: true });
   }
 };
 
@@ -267,13 +283,13 @@ export const gymSignup = async (req, res) => {
     });
     const signUpRequest = await SignUpRequest.create({
       requestedBy: newGym._id,
-      requestType: 'gym',
+      requestType: "gym",
     });
 
-    const token = signJWT(newGym._id, 'gym');
+    const token = signJWT(newGym._id, "gym");
 
     res.status(201).json({
-      status: 'success',
+      status: "success",
       token,
       data: {
         gym: newGym,
@@ -281,7 +297,7 @@ export const gymSignup = async (req, res) => {
     });
   } catch (err) {
     res.status(400).json({
-      status: 'fail',
+      status: "fail",
       message: err.message,
     });
   }
@@ -291,25 +307,25 @@ export const gymLogin = async (req, res) => {
   try {
     const { email, password } = req.body;
     if (!email || !password) {
-      throw new Error('Please provide email and password');
+      throw new Error("Please provide email and password");
     }
-    const gymUser = await Gym.findOne({ email }).select('+password');
+    const gymUser = await Gym.findOne({ email }).select("+password");
     if (
       !gymUser ||
       !(await gymUser.isPasswordCorrect(password, gymUser.password))
     ) {
-      throw new Error('Incorrect email or password');
+      throw new Error("Incorrect email or password");
     }
-    const token = signJWT(gymUser._id, 'gym');
-    res.cookie('jwt', token, {
+    const token = signJWT(gymUser._id, "gym");
+    res.cookie("jwt", token, {
       httpOnly: true,
       secure: true,
-      sameSite: 'Strict',
+      sameSite: "Strict",
     });
 
-    res.redirect('/admin/dashboard');
+    res.redirect("/admin/dashboard");
   } catch (err) {
-    res.render('accountSignIn', { errors: [err.message], hasErrors: true });
+    res.render("accountSignIn", { errors: [err.message], hasErrors: true });
   }
 };
 
@@ -342,8 +358,8 @@ export const trainerSignup = async (req, res) => {
       phone,
     });
     if (password !== passwordConfirm) {
-      return res.render('trainer/trainerSignUp', {
-        errors: ['Password and passwordConfirm should match'],
+      return res.render("trainer/trainerSignUp", {
+        errors: ["Password and passwordConfirm should match"],
         hasErrors: true,
       });
     }
@@ -353,7 +369,7 @@ export const trainerSignup = async (req, res) => {
       const errors = Object.values(validationErrors.errors).map(
         (error) => error.message
       );
-      return res.render('trainer/trainerSignUp', {
+      return res.render("trainer/trainerSignUp", {
         errors,
         hasErrors: true,
       });
@@ -363,20 +379,20 @@ export const trainerSignup = async (req, res) => {
 
     const signUpRequest = await SignUpRequest.create({
       requestedBy: createdTrainer._id,
-      requestType: 'trainer',
+      requestType: "trainer",
     });
 
-    const token = signJWT(createdTrainer._id, 'trainer');
+    const token = signJWT(createdTrainer._id, "trainer");
 
-    res.redirect('/accountSignIn');
+    res.redirect("/accountSignIn");
   } catch (err) {
     if (err.code === 11000 && err.keyPattern.email) {
-      return res.render('trainer/trainerSignUp', {
-        errors: ['User already exists with the given email'],
+      return res.render("trainer/trainerSignUp", {
+        errors: ["User already exists with the given email"],
         hasErrors: true,
       });
     }
-    return res.render('trainer/trainerSignUp', {
+    return res.render("trainer/trainerSignUp", {
       errors: [err.message],
       hasErrors: true,
     });
@@ -387,26 +403,26 @@ export const trainerLogin = async (req, res) => {
   try {
     const { email, password } = req.body;
     if (!email || !password) {
-      throw new Error('Please provide email and password');
+      throw new Error("Please provide email and password");
     }
 
-    const trainer = await Trainer.findOne({ email }).select('+password');
+    const trainer = await Trainer.findOne({ email }).select("+password");
 
     if (
       !trainer ||
       !(await trainer.isPasswordCorrect(password, trainer.password))
     ) {
-      throw new Error('Incorrect email or password');
+      throw new Error("Incorrect email or password");
     }
-    const token = signJWT(trainer._id, 'trainer');
-    res.cookie('jwt', token, {
+    const token = signJWT(trainer._id, "trainer");
+    res.cookie("jwt", token, {
       httpOnly: true,
       secure: true,
-      sameSite: 'Strict',
+      sameSite: "Strict",
     });
 
-    res.redirect('/trainer/dashboard');
+    res.redirect("/trainer/dashboard");
   } catch (err) {
-    res.render('accountSignIn', { errors: [err.message], hasErrors: true });
+    res.render("accountSignIn", { errors: [err.message], hasErrors: true });
   }
 };

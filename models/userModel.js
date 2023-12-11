@@ -8,7 +8,10 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: [true, "Please enter your first name"],
     trim: true,
-    validate: [validator.isAlpha, "Please enter a valid first name"],
+    validate: [
+      validator.isAlpha,
+      "Please enter a valid first name, user name can only contain letters",
+    ],
     minLength: [2, "First name must be at least 2 characters long"],
     maxLength: [20, "First name must be less than 20 characters long"],
   },
@@ -16,7 +19,10 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: [true, "Please enter your last name"],
     trim: true,
-    validate: [validator.isAlpha, "Please enter a valid last name"],
+    validate: [
+      validator.isAlpha,
+      "Please enter a valid last name,last name can only contain letters",
+    ],
     minLength: [2, "Last name must be at least 2 characters long"],
     maxLength: [20, "Last name must be less than 20 characters long"],
   },
@@ -49,6 +55,13 @@ const userSchema = new mongoose.Schema({
       },
       message: "Passwords do not match",
     },
+  },
+  location: {
+    type: {
+      type: String,
+      default: "Point",
+    },
+    coordinates: [Number],
   },
   passwordChangedAt: {
     type: Date,

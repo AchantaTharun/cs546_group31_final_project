@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+    </head>
+    <link rel="stylesheet" href="/public/css/userProfile.css ">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+
+    <body>
+        <nav class="navbar bg-body-tertiary">
+            <div class="container-fluid">
+                <a class="navbar-brand m-2" href="/user/home">GymMate</a>
+                <div class="d-flex flex-row-reverse">
+                    <form class=" m-2" role="search" action="/user/profile" method="get">
+                        <button class="btn btn-success" type="submit">Profile</button>
+                    </form>
+
+                    <form class=" m-2" role="search" action="/user/logout" method="get">
+                        <button class="btn btn-danger" type="submit">Logout</button>
+                    </form>
+                </div>
+            </div>
+        </nav>
+
+
+
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div id="content" class="content content-full-width">
+                        <!-- begin profile -->
+                        <div class="profile">
+                            <div class="profile-header">
+                                <!-- BEGIN profile-header-cover -->
+                                <div class="profile-header-cover"></div>
+                                <!-- END profile-header-cover -->
+                                <!-- BEGIN profile-header-content -->
+                                <div class="profile-header-content">
+                                    <!-- BEGIN profile-header-img -->
+                                    <div class="profile-header-img">
+                                        <img src="https://bootdey.com/img/Content/avatar/avatar3.png" alt="">
+                                    </div>
+                                    <!-- END profile-header-img -->
+                                    <!-- BEGIN profile-header-info -->
+                                    <div class="profile-header-info">
+                                        <h4 class="m-t-10 m-b-5">Sean Ngu</h4>
+                                        <p class="m-b-10">UXUI + Frontend Developer</p>
+                                        <a href="/user/profile/edit" class="btn btn-sm btn-info mb-2">Edit Profile</a>
+                                    </div>
+                                    <!-- END profile-header-info -->
+                                </div>
+                                <!-- END profile-header-content -->
+                                <!-- BEGIN profile-header-tab -->
+                                <ul class="profile-header-tab nav nav-tabs">
+                                    <li class="nav-item"><a
+                                            href="https://www.bootdey.com/snippets/view/bs4-profile-with-timeline-posts"
+                                            target="__blank" class="nav-link_">POSTS</a></li>
+                                    <li class="nav-item"><a
+                                            href="https://www.bootdey.com/snippets/view/bs4-profile-about"
+                                            target="__blank" class="nav-link_">ABOUT</a></li>
+                                    <li class="nav-item"><a href="https://www.bootdey.com/snippets/view/profile-photos"
+                                            target="__blank" class="nav-link_">PHOTOS</a></li>
+                                    <li class="nav-item"><a href="https://www.bootdey.com/snippets/view/profile-videos"
+                                            target="__blank" class="nav-link_">VIDEOS</a></li>
+                                    <li class="nav-item"><a
+                                            href="https://www.bootdey.com/snippets/view/bs4-profile-friend-list"
+                                            target="__blank" class="nav-link_ active show">FRIENDS</a></li>
+                                </ul>
+                                <!-- END profile-header-tab -->
+                            </div>
+                        </div>
+                        <!-- end profile -->
+                        <!-- begin profile-content -->
+                        <div class="profile-content">
+
+                        </div>
+                        <!-- end profile-content -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+            crossorigin="anonymous"></script>
+
+    </body>
+
+</html>

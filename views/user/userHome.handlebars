@@ -1,0 +1,24 @@
+<div class="container mt-4">
+    <h1>User List</h1>
+
+    <div class="row">
+        {{#each users}}
+            <div class="col-md-4">
+                <div class="card user-card">
+                    <div class="card-body">
+                        <h5 class="card-title">{{this.firstName}} {{this.lastName}}</h5>
+                        <p class="card-text">Email: {{this.email}}</p>
+                        <p class="card-text">{{#if this.location}}
+                                Location: Latitude {{this.location.lat}}, Longitude {{this.location.lng}}
+                            {{else}}
+                                Location: Not available
+                            {{/if}}
+                        </p>
+                        <p class="card-text">Created At: {{this.createdAt}}</p>
+                    </div>
+                </div>
+            </div>
+        {{/each}}
+    </div>
+
+</div>
