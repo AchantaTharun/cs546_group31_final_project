@@ -6,10 +6,10 @@ body {
   background-color: #333;
   bottom: 0px;
   left: 0px;
-  position: fixed;
+  position: absolute;
   top: 80px;
   width: 200px;
-  z-index: 1000;
+  z-index: 8;
   overflow: hidden;
   -webkit-transition: all 0.1s ease-in-out;
   -moz-transition: all 0.1s ease-in-out;
@@ -71,8 +71,6 @@ body {
 .main-dashboard-content {
   margin-left: 200px;
   padding: 20px;
-
-  padding-top: 90px;
 }
 
 .collapsed + .main-dashboard-content {
@@ -86,8 +84,6 @@ header {
   border-bottom: solid 1px rgba(16, 16, 16, 0.1);
   font-family: 'Poppins';
   color: white;
-  position: fixed;
-  z-index: 1000;
 }
 
 header .inner {

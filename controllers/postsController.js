@@ -1,16 +1,16 @@
-import Post from '../models/postModel.js';
+import Post from "../models/postModel.js";
 
 export const getAllPosts = async (req, res) => {
   try {
     const posts = await Post.find();
-    if (!posts || posts.length === 0) {
+    if (!posts) {
       return res.status(404).json({
-        status: 'fail',
-        errors: ['No posts have been made yet'],
+        status: "fail",
+        message: "No posts have been made yet",
       });
     }
     return res.status(200).json({
-      status: 'success',
+      status: "success",
       results: posts.length,
       data: {
         posts,
@@ -18,26 +18,27 @@ export const getAllPosts = async (req, res) => {
     });
   } catch (e) {
     return res.status(500).json({
-      status: 'fail',
-      errors: [e.message],
+      status: "fail",
+      message: e.message,
     });
   }
 };
 
 export const createPost = async (req, res) => {
+  console.log("first");
   try {
     const { title, description, author, img } = req.body;
     const newPost = await Post.create({ title, description, author, img });
     return res.status(201).json({
-      status: 'success',
+      status: "success",
       data: {
         post: newPost,
       },
     });
   } catch (e) {
     return res.status(500).json({
-      status: 'fail',
-      errors: [e.message],
+      status: "fail",
+      message: e.message,
     });
   }
 };
@@ -47,20 +48,20 @@ export const getPostById = async (req, res) => {
     const post = await Post.findById(req.params.id);
     if (!post) {
       return res.status(404).json({
-        status: 'fail',
-        errors: ['No post found with that ID'],
+        status: "fail",
+        message: "No post found with that ID",
       });
     }
     return res.status(200).json({
-      status: 'success',
+      status: "success",
       data: {
         post,
       },
     });
   } catch (e) {
     return res.status(500).json({
-      status: 'fail',
-      errors: [e.message],
+      status: "fail",
+      message: e.message,
     });
   }
 };
@@ -70,8 +71,8 @@ export const updatePost = async (req, res) => {
     const post = await Post.findById(req.params.id);
     if (!post) {
       return res.status(404).json({
-        status: 'fail',
-        errors: ['No post found with that ID'],
+        status: "fail",
+        message: "No post found with that ID",
       });
     }
     const { title, description, author, img } = req.body;
@@ -81,15 +82,15 @@ export const updatePost = async (req, res) => {
       { new: true }
     );
     return res.status(200).json({
-      status: 'success',
+      status: "success",
       data: {
         post: updatedPost,
       },
     });
   } catch (e) {
     return res.status(500).json({
-      status: 'fail',
-      errors: [e.message],
+      status: "fail",
+      message: e.message,
     });
   }
 };
@@ -99,19 +100,19 @@ export const deletePost = async (req, res) => {
     const post = await Post.findById(req.params.id);
     if (!post) {
       return res.status(404).json({
-        status: 'fail',
-        errors: ['No post found with that ID'],
+        status: "fail",
+        message: "No post found with that ID",
       });
     }
     await Post.findByIdAndDelete(req.params.id);
     return res.status(204).json({
-      status: 'success',
-      data: 'Deleted post!',
+      status: "success",
+      data: "Deleted post!",
     });
   } catch (e) {
     return res.status(500).json({
-      status: 'fail',
-      errors: [e.message],
+      status: "fail",
+      message: e.message,
     });
   }
 };
@@ -123,8 +124,8 @@ export const addComment = async (req, res) => {
     const post = await Post.findById(req.params.id);
     if (!post) {
       return res.status(404).json({
-        status: 'fail',
-        errors: ['No post found with that ID'],
+        status: "fail",
+        message: "No post found with that ID",
       });
     }
     const commentsKey = commentedBy(user);
@@ -137,38 +138,39 @@ export const addComment = async (req, res) => {
       },
       { new: true }
     );
+    console.log(updatedPost);
     return res.status(200).json({
-      status: 'success',
+      status: "success",
       data: {
         post: updatedPost,
       },
     });
   } catch (e) {
     return res.status(500).json({
-      status: 'fail',
-      errors: [e.message],
+      status: "fail",
+      message: e.message,
     });
   }
 };
 
 export const deleteComment = async (req, res) => {
-  res.send('this route is not yet defined');
+  res.send("this route is not yet defined");
 };
 
 export const updateComment = async (req, res) => {
-  res.send('this route is not yet defined');
+  res.send("this route is not yet defined");
 };
 
 const commentedBy = (user) => {
-  if ('isUser' in user) {
-    return 'users';
+  if ("isUser" in user) {
+    return "users";
   }
 
-  if ('isGym' in user) {
-    return 'gyms';
+  if ("isGym" in user) {
+    return "gyms";
   }
 
-  if ('isTrainer' in user) {
-    return 'trainers';
+  if ("isTrainer" in user) {
+    return "trainers";
   }
 };
