@@ -1,8 +1,8 @@
 {{#if hasData}}
 <form id="entity-display" novalidate>
     <label for="name">
-        GYM NAME :                                                 
-        <input type="text" name="name" id="name" value="{{gymName}}" readonly>
+        TRAINER NAME :                                                 
+        <input type="text" name="name" id="name" value="{{trainerName}}" readonly>
     </label>
     <br>
     <label for="email">
@@ -42,9 +42,9 @@
 {{/unless}}
 
 {{#if hasData}}
-<form action="/api/v1/admin/manage/gym/{{objectId}}" method="POST" id="entity-submit" novalidate>
+<form action="/api/v1/admin/manage/trainer/{{objectId}}" method="POST" id="entity-submit" novalidate>
     <label for="id"> 
-        GYM ID:                                                 
+        TRAINER ID:                                                 
         <input type="text" name="id" id="id" value="{{objectId}}" readonly>
     </label>
     <br>

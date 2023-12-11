@@ -412,28 +412,258 @@ router
     objectId:object._id.toString()});
   })
   .post(restrict,async(req,res)=>{
-    
+    let id = req.params.id;
+    let type = "gym";
+    let object = undefined;
+    try{
+      //General validations
+      if(!id || !type ) throw "Some Fields are missing";
+      type = help.checkString(type);
+      id = help.checkId(id);
+
+      //Case Specific validations
+      if(type!=="gym") throw "Type has to be a gym in this very case scenario";
+    } catch(e)
+    {
+      return res.status(400).render('admin/gymEntity',{title:"GYM DATA",hasData:false,error:e});
+    }
+    try{
+      object = await adminController.deleteOne(type,id);
+    }catch(e)
+    {
+      return res.status(404).render('admin/gymEntity',{title:"GYM DATA",hasData:false,error:e});
+    }
+    // console.log("\nDeleted Object is:",object);
+    return res.redirect('/api/v1/admin/manage');
   })
 
   router.
   route("/manage/trainer/:id")
-  .get(restrict,async(req,res)=>{})
-  .post(restrict,async(req,res)=>{})
+  .get(restrict,async(req,res)=>{
+    try{
+      req.params.id = help.checkId(req.params.id);
+      } catch(e) {
+        return res.status(400).render('admin/trainerEntity',{title:"TRAINER DATA",hasData:false,error: e});
+    }
+    //Validations are complete.
+    let object =undefined;
+    try
+    {
+      object = await adminController.getOne('trainer',req.params.id);
+    } catch(e)
+    {
+      return res.status(404).render('admin/trainerEntity',{title:"TRAINER DATA",hasData:false,error:e});
+    }
+    if(!object)   
+    {
+      return res.status(500).render('admin/trainerEntity',{title:"TRAINER DATA",hasData:false,error:"Internal Server Error"});
+    }
+
+    return res.status(200).render('admin/trainerEntity',{title:"TRAINER DATA",hasData:true,error:"",
+    trainerName:object.trainerName,
+    email:object.email,
+    phone:object.phone,
+    street:object.address.street,
+    state:object.address.state,
+    city:object.address.city,
+    zip:object.address.zip,
+    objectId:object._id.toString()});
+  })
+  .post(restrict,async(req,res)=>{
+    let id = req.params.id;
+    let type = "trainer";
+    let object = undefined;
+    try{
+      //General validations
+      if(!id || !type ) throw "Some Fields are missing";
+      type = help.checkString(type);
+      id = help.checkId(id);
+
+      //Case Specific validations
+      if(type!=="trainer") throw "Type has to be a trainer in this very case scenario";
+    } catch(e)
+    {
+      return res.status(400).render('admin/trainerEntity',{title:"TRAINER DATA",hasData:false,error:e});
+    }
+    try{
+      object = await adminController.deleteOne(type,id);
+    }catch(e)
+    {
+      return res.status(404).render('admin/trainerEntity',{title:"TRAINER DATA",hasData:false,error:e});
+    }
+    // console.log("\nDeleted Object is:",object);
+    return res.redirect('/api/v1/admin/manage');
+  })
 
   router.
   route("/manage/user/:id")
-  .get(restrict,async(req,res)=>{})
-  .post(restrict,async(req,res)=>{})
+  .get(restrict,async(req,res)=>{
+    try{
+      req.params.id = help.checkId(req.params.id);
+      } catch(e) {
+        return res.status(400).render('admin/userEntity',{title:"USER DATA",hasData:false,error: e});
+    }
+    //Validations are complete.
+    let object =undefined;
+    try
+    {
+      object = await adminController.getOne('user',req.params.id);
+    } catch(e)
+    {
+      return res.status(404).render('admin/userEntity',{title:"USER DATA",hasData:false,error:e});
+    }
+    if(!object)   
+    {
+      return res.status(500).render('admin/userEntity',{title:"USER DATA",hasData:false,error:"Internal Server Error"});
+    }
+
+    return res.status(200).render('admin/userEntity',{title:"USER DATA",hasData:true,error:"",
+    name:(object.firstName + object.lastName),
+    email:object.email,
+    objectId:object._id.toString()});
+  })
+  .post(restrict,async(req,res)=>{
+    let id = req.params.id;
+    let type = "user";
+    let object = undefined;
+    try{
+      //General validations
+      if(!id || !type ) throw "Some Fields are missing";
+      type = help.checkString(type);
+      id = help.checkId(id);
+
+      //Case Specific validations
+      if(type!=="user") throw "Type has to be a user in this very case scenario";
+    } catch(e)
+    {
+      return res.status(400).render('admin/userEntity',{title:"USER DATA",hasData:false,error:e});
+    }
+    try{
+      object = await adminController.deleteOne(type,id);
+    }catch(e)
+    {
+      return res.status(404).render('admin/userEntity',{title:"USER DATA",hasData:false,error:e});
+    }
+    // console.log("\nDeleted Object is:",object);
+    return res.redirect('/api/v1/admin/manage');
+  })
 
   router.
   route("/manage/event/:id")
-  .get(restrict,async(req,res)=>{})
-  .post(restrict,async(req,res)=>{})
+  .get(restrict,async(req,res)=>{
+    try{
+      req.params.id = help.checkId(req.params.id);
+      } catch(e) {
+        return res.status(400).render('admin/eventEntity',{title:"EVENT DATA",hasData:false,error: e});
+    }
+    //Validations are complete.
+    let object =undefined;
+    try
+    {
+      object = await adminController.getOne('event',req.params.id);
+    } catch(e)
+    {
+      return res.status(404).render('admin/eventEntity',{title:"EVENT DATA",hasData:false,error:e});
+    }
+    if(!object)   
+    {
+      return res.status(500).render('admin/eventEntity',{title:"EVENT DATA",hasData:false,error:"Internal Server Error"});
+    }
+
+    return res.status(200).render('admin/eventEntity',{title:"EVENT DATA",hasData:true,error:"",
+    title:object.title,
+    contactEmail:object.contactEmail,
+    street:object.eventLocation.streetAddress,
+    state:object.eventLocation.state,
+    city:object.eventLocation.city,
+    zip:object.eventLocation.zipCode,
+    objectId:object._id.toString()});
+  })
+  .post(restrict,async(req,res)=>{
+    let id = req.params.id;
+    let type = "event";
+    let object = undefined;
+    try{
+      //General validations
+      if(!id || !type ) throw "Some Fields are missing";
+      type = help.checkString(type);
+      id = help.checkId(id);
+
+      //Case Specific validations
+      if(type!=="event") throw "Type has to be an event in this very case scenario";
+    } catch(e)
+    {
+      return res.status(400).render('admin/eventEntity',{title:"EVENT DATA",hasData:false,error:e});
+    }
+    try{
+      object = await adminController.deleteOne(type,id);
+    }catch(e)
+    {
+      return res.status(404).render('admin/eventEntity',{title:"EVENT DATA",hasData:false,error:e});
+    }
+    //console.log("\nDeleted Object is:",object);
+    return res.redirect('/api/v1/admin/manage');
+  })
   
   router.
   route("/manage/post/:id")
-  .get(restrict,async(req,res)=>{})
-  .post(restrict,async(req,res)=>{})
+  .get(restrict,async(req,res)=>{
+    try{
+      req.params.id = help.checkId(req.params.id);
+      } catch(e) {
+        return res.status(400).render('admin/postEntity',{title:"POST DATA",hasData:false,error: e});
+    }
+    //Validations are complete.
+    let object =undefined;
+    try
+    {
+      object = await adminController.getOne('post',req.params.id);
+    } catch(e)
+    {
+      return res.status(404).render('admin/postEntity',{title:"POST DATA",hasData:false,error:e});
+    }
+    if(!object)   
+    {
+      return res.status(500).render('admin/postEntity',{title:"POST DATA",hasData:false,error:"Internal Server Error"});
+    }
+
+    return res.status(200).render('admin/postEntity',{title:"POST DATA",hasData:true,error:"",
+    title:object.title,
+    description:object.description,
+    objectId:object._id.toString()});
+  })
+  .post(restrict,async(req,res)=>{
+    let id = req.params.id;
+    let type = "post";
+    let object = undefined;
+    try{
+      //General validations
+      if(!id || !type ) throw "Some Fields are missing";
+      type = help.checkString(type);
+      id = help.checkId(id);
+
+      //Case Specific validations
+      if(type!=="post") throw "Type has to be a post in this very case scenario";
+    } catch(e)
+    {
+      return res.status(400).render('admin/postEntity',{title:"POST DATA",hasData:false,error:e});
+    }
+    try{
+      object = await adminController.deleteOne(type,id);
+    }catch(e)
+    {
+      return res.status(404).render('admin/postEntity',{title:"POST DATA",hasData:false,error:e});
+    }
+    //console.log("\nDeleted Object is:",object);
+    return res.redirect('/api/v1/admin/manage');
+  })
+
+
+
+
+
+
+
   // router.
   // route("/")
   // .get(restrict,async(req,res) =>{ 

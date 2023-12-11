@@ -426,6 +426,7 @@ export const deleteOne = async (type,id) => {
   id = help.checkId(id);
 
   let object = undefined; 
+  let deletedSignUpRequest = undefined;
   if(type==='user')
   {
     object = await User.findOneAndDelete({_id: id});
@@ -435,11 +436,22 @@ export const deleteOne = async (type,id) => {
   {
     object = await Trainer.findOneAndDelete({_id: id});
     sendEmail(object.email,'eliminated',"You have broken the application's policy.");
+    if(object.status === "pending")
+    {
+      deletedSignUpRequest = await SignUpRequest.findOneAndDelete({requestedBy: id});
+      if(!deletedSignUpRequest) throw `${type} type sign up request, by the id: ${id} could not be deleted`;
+    }
+    
   }
   if(type==='gym')
   {
     object = await Gym.findOneAndDelete({_id: id});
     sendEmail(object.email,'eliminated',"You have broken the application's policy.");
+    if(object.status === "pending")
+    {
+      deletedSignUpRequest = await SignUpRequest.findOneAndDelete({requestedBy: id});
+      if(!deletedSignUpRequest) throw `${type} type sign up request, by the id: ${id} could not be deleted`;
+    }
   }
   else if(type==='event')
   {
@@ -451,6 +463,7 @@ export const deleteOne = async (type,id) => {
   }
 
   if(!object) throw `${type} type object with id: ${id} could not be deleted`;
+  
   return object;
   
 }

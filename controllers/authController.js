@@ -237,16 +237,16 @@ export const adminLogin = async (req, res) => {
 
 // gym
 export const gymSignup = async (req, res) => {
-  const file = req.file;
-  console.log(file);
-  try {
-    const result = await s3.uploadFile(file);
-    console.log(result);
-    res.send("done");
-  } catch (err) {
-    console.log(err);
-    res.send("error");
-  }
+  // const file = req.file;
+  // console.log(file);
+  // try {
+  //   const result = await s3.uploadFile(file);
+  //   console.log(result);
+  //   res.send("done");
+  // } catch (err) {
+  //   console.log(err);
+  //   res.send("error");
+  // }
   try {
     const {
       gymName,

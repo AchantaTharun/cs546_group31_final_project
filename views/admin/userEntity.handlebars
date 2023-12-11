@@ -1,0 +1,30 @@
+{{#if hasData}}
+<form id="entity-display" novalidate>
+    <label for="name">
+        USER NAME :                                                 
+        <input type="text" name="name" id="name" value="{{name}}" readonly>
+    </label>
+    <br>
+    <label for="email">
+        EMAIL :                                                 
+        <input type="text" name="email" value="{{email}}" id="email" readonly>
+    </label>
+</form>
+{{/if}}
+
+{{#unless hasData}}
+<p id="error">{{error}}</p>
+{{/unless}}
+
+{{#if hasData}}
+<form action="/api/v1/admin/manage/user/{{objectId}}" method="POST" id="entity-submit" novalidate>
+    <label for="id"> 
+        USER ID:                                                 
+        <input type="text" name="id" id="id" value="{{objectId}}" readonly>
+    </label>
+    <br>
+    <button type="submit">DELETE</button>
+</form>
+{{/if}}
+
+<a href="/api/v1/admin/manage">BACK TO SYSTEM MANAGEMENT PAGE</a>

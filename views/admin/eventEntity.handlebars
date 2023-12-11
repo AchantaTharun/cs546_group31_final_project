@@ -1,18 +1,13 @@
 {{#if hasData}}
 <form id="entity-display" novalidate>
     <label for="name">
-        GYM NAME :                                                 
-        <input type="text" name="name" id="name" value="{{gymName}}" readonly>
+        EVENT TITLE :                                                 
+        <input type="text" name="name" id="name" value="{{title}}" readonly>
     </label>
     <br>
     <label for="email">
         EMAIL :                                                 
-        <input type="text" name="email" value="{{email}}" id="email" readonly>
-    </label>
-    <br>
-    <label for="phone">
-        PHONE :                                                 
-        <input type="text" name="phone" value="{{phone}}" id="phone" readonly>
+        <input type="text" name="email" value="{{contactEmail}}" id="email" readonly>
     </label>
     <br>
     <label for="street">
@@ -42,9 +37,9 @@
 {{/unless}}
 
 {{#if hasData}}
-<form action="/api/v1/admin/manage/gym/{{objectId}}" method="POST" id="entity-submit" novalidate>
+<form action="/api/v1/admin/manage/event/{{objectId}}" method="POST" id="entity-submit" novalidate>
     <label for="id"> 
-        GYM ID:                                                 
+        EVENT ID:                                                 
         <input type="text" name="id" id="id" value="{{objectId}}" readonly>
     </label>
     <br>
