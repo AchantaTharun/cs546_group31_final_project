@@ -1,5 +1,7 @@
 import Event from '../models/eventModel.js';
 
+import mongoose from 'mongoose';
+
 export const getAllEvents = async (req, res) => {
   try {
     const events = await Event.find();
@@ -44,7 +46,7 @@ export const createEvent = async (req, res) => {
       totalNumberOfAttendees,
     } = req.body;
 
-    const newEvent = await Event.create({
+    const newEvent = new Event({
       img,
       title,
       description,
@@ -62,10 +64,20 @@ export const createEvent = async (req, res) => {
       totalNumberOfAttendees,
     });
 
+    const validationErrors = newEvent.validateSync();
+    if (validationErrors) {
+      const errors = Object.values(validationErrors.errors).map(
+        (error) => error.message
+      );
+      return res.status(400).json({ status: 'fail', errors });
+    }
+
+    const savedEvent = await newEvent.save();
+
     return res.status(201).json({
       status: 'success',
       data: {
-        event: newEvent,
+        event: savedEvent,
       },
     });
   } catch (e) {
@@ -101,19 +113,59 @@ export const getEventById = async (req, res) => {
 
 export const updateEvent = async (req, res) => {
   try {
-    const updateData = req.body;
+    const { eventId } = req.params;
+    const {
+      img,
+      title,
+      description,
+      contactEmail,
+      eventLocation,
+      maxCapacity,
+      priceOfAdmission,
+      comments,
+      user,
+      eventDate,
+      startTime,
+      endTime,
+      totalNumberOfAttendees,
+    } = req.body;
 
-    const updatedEvent = await Event.findByIdAndUpdate(
-      req.params.eventId,
-      updateData,
-      { new: true, runValidators: true }
-    );
-    if (!updatedEvent) {
-      return res.status(404).json({
-        status: 'fail',
-        errors: ['No event found with that ID'],
-      });
+    if (!mongoose.Types.ObjectId.isValid(eventId)) {
+      return res
+        .status(400)
+        .json({ status: 'fail', errors: ['Invalid event ID'] });
     }
+
+    const event = await Event.findById(eventId);
+
+    if (!event) {
+      return res
+        .status(404)
+        .json({ status: 'fail', errors: ['Event not found'] });
+    }
+
+    event.img = img;
+    event.title = title;
+    event.description = description;
+    event.contactEmail = contactEmail;
+    event.eventLocation = eventLocation;
+    event.maxCapacity = maxCapacity;
+    event.priceOfAdmission = priceOfAdmission;
+    event.comments = comments;
+    event.user = user;
+    event.eventDate = eventDate;
+    event.startTime = startTime;
+    event.endTime = endTime;
+    event.totalNumberOfAttendees = totalNumberOfAttendees;
+
+    const validationErrors = event.validateSync();
+    if (validationErrors) {
+      const errors = Object.values(validationErrors.errors).map(
+        (error) => error.message
+      );
+      return res.status(400).json({ status: 'fail', errors });
+    }
+    const updatedEvent = await event.save();
 
     return res.status(200).json({
       status: 'success',
@@ -169,6 +221,14 @@ export const addComment = async (req, res) => {
       comment: comment,
       createdAt: new Date(),
     });
+
+    const validationErrors = event.validateSync();
+    if (validationErrors) {
+      const errors = Object.values(validationErrors.errors).map(
+        (error) => error.message
+      );
+      return res.status(400).json({ status: 'fail', errors });
+    }
 
     const updatedEvent = await event.save();
 
@@ -242,6 +302,14 @@ export const updateComment = async (req, res) => {
 
     event.comments[commentIndex].comment = newComment;
     event.comments[commentIndex].updatedAt = new Date();
+
+    const validationErrors = event.validateSync();
+    if (validationErrors) {
+      const errors = Object.values(validationErrors.errors).map(
+        (error) => error.message
+      );
+      return res.status(400).json({ status: 'fail', errors });
+    }
     await event.save();
 
     return res.status(200).json({
