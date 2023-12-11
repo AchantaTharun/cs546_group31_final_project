@@ -130,7 +130,6 @@ async function createSession(formData) {
     const apiUrl = '/session/createsession';
     const response = await apiRequest('post', apiUrl, formData);
 
-    console.log('Session created successfully!', response);
     window.location.href = '/trainer/sessions';
   } catch (error) {
     console.error('Error creating session:', error);
@@ -258,7 +257,6 @@ async function endSession(sessionId, sessionType, registeredUsersCount) {
     const apiUrl = `/session/toggle/${sessionId}`;
     const response = await apiRequest('post', apiUrl);
 
-    console.log(`Session ${sessionId} ended successfully!`, response);
     window.location.href = '/trainer/sessions';
   } catch (error) {
     console.error(`Error toggling session ${sessionId}:`, error);
