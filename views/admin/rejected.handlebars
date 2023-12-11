@@ -1,0 +1,13 @@
+<h1>{{title}}</h1>
+<main>
+    <ol>
+    {{#each data}}
+      <li><a href="/api/v1/admin/rejectedRequests/{{id}}">{{requestType}}, with the ID {{id}} and email: {{email}} was rejected due to this reason: {{reason}}</a></li>
+    {{/each}}
+    </ol>
+</main>
+<p class="error">{{error}}</p>
+
+
+<a href="/api/v1/admin/homepage">BACK TO HOMEPAGE</a>
+

@@ -222,7 +222,7 @@ export const getOneRequestReport = async (id) =>{
   if(!id) throw "Id Parameter is missing";
   id = help.checkId(id);
 
-  const rprtRequest = await RejectedRequest.findOne({ _id:id }).select('_id requestType email phone reason').exec();
+  const rprtRequest = await RejectedRequest.findOne({ _id:id });
   if (!rprtRequest) {
     throw "No Rejected Request found";
   }

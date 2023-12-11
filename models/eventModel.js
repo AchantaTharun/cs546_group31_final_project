@@ -24,6 +24,7 @@ const eventSchema = new mongoose.Schema({
     type: String,
     required: [true, "Please enter the contactEmail"],
     trim: true,
+    lowercase: true ,
     validate: [
     {
       validator:validator.isEmail, 

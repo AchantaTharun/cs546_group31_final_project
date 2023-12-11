@@ -5,12 +5,12 @@ import { Router } from "express";
 
 const router = Router();
 
-// import multer from "multer";
-// import upload from "../utils/multer.js";
-
+import multer from "multer";
+//import upload from "../utils/multer.js";
+const upload = multer({dest:"uploads/"});
 router.post(
   "/signup",
-  // upload.single("businessLicense"),
+  upload.single("businessLicense"),
   authController.gymSignup
 );
 
