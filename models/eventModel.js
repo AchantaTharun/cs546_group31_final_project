@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import validator from "validator";
 
-// Not Complete
+
 const eventSchema = new mongoose.Schema({
   img: {
     type: String,
@@ -43,54 +43,12 @@ const eventSchema = new mongoose.Schema({
       validate: {
         validator: function (el) {
           const states = [
-            "AL",
-            "AK",
-            "AZ",
-            "AR",
-            "CA",
-            "CO",
-            "CT",
-            "DE",
-            "FL",
-            "GA",
-            "HI",
-            "ID",
-            "IL",
-            "IN",
-            "IA",
-            "KS",
-            "KY",
-            "LA",
-            "ME",
-            "MD",
-            "MA",
-            "MI",
-            "MS",
-            "MO",
-            "MT",
-            "NE",
-            "NV",
-            "NH",
-            "NJ",
-            "NM",
-            "NY",
-            "NC",
-            "ND",
-            "OH",
-            "OK",
-            "OR",
-            "PA",
-            "RI",
-            "SC",
-            "SD",
-            "TN",
-            "TX",
-            "UT",
-            "VT",
-            "VA",
-            "WA",
-            "WV",
-            "WI",
+            "AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE",
+            "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS", 
+            "KY", "LA", "ME", "MD", "MA", "MI", "MS", "MO",
+            "MT", "NE", "NV", "NH", "NJ", "NM", "NY", "NC",
+            "ND", "OH", "OK", "OR", "PA", "RI", "SC", "SD",
+            "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI",
           ];
           return el.length === 2 && states.includes(el.toUpperCase());
         },
@@ -212,7 +170,7 @@ const eventSchema = new mongoose.Schema({
       message: "Please enter a valid totalNumberOfAttendees",
     },
   },
-  // needs to change
+  
   attendees: [
     {
       type: mongoose.Schema.ObjectId,
