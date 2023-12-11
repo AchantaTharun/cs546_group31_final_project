@@ -1195,6 +1195,393 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "events",
+			"item": [
+				{
+					"name": "add event",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"img\": \"https://example.com/event-image.jpg\",\n  \"title\": \"Sample Event\",\n  \"description\": \"This is a sample event description.\",\n  \"contactEmail\": \"sample@example.com\",\n  \"eventLocation\": {\n    \"streetAddress\": \"123 Main Street\",\n    \"city\": \"Sample City\",\n    \"state\": \"CA\",\n    \"zipCode\": \"12345\"\n  },\n  \"maxCapacity\": 100,\n  \"priceOfAdmission\": 20.0,\n  \"comments\": [],\n  \"user\": {\n    \"userId\": \"SAMPLE_USER_ID\",\n    \"userType\": \"user\"\n  },\n  \"eventDate\": \"2023-12-31\",\n  \"startTime\": \"2023-12-31T18:00:00Z\",\n  \"endTime\": \"2023-12-31T21:00:00Z\",\n  \"totalNumberOfAttendees\": 0,\n  \"attendees\": []\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{EVENTS_API}}/create",
+							"host": [
+								"{{EVENTS_API}}"
+							],
+							"path": [
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update event",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"img\": \"https://example.com/event-image.jpg\",\n  \"title\": \"Sample Event\",\n  \"description\": \"This is a sample event description.\",\n  \"contactEmail\": \"sample@example.com\",\n  \"eventLocation\": {\n    \"streetAddress\": \"123 Main Street\",\n    \"city\": \"Sample City\",\n    \"state\": \"CA\",\n    \"zipCode\": \"12345\"\n  },\n  \"maxCapacity\": 100,\n  \"priceOfAdmission\": 20.0,\n  \"comments\": [],\n  \"user\": {\n    \"userId\": \"SAMPLE_USER_ID\",\n    \"userType\": \"user\"\n  },\n  \"eventDate\": \"2023-12-31\",\n  \"startTime\": \"2023-12-31T18:00:00Z\",\n  \"endTime\": \"2023-12-31T21:00:00Z\",\n  \"totalNumberOfAttendees\": 0,\n  \"attendees\": []\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{EVENTS_API}}/65777d994babce0d8322100b",
+							"host": [
+								"{{EVENTS_API}}"
+							],
+							"path": [
+								"65777d994babce0d8322100b"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get all events",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"img\": \"https://example.com/event-image.jpg\",\n  \"title\": \"Sample Event\",\n  \"description\": \"This is a sample event description.\",\n  \"contactEmail\": \"sample@example.com\",\n  \"eventLocation\": {\n    \"streetAddress\": \"123 Main Street\",\n    \"city\": \"Sample City\",\n    \"state\": \"CA\",\n    \"zipCode\": \"12345\"\n  },\n  \"maxCapacity\": 100,\n  \"priceOfAdmission\": 20.0,\n  \"comments\": [],\n  \"user\": {\n    \"userId\": \"SAMPLE_USER_ID\",\n    \"userType\": \"user\"\n  },\n  \"eventDate\": \"2023-12-31\",\n  \"startTime\": \"2023-12-31T18:00:00Z\",\n  \"endTime\": \"2023-12-31T21:00:00Z\",\n  \"totalNumberOfAttendees\": 0,\n  \"attendees\": []\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{EVENTS_API}}/",
+							"host": [
+								"{{EVENTS_API}}"
+							],
+							"path": [
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get event by ID",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"img\": \"https://example.com/event-image.jpg\",\n  \"title\": \"Sample Event\",\n  \"description\": \"This is a sample event description.\",\n  \"contactEmail\": \"sample@example.com\",\n  \"eventLocation\": {\n    \"streetAddress\": \"123 Main Street\",\n    \"city\": \"Sample City\",\n    \"state\": \"CA\",\n    \"zipCode\": \"12345\"\n  },\n  \"maxCapacity\": 100,\n  \"priceOfAdmission\": 20.0,\n  \"comments\": [],\n  \"user\": {\n    \"userId\": \"SAMPLE_USER_ID\",\n    \"userType\": \"user\"\n  },\n  \"eventDate\": \"2023-12-31\",\n  \"startTime\": \"2023-12-31T18:00:00Z\",\n  \"endTime\": \"2023-12-31T21:00:00Z\",\n  \"totalNumberOfAttendees\": 0,\n  \"attendees\": []\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{EVENTS_API}}/65777d994babce0d8322100b",
+							"host": [
+								"{{EVENTS_API}}"
+							],
+							"path": [
+								"65777d994babce0d8322100b"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete event by ID",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"img\": \"https://example.com/event-image.jpg\",\n  \"title\": \"Sample Event\",\n  \"description\": \"This is a sample event description.\",\n  \"contactEmail\": \"sample@example.com\",\n  \"eventLocation\": {\n    \"streetAddress\": \"123 Main Street\",\n    \"city\": \"Sample City\",\n    \"state\": \"CA\",\n    \"zipCode\": \"12345\"\n  },\n  \"maxCapacity\": 100,\n  \"priceOfAdmission\": 20.0,\n  \"comments\": [],\n  \"user\": {\n    \"userId\": \"SAMPLE_USER_ID\",\n    \"userType\": \"user\"\n  },\n  \"eventDate\": \"2023-12-31\",\n  \"startTime\": \"2023-12-31T18:00:00Z\",\n  \"endTime\": \"2023-12-31T21:00:00Z\",\n  \"totalNumberOfAttendees\": 0,\n  \"attendees\": []\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{EVENTS_API}}/65777d994babce0d8322100b",
+							"host": [
+								"{{EVENTS_API}}"
+							],
+							"path": [
+								"65777d994babce0d8322100b"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add comment to event",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"comment\": \"This is a sample comment.\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{EVENTS_API}}/65777d994babce0d8322100b/comments",
+							"host": [
+								"{{EVENTS_API}}"
+							],
+							"path": [
+								"65777d994babce0d8322100b",
+								"comments"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add attendee to event",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"comment\": \"This is a sample comment.\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{EVENTS_API}}/65777d994babce0d8322100b/attendees",
+							"host": [
+								"{{EVENTS_API}}"
+							],
+							"path": [
+								"65777d994babce0d8322100b",
+								"attendees"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "remove attendee from event",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"comment\": \"This is a sample comment.\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{EVENTS_API}}/65777d994babce0d8322100b/attendees/6570ce7e82c3aaa200bf6739",
+							"host": [
+								"{{EVENTS_API}}"
+							],
+							"path": [
+								"65777d994babce0d8322100b",
+								"attendees",
+								"6570ce7e82c3aaa200bf6739"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update comment to event",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"newComment\": \"This is a sample comment.\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{EVENTS_API}}/65777d994babce0d8322100b/comments/65777fbe7553034f4080f18e",
+							"host": [
+								"{{EVENTS_API}}"
+							],
+							"path": [
+								"65777d994babce0d8322100b",
+								"comments",
+								"65777fbe7553034f4080f18e"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete comment from event",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"comment\": \"This is a sample comment.\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{EVENTS_API}}/65777d994babce0d8322100b/comments/65777fbe7553034f4080f18e",
+							"host": [
+								"{{EVENTS_API}}"
+							],
+							"path": [
+								"65777d994babce0d8322100b",
+								"comments",
+								"65777fbe7553034f4080f18e"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "posts",
+			"item": [
+				{
+					"name": "get all posts",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{POSTS_API}}/",
+							"host": [
+								"{{POSTS_API}}"
+							],
+							"path": [
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get post by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{POSTS_API}}/657781f8e2c28a845b58efd8",
+							"host": [
+								"{{POSTS_API}}"
+							],
+							"path": [
+								"657781f8e2c28a845b58efd8"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete post",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{POSTS_API}}/657781f8e2c28a845b58efd8",
+							"host": [
+								"{{POSTS_API}}"
+							],
+							"path": [
+								"657781f8e2c28a845b58efd8"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add post",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"title\": \"Sample Post\",\n  \"img\": \"https://example.com/sample-image.jpg\",\n  \"description\": \"This is a sample post description.\",\n  \"user\": {\n    \"userId\": \"USER_ID\",\n    \"userType\": \"user\"\n  },\n  \"comments\": {\n    \"trainers\": [\n      {\n        \"userId\": \"TRAINER_ID\",\n        \"comment\": \"This is a comment from a trainer.\"\n      }\n    ],\n    \"gyms\": [\n      {\n        \"userId\": \"GYM_ID\",\n        \"comment\": \"This is a comment from a gym.\"\n      }\n    ],\n    \"users\": [\n      {\n        \"userId\": \"ANOTHER_USER_ID\",\n        \"comment\": \"This is a comment from another user.\"\n      }\n    ]\n  }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{POSTS_API}}/",
+							"host": [
+								"{{POSTS_API}}"
+							],
+							"path": [
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update post",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"title\": \"Sample Post\",\n  \"img\": \"https://example.com/sample-image.jpg\",\n  \"description\": \"This is a sample post description.\",\n  \"user\": {\n    \"userId\": \"USER_ID\",\n    \"userType\": \"user\"\n  },\n  \"comments\": {\n    \"trainers\": [\n      {\n        \"userId\": \"TRAINER_ID\",\n        \"comment\": \"This is a comment from a trainer.\"\n      }\n    ],\n    \"gyms\": [\n      {\n        \"userId\": \"GYM_ID\",\n        \"comment\": \"This is a comment from a gym.\"\n      }\n    ],\n    \"users\": [\n      {\n        \"userId\": \"ANOTHER_USER_ID\",\n        \"comment\": \"This is a comment from another user.\"\n      }\n    ]\n  }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{POSTS_API}}/65778209e2c28a845b58efdd",
+							"host": [
+								"{{POSTS_API}}"
+							],
+							"path": [
+								"65778209e2c28a845b58efdd"
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		}
 	]
 }
