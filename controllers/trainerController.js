@@ -23,7 +23,6 @@ export const renderTrainerSessions = async (req, res) => {
       type: 'trainer',
     });
   } catch (error) {
-    console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
@@ -47,7 +46,6 @@ export const renderTrainerDashboard = async (req, res) => {
       type: 'trainer',
     });
   } catch (error) {
-    console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
@@ -71,8 +69,17 @@ export const renderTrainerSessionUsers = async (req, res) => {
       type: 'trainer',
     });
   } catch (error) {
-    console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+export const getAllTrainers = async (req, res) => {
+  try {
+    const trainers = await Trainer.find({});
+
+    res.status(200).json(trainers);
+  } catch (error) {
+    res.status(500).json({ errors: ['Internal Server Error'] });
   }
 };
 
@@ -93,21 +100,18 @@ export const getTrainerDetails = async (req, res) => {
       isTrainer,
       sessions,
     } = trainer;
-    res
-      .status(200)
-      .json({
-        _id,
-        trainerName,
-        email,
-        address,
-        phone,
-        status,
-        createdAt,
-        isTrainer,
-        sessions,
-      });
+    res.status(200).json({
+      _id,
+      trainerName,
+      email,
+      address,
+      phone,
+      status,
+      createdAt,
+      isTrainer,
+      sessions,
+    });
   } catch (error) {
-    console.error(error);
     res.status(500).json({ errors: ['Internal Server Error'] });
   }
 };
@@ -158,19 +162,16 @@ export const updateTrainer = async (req, res) => {
       email: updatedEmail,
       status: updatedStatus,
     } = updatedTrainer;
-    res
-      .status(200)
-      .json({
-        message: 'Trainer updated successfully',
-        trainer: {
-          _id,
-          trainerName: updatedName,
-          email: updatedEmail,
-          status: updatedStatus,
-        },
-      });
+    res.status(200).json({
+      message: 'Trainer updated successfully',
+      trainer: {
+        _id,
+        trainerName: updatedName,
+        email: updatedEmail,
+        status: updatedStatus,
+      },
+    });
   } catch (error) {
-    console.error(error);
     res.status(500).json({ errors: ['Internal Server Error'] });
   }
 };
@@ -183,7 +184,6 @@ export const deleteTrainer = async (req, res) => {
     }
     res.json({ message: 'Trainer account deleted successfully' });
   } catch (error) {
-    console.error(error);
     res.status(500).json({ errors: ['Internal Server Error'] });
   }
 };
@@ -229,7 +229,6 @@ export const updateTrainerPassword = async (req, res) => {
     await trainer.save();
     res.status(200).json({ message: 'Password updated successfully' });
   } catch (error) {
-    console.error(error);
     res.status(500).json({ errors: ['Internal Server Error'] });
   }
 };
@@ -246,9 +245,8 @@ export const getSessionsOfTrainer = async (req, res) => {
     if (trainerSessions.length === 0) {
       return res.status(404).json({ errors: ['Trainer has no sessions'] });
     }
-    res.status(200).json({ trainerSessions });
+    res.status(200).json(trainerSessions);
   } catch (error) {
-    console.error(error);
     res.status(500).json({ errors: ['Internal Server Error'] });
   }
 };

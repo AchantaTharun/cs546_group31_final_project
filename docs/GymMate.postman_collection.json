@@ -736,6 +736,34 @@
 					"response": []
 				},
 				{
+					"name": "get all trainers",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.environment.set(\"trainerjwt\",pm.response.json().token);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{TRAINER_API}}/",
+							"host": [
+								"{{TRAINER_API}}"
+							],
+							"path": [
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "delete trainer",
 					"event": [
 						{
