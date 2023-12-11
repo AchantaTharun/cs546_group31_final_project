@@ -137,7 +137,7 @@ const eventSchema = new mongoose.Schema({
     type: Date,
   },
   startTime: {
-    type: String,
+    type: Date, // Changed from String to Date
     required: [true, "Please enter the startTime"],
     trim: true,
     validate: {
@@ -148,15 +148,22 @@ const eventSchema = new mongoose.Schema({
     },
   },
   endTime: {
-    type: String,
+    type: Date, // Changed from String to Date
     required: [true, "Please enter the endTime"],
     trim: true,
-    validate: {
+    validate: [ {
       validator: function (el) {
         return el >= this.startTime;
       },
       message: "Please enter a valid endTime",
     },
+    {
+      validator: function (el) {
+        return isSameDay(this.startTime, el);
+      },
+      message: "StartTime and EndTime must be on the same day",
+    },
+  ],
   },
 
   totalNumberOfAttendees: {
@@ -177,7 +184,15 @@ const eventSchema = new mongoose.Schema({
       ref: "User" || "Trainer" || "Gym",
     },
   ],
+},{
+timestamps: true
 });
+
+function isSameDay(date1, date2) {
+  return date1.getFullYear() === date2.getFullYear() &&
+    date1.getMonth() === date2.getMonth() &&
+    date1.getDate() === date2.getDate();
+}
 
 const Event = mongoose.model("Event", eventSchema);
 
