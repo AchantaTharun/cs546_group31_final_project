@@ -1,5 +1,39 @@
 <div class="container mt-4">
-    <h1>User List</h1>
+
+    <form class="row g-3" method="post">
+        <div class="col-md-6">
+            <label for="selectUser" class="form-label">Select User</label>
+            <select id="selectUser" class="form-select">
+                <option selected disabled>Choose...</option>
+                <option value="People">People</option>
+                <option value="Trainers">Trainers</option>
+                <option value="Gyms">Gyms</option>
+            </select>
+        </div>
+        <div class="col-md-6">
+            <label for="favoriteWorkout" class="form-label">Favorite Workout</label>
+            <select id="favoriteWorkout" class="form-select">
+                <option selected disabled>Choose...</option>
+                <option value="Cardio">Cardio</option>
+                <option value="Strength">Strength</option>
+                <option value="Flexibility">Flexibility</option>
+                <option value="Sports">Sports</option>
+                <option value="CrossFit">CrossFit</option>
+                <option value="Body Weight">Body Weight</option>
+            </select>
+        </div>
+        <div class="col-md-6">
+            <label for="searchType" class="form-label">Search Type</label>
+            <select id="searchType" class="form-select">
+                <option selected disabled>Choose...</option>
+                <option value="Location">Location</option>
+                <option value="Names">Names</option>
+
+            </select>
+        </div>
+    </form>
+
+    <h1>GymMates</h1>
 
     <div class="row">
         {{#each users}}
@@ -16,6 +50,7 @@
                         </p>
                         <p class="card-text">Created At: {{this.createdAt}}</p>
                     </div>
+                    <button class="btn btn-primary"><a href="/user/{{this._id}}">View Profile</a></button>
                 </div>
             </div>
         {{/each}}

@@ -81,4 +81,34 @@ router.get("/posts", authController.protectRoute, async (req, res) => {
   }
 });
 
+router.get("/:id", authController.protectRoute, async (req, res) => {
+  const user = req.user;
+  try {
+    const response = await axios.get(
+      `http://localhost:3000/api/v1/user/${req.params.id}`
+    );
+    const user = response.data.data.user;
+    return res.render("user/userPage", {
+      layout: "main.handlebars",
+      user,
+    });
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+router.get("/profile/edit", authController.protectRoute, async (req, res) => {
+  res.render("user/userEditProfile", {
+    layout: "userEditProfile.layout.handlebars",
+  });
+});
+router.get(
+  "/profile/workout",
+  authController.protectRoute,
+  async (req, res) => {
+    res.render("user/userWorkouts", {
+      layout: "userEditProfile.layout.handlebars",
+    });
+  }
+);
 export default router;
