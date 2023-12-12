@@ -28,11 +28,19 @@ export const createPost = async (req, res) => {
   console.log("first");
   try {
     const { title, description, author, img } = req.body;
-    const newPost = await Post.create({ title, description, author, img });
+    const newPost = new Post({ title, description, author, img });
+    const validationErrors = newPost.validateSync();
+    if (validationErrors) {
+      const errors = Object.values(validationErrors.errors).map(
+        (error) => error.message
+      );
+      return res.status(400).json({ status: 'fail', errors });
+    }
+    const savedPost = await newPost.save();
     return res.status(201).json({
       status: "success",
       data: {
-        post: newPost,
+        post: savedPost,
       },
     });
   } catch (e) {
