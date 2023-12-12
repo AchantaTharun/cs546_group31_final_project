@@ -1,4 +1,3 @@
-import * as authController from "../controllers/authController.js";
 import * as adminController from "../controllers/adminController.js";
 import jwt from "jsonwebtoken";
 import Admin from "../models/adminModel.js";
