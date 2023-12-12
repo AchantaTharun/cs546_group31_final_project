@@ -36,7 +36,6 @@ let restrict = (req,res,next) =>{
   // }
   if(!req.cookies.adminjwt)
   {
-    console.log(req.path);
     if(req.path!=="/login")
     {
       return res.redirect("/api/v1/admin/login");
@@ -45,23 +44,15 @@ let restrict = (req,res,next) =>{
     {
       return next();
     }
-    console.log("Akshit");
   }
   token = req.cookies.adminjwt;
-  // if (!token) {
-  //   console.log("13");
-  //   return res.redirect('/api/v1/admin/admin-login');   //check for the status message
-  // }
 } catch(e)
 {
-  console.log("14");
   return res.status(401).render('admin/login',{title:"ADMIN LOGIN",error:`Some Kind of a Cookie Error | ${e}`});
 }
   jwt.verify(token, process.env.JWT_SECRET,async (err,data)=>{
     if(err) 
     {
-      console.log(req.path);
-      console.log(token);
       return res.status(401).render('admin/login',{title:"ADMIN LOGIN",error:"Token Verification Failed"});
     }
     try{
@@ -72,25 +63,24 @@ let restrict = (req,res,next) =>{
     //Now check if the admin is there in the database
     const admin = await Admin.findById(data.id);
     if (!admin) {
-      console.log("15");
       return res.status(404).render('admin/login',{title:"ADMIN LOGIN",error:"No Such Admin user was in the database"});
     }
     if (
       "passwordChangedAt" in admin &&
       checkTokenValid(admin.passwordChangedAt, data.iat)
     ) {
-      console.log("16");
-      return res.status(404).render('admin/login',{title:"ADMIN LOGIN",error:"Password was changed recently"});
+      if (req.cookies.adminjwt) {
+        res.clearCookie('adminjwt');
+      }
+      return res.status(200).render('admin/login',{title:"ADMIN LOGIN",error:"Password was changed recently"});
     }
     req.admin = admin;
-    if(req.path==='/api/v1/admin/login')
+    if(req.path==='/login')
     {
-      console.log("17");
       return res.redirect('/api/v1/admin/homepage');
     } 
   } catch(e)
   {
-    console.log("18");
     return res.status(400).render('admin/login',{title:"ADMIN LOGIN",error:e});
   }
     next();
@@ -102,7 +92,6 @@ let restrict = (req,res,next) =>{
 router
   .route("/login")
   .get(restrict,async(req,res) =>{ 
-    console.log("Make")
     return res.status(200).render('admin/login',{title:"ADMIN LOGIN",error:""});
   })
   .post(restrict,async(req,res) =>{ 
@@ -747,7 +736,55 @@ router
 
   })
 
+  router.
+  route("/changePassword")
+  .get(restrict,async(req,res)=>{
+    return res.status(200).render("admin/changePassword",{title:"CHANGE PASSWORD",error:""});
+  })
+  .post(restrict,async(req,res)=>{
+    let {emailAddress, oldPassword, newPassword,confirmPassword} = req.body;
+    try
+    {
+      if(!emailAddress || !oldPassword || !newPassword || !confirmPassword) throw "Some Fields are missing";
   
+      //Initial modifications
+      if(typeof emailAddress!=='string') throw "Email address is not of valid data type";
+      emailAddress = emailAddress.trim().toLowerCase();
+    
+      //Validations
+      if(!e_valid.validate(emailAddress)) throw "Email address invalid";
+      oldPassword = help.checkPassword(oldPassword);
+      newPassword = help.checkPassword(newPassword);
+      confirmPassword = help.checkPassword(confirmPassword);
+      //Everything Validated
+    }catch(e)
+    {
+      return res.status(400).render('admin/changePassword',{title:"CHANGE PASSWORD",error:e});
+    }
+    let object={};
+    try
+    {
+      object = await adminController.passwordChange(emailAddress, oldPassword, newPassword,confirmPassword);
+    }catch(e)
+    {
+      return res.status(400).render('admin/changePassword',{title:"CHANGE PASSWORD",error:"Password Change Couldn't be completed"});
+    }
+    if(!object.changedPasswordAdmin)
+    {
+      return res.status(500).render('admin/changePassword',{title:"CHANGE PASSWORD",error:"Internal Server error"});
+    }
+    //res.redirect("/api/v1/admin/homepage");
+    return res.status(200).render('admin/changePassword',{title:"CHANGE PASSWORD",error:""});
+  })
+
+  router.
+  route("/logout")
+  .get(restrict,async(req,res)=>{
+    if (req.cookies.adminjwt) {
+      res.clearCookie('adminjwt');
+    }
+    return res.redirect("/api/v1/admin/login");
+  })
 
   // router.
   // route("/changePassword")
