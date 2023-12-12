@@ -7,7 +7,7 @@ import * as e_valid from 'email-validator'
 import * as help from "../Helpers.js";
 
 const router = Router();
-//ADD IT HERE
+//ADD IT HERE The image storage and retrieval thing.
 
 const signJWT = (id, role) => {
   return jwt.sign({ id, role }, process.env.JWT_SECRET, {
@@ -36,8 +36,16 @@ let restrict = (req,res,next) =>{
   // }
   if(!req.cookies.adminjwt)
   {
-    console.log("12");
-    res.redirect("api/v1/admin/login");
+    console.log(req.path);
+    if(req.path!=="/login")
+    {
+      return res.redirect("/api/v1/admin/login");
+    }
+    else
+    {
+      return next();
+    }
+    console.log("Akshit");
   }
   token = req.cookies.adminjwt;
   // if (!token) {
@@ -52,6 +60,8 @@ let restrict = (req,res,next) =>{
   jwt.verify(token, process.env.JWT_SECRET,async (err,data)=>{
     if(err) 
     {
+      console.log(req.path);
+      console.log(token);
       return res.status(401).render('admin/login',{title:"ADMIN LOGIN",error:"Token Verification Failed"});
     }
     try{
@@ -91,11 +101,11 @@ let restrict = (req,res,next) =>{
 
 router
   .route("/login")
-  .get(async(req,res) =>{ 
+  .get(restrict,async(req,res) =>{ 
     console.log("Make")
-    res.status(200).render('admin/login',{title:"ADMIN LOGIN",error:""});
+    return res.status(200).render('admin/login',{title:"ADMIN LOGIN",error:""});
   })
-  .post(async(req,res) =>{ 
+  .post(restrict,async(req,res) =>{ 
     //Get the credentials from req.body
     let {emailAddressInput,passwordInput} = req.body;
     
@@ -141,7 +151,7 @@ router
         secure: false, 
         sameSite: "Strict",
       })
-      res.redirect("/api/v1/admin/homepage");
+      return res.redirect("/api/v1/admin/homepage");
     }
     else
     {
@@ -658,8 +668,95 @@ router
     return res.redirect('/api/v1/admin/manage');
   })
 
+  router.
+  route("/createEvent")
+  .get(restrict,async(req,res)=>{
+    return res.status(200).render("admin/createEvent",{title:"CREATE EVENT",error:""});
+  })
+  .post(restrict,async(req,res)=>{
+    let {img,title,description,contactEmail,streetAddress,city,state,zipCode,maxCapacity,priceOfAdmission,eventDate,startTime,endTime,totalNumberOfAttendees}= req.body;
+    try
+    {
+      maxCapacity = parseInt(maxCapacity);
+      priceOfAdmission = parseFloat(priceOfAdmission);
+      totalNumberOfAttendees = parseInt(totalNumberOfAttendees);
+    }catch(e)
+    {
+      return res.status(400).render('admin/createEvent',{title:"CREATE EVENT",error:"Max Capacity | Price Of Admission | Number of Attendees is in the wrong format"});
+    }
+    try{
+      if(!img || !title || !description || !contactEmail || !streetAddress || !city || !state || !zipCode
+        || !maxCapacity || (!priceOfAdmission && priceOfAdmission !== 0) || !eventDate || !startTime || !endTime || (!totalNumberOfAttendees && totalNumberOfAttendees !==0))
+        throw "Some input Parameters are missing";
+      
+      img = help.checkString(img);
+      title = help.checkString(title);
+      description = help.checkString(description);
+      if(typeof contactEmail !=='string') throw "Email has to be a string";
+      contactEmail = contactEmail.trim();
+      if(!e_valid.validate(contactEmail)) throw "The Email provided is not valid";
+      streetAddress = help.checkString(streetAddress);
+      city = help.checkString(city);
+      state = help.checkState(state);  //Remember that you still have to add these two functions.
+      zipCode = help.checkZip(zipCode);
 
+      if(typeof maxCapacity!=='number' || maxCapacity<=0 || !Number.isInteger(maxCapacity)) throw "Max capacity value is invalid";
+      if(typeof priceOfAdmission!=='number' || priceOfAdmission < 0) throw "Price of Admission has an invalid value";
+      // if(!help.isDate(eventDate)) throw "THe event date value is not proper";
+    
+      
+      //Just making sure that the date strings are in the right format.
+      eventDate = help.checkString(eventDate);
+      if(!help.dateCheck(eventDate)) throw "Event Date couldn't be parsed";
 
+      startTime = help.checkString(startTime);
+
+      if(!help.dateCheck(startTime)) throw "Start time couldn't be parsed";
+      endTime = help.checkString(endTime);
+
+      if(!help.dateCheck(endTime)) throw "End time couldn't be parsed";
+      
+      //Validating the date strings order.
+      if(!help.isEarlierInSameDay(new Date(startTime),new Date(endTime))) throw "Start time and End time should be on the same day";
+      if(!help.isEarlierInSameDay(new Date(startTime),new Date(eventDate))) throw "Event Date and Start time should be on the same day";
+      if((new Date()) > (new Date(eventDate))) throw "You cannot have an event date and time in the past";
+      if((new Date(eventDate)) > (new Date(startTime))) throw "You cannot have an event Start date and time in the past";
+      if((new Date(startTime)) >= (new Date(endTime))) throw "You cannot have an event date and time in the past";
+      
+      
+      if(typeof totalNumberOfAttendees !=='number' || totalNumberOfAttendees > maxCapacity) throw "Number of attendees are invalid";
+      //Validations are completed
+    } catch(e)
+    {
+      return res.status(400).render('admin/createEvent',{title:"CREATE EVENT",error:e});
+    }
+    let adminEvent = undefined;
+    try
+    {
+      adminEvent = await adminController.createEvent(img,title,description,contactEmail,streetAddress,city,state,zipCode,maxCapacity,priceOfAdmission,eventDate,startTime,endTime,totalNumberOfAttendees);
+    }catch(e)
+    {
+      return res.status(400).render('admin/createEvent',{title:"CREATE EVENT",error:"Event Creation Couldn't be completed"});
+    }
+    if(!adminEvent)
+    {
+      return res.status(500).render('admin/createEvent',{title:"CREATE EVENT",error:"Internal Server error"});
+    } 
+    //console.log(adminEvent);
+    res.redirect("/api/v1/admin/homepage");
+
+  })
+
+  
+
+  // router.
+  // route("/changePassword")
+  // .get(restrict,async(req,res)=>{
+
+  // })
+  // .post(restrict,async(req,res)=>{
+
+  // })
 
 
 

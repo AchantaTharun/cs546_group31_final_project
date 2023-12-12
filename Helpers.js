@@ -144,11 +144,9 @@ let isDate = (value) => {
 let isEarlierInSameDay = (date1, date2) => {
     const sameDay = date1.getDate() === date2.getDate() && date1.getMonth() === date2.getMonth() && date1.getFullYear() === date2.getFullYear();
     if (sameDay) {
-        return date1.getHours() < date2.getHours();
+        return true;
     }
-    console.log("Date1",date1);
-    console.log("Date2",date2);
-    return date1 < date2;
+    return false;
 }
 
 let checkState = (state) =>{

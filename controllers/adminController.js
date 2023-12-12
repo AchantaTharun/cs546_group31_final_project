@@ -241,7 +241,7 @@ export const getOneSignUpRequest = async (id) =>{
   }
   return signUpRequest; 
 };
-//Add the email validator   -- ? Don't remember this 
+
 
 export const createEvent = async (
   img,
@@ -254,17 +254,16 @@ export const createEvent = async (
   zipCode,
   maxCapacity,
   priceOfAdmission,
+  eventDate,
   startTime,
   endTime,
   totalNumberOfAttendees
 ) => {
-  // The actual function logic starts here 
-  //First will be the validation part.
   if(!img || !title || !description || !contactEmail || !streetAddress || !city || !state || !zipCode
-    || !maxCapacity || (!priceOfAdmission && priceOfAdmission !== 0) || !startTime || !endTime || (!totalNumberOfAttendees && totalNumberOfAttendees !==0))
+    || !maxCapacity || (!priceOfAdmission && priceOfAdmission !== 0) || !eventDate || !startTime || !endTime || (!totalNumberOfAttendees && totalNumberOfAttendees !==0))
     throw "Some input Parameters are missing";
   
-  img = help.checkId(img);
+  img = help.checkString(img);
   title = help.checkString(title);
   description = help.checkString(description);
   if(typeof contactEmail !=='string') throw "Email has to be a string";
@@ -277,12 +276,27 @@ export const createEvent = async (
   if(typeof maxCapacity!=='number' || maxCapacity<=0 || !Number.isInteger(maxCapacity)) throw "Max capacity value is invalid";
   if(typeof priceOfAdmission!=='number' || priceOfAdmission < 0) throw "Price of Admission has an invalid value";
   // if(!help.isDate(eventDate)) throw "THe event date value is not proper";
+
+  
+  //Just making sure that the date strings are in the right format.
+  eventDate = help.checkString(eventDate);
+  if(!help.dateCheck(eventDate)) throw "Event Date couldn't be parsed";
+
   startTime = help.checkString(startTime);
+
   if(!help.dateCheck(startTime)) throw "Start time couldn't be parsed";
   endTime = help.checkString(endTime);
+
   if(!help.dateCheck(endTime)) throw "End time couldn't be parsed";
   
-  if(((new Date(startTime)) > (new Date(endTime))) || ((new Date()) > (new Date(startTime)))) throw "The dates are not in an orderly fashion";  //!(help.isEarlierInSameDay(new Date(startTime),new Date(endTime))) This was removed from the conditions.
+  //Validating the date strings order.
+  if(!help.isEarlierInSameDay(new Date(startTime),new Date(endTime))) throw "Start time and End time should be on the same day";
+  if(!help.isEarlierInSameDay(new Date(startTime),new Date(eventDate))) throw "Event Date and Start time should be on the same day";
+  if((new Date()) > (new Date(eventDate))) throw "You cannot have an event date and time in the past";
+  if((new Date(eventDate)) > (new Date(startTime))) throw "You cannot have an event Start date and time in the past";
+  if((new Date(startTime)) >= (new Date(endTime))) throw "You cannot have an event date and time in the past";
+  
+  
   if(typeof totalNumberOfAttendees !=='number' || totalNumberOfAttendees > maxCapacity) throw "Number of attendees are invalid";
   //Validations are completed
 
@@ -301,8 +315,9 @@ export const createEvent = async (
     },
     maxCapacity : maxCapacity,
     priceOfAdmission : priceOfAdmission,
-    startTime : startTime,
-    endTime : endTime,
+    eventDate:new Date(eventDate),
+    startTime : new Date(startTime),
+    endTime : new Date(endTime),
     totalNumberOfAttendees : totalNumberOfAttendees
   }
   const adminEvent = await Event.create(eventbyAdmin);
