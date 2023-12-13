@@ -1,0 +1,82 @@
+<form action="/api/v1/admin/createEvent" method="POST" id="create-event" novalidate>
+   <label for="imageInput">
+        UPLOAD IMAGE FILE :                                                 
+        <input type="file" accept="image/*" id="imageInput">
+    </label>
+    <label for="img">                                              
+        <input type="text" name="img" id="img" readonly hidden>
+    </label>
+    <br>
+    <label for="title">
+        TITLE :                                                 
+        <input type="text" name="title" id="title">
+    </label>
+    <br>
+    <label for="description">
+        DESCRIPTION :                                                 
+        <input type="text" name="description" id="description">
+    </label>
+    <br>
+    <label for="contactEmail">
+        EMAIL :                                                 
+        <input type="text" name="contactEmail" id="contactEmail">
+    </label>
+    <br>
+    <label for="streetAddress">
+        ADDRESS :                                                 
+        <input type="text" name="streetAddress" id="streetAddress">
+    </label>
+    <br>
+    <label for="city">
+        CITY :                                                 
+        <input type="text" name="city" id="city">
+    </label>
+    <br>
+    <label for="state">
+        STATE :                                                 
+        <input type="text" name="state" id="state">
+    </label>
+    <br>
+    <label for="zipCode">
+        ZIP :                                                 
+        <input type="text" name="zipCode" id="zipCode">
+    </label>
+    <br>
+    <label for="maxCapacity">
+        MAX CAPACITY :                                                 
+        <input type="number" name="maxCapacity" id="maxCapacity">
+    </label>
+    <br>
+    <label for="priceOfAdmission">
+        ADMISSION PRICE :                                                 
+        <input type="number" name="priceOfAdmission" id="priceOfAdmission">
+    </label>
+    <br>
+    <label for="eventDate">
+        EVENT DATE :                                                 
+        <input type="datetime-local" name="eventDate" id="eventDate">
+    </label>
+    <br>
+    <label for="startTime">
+        START TIME :                                                 
+        <input type="datetime-local" name="startTime" id="startTime">
+    </label>
+    <br>
+    <label for="endTime">
+        END TIME :                                                 
+        <input type="datetime-local" name="endTime" id="endTime">
+    </label>
+    <br>
+    <label for="totalNumberOfAttendees">
+        INITIAL ATTENDEES :                                                 
+        <input type="number" name="totalNumberOfAttendees" value="0" id="totalNumberOfAttendees" readonly>
+    </label>
+    <br>
+    <button type="submit">CREATE EVENT</button>
+</form>
+
+<p id="error">{{error}}</p>
+
+<a href="/api/v1/admin/homepage">BACK TO HOMEPAGE</a>
+
+<script src="/public/js/createAdminEventValidation.js"></script>

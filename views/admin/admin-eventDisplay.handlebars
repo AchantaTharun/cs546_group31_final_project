@@ -1,0 +1,6 @@
+  <h1>Image Display</h1>
+  {{#if imageData}}
+    <img src="data:image/jpeg;base64,{{imageData}}" alt="Displayed Image">
+  {{else}}
+    <p>No image data available</p>
+  {{/if}}

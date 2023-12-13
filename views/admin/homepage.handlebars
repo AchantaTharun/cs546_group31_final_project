@@ -1,0 +1,17 @@
+<h1>{{title}}</h1>
+<main>
+    <ol>
+    {{#each data}}
+      <li><a href="/api/v1/admin/signupRequests/{{requestType}}/{{requestedBy}}">{{requestType}}, with the ID {{requestedBy}}</a></li>
+    {{/each}}
+    </ol>
+</main>
+<p class="error">{{error}}</p>
+
+<a href="/api/v1/admin/createEvent">NEW EVENT</a>
+<a href="/api/v1/admin/changePassword">CHANGE PASSWORD</a>
+<a href="/api/v1/admin/manage">SYSTEM MANAGEMENT</a>
+<a href="/api/v1/admin/rejectedRequests">REJECTED REQUESTS</a>
+<a href="/api/v1/admin/logout">LOGOUT</a>
+
+

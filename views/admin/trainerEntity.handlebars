@@ -1,0 +1,55 @@
+{{#if hasData}}
+<form id="entity-display" novalidate>
+    <label for="name">
+        TRAINER NAME :                                                 
+        <input type="text" name="name" id="name" value="{{trainerName}}" readonly>
+    </label>
+    <br>
+    <label for="email">
+        EMAIL :                                                 
+        <input type="text" name="email" value="{{email}}" id="email" readonly>
+    </label>
+    <br>
+    <label for="phone">
+        PHONE :                                                 
+        <input type="text" name="phone" value="{{phone}}" id="phone" readonly>
+    </label>
+    <br>
+    <label for="street">
+         STREET:                                                 
+        <input type="text" name="street" value= "{{street}}" id="street" readonly>
+    </label>
+    <br>
+    <label for="city">
+        CITY :                                                 
+        <input type="text" name="city" value="{{city}}" id="city" readonly>
+    </label>
+    <br>
+    <label for="state">
+        STATE :                                                 
+        <input type="text" name="state" value="{{state}}" id="state" readonly>
+    </label>
+    <br>
+    <label for="zip">
+        ZIP :                                                 
+        <input type="text" name="zip" value="{{zip}}" id="zip" readonly>
+    </label>
+</form>
+{{/if}}
+
+{{#unless hasData}}
+<p id="error">{{error}}</p>
+{{/unless}}
+
+{{#if hasData}}
+<form action="/api/v1/admin/manage/trainer/{{objectId}}" method="POST" id="entity-submit" novalidate>
+    <label for="id"> 
+        TRAINER ID:                                                 
+        <input type="text" name="id" id="id" value="{{objectId}}" readonly>
+    </label>
+    <br>
+    <button type="submit">DELETE</button>
+</form>
+{{/if}}
+
+<a href="/api/v1/admin/manage">BACK TO SYSTEM MANAGEMENT PAGE</a>
