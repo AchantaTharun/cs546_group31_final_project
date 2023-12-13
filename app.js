@@ -7,6 +7,7 @@ import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import cookieParser from 'cookie-parser';
 import configRoutesFunction from './routes/index.js';
+import hpp from 'hpp';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -17,8 +18,12 @@ const app = express();
 // Middlewares
 app.use(cookieParser());
 app.use(express.json());
-dotenv.config({ path: './.env' });
-app.use(morgan('dev'));
+dotenv.config({ path: "./.env" });
+app.use(morgan("dev"));
+app.use(cookieParser());
+
+//For avoiding parameter pollution
+app.use(hpp());
 // Middleware for preventing NoSQL query injection
 app.use(mongoSanitizer());
 

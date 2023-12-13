@@ -1,0 +1,17 @@
+<form action="/api/v1/admin/login" method="POST" id="login-form" novalidate>
+    <label for="emailAddressInput">
+      E-MAIL:                                                 
+      <input type="email" name="emailAddressInput" id="emailAddressInput">
+    </label>
+    <br>
+    <label for="passwordInput">
+      PASSWORD :                                                 
+      <input type="password" name="passwordInput" id="passwordInput">
+    </label>
+    <br>
+    <button type="submit">LOGIN</button>
+</form>
+<br>
+<p id="error">{{error}}</p> 
+<br>
+<script src="/public/js/validation_script.js"></script>

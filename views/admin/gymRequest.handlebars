@@ -1,0 +1,61 @@
+{{#if hasData}}
+<form id="gym-display" novalidate>
+    <label for="name">
+        GYM NAME :                                                 
+        <input type="text" name="name" id="name" value="{{gymName}}" readonly>
+    </label>
+    <br>
+    <label for="email">
+        EMAIL :                                                 
+        <input type="text" name="email" value="{{email}}" id="email" readonly>
+    </label>
+    <br>
+    <label for="phone">
+        PHONE :                                                 
+        <input type="text" name="phone" value="{{phone}}" id="phone" readonly>
+    </label>
+    <br>
+    <label for="street">
+         STREET:                                                 
+        <input type="text" name="street" value= "{{street}}" id="street" readonly>
+    </label>
+    <br>
+    <label for="city">
+        CITY :                                                 
+        <input type="text" name="city" value="{{city}}" id="city" readonly>
+    </label>
+    <br>
+    <label for="state">
+        STATE :                                                 
+        <input type="text" name="state" value="{{state}}" id="state" readonly>
+    </label>
+    <br>
+    <label for="zip">
+        ZIP :                                                 
+        <input type="text" name="zip" value="{{zip}}" id="zip" readonly>
+    </label>
+</form>
+{{/if}}
+
+{{#unless hasData}}
+<p id="error">{{error}}</p>
+{{/unless}}
+
+<form action="/api/v1/admin/signupRequests/gym/{{objectId}}" method="POST" id="gym-submit" novalidate>
+    <label for= "status">
+        DECISION :
+        <select id="status" name="status">
+            <option value="approved">Approve</option>
+            <option value="rejected">Reject</option>
+        </select>
+    </label>
+    <br>
+    <label for="reason">
+        REASON :                                                 
+        <input type="text" name="reason" id="reason">
+    </label>
+    <br>
+    <button type="submit">CHANGE STATUS</button>
+</form>
+
+<a href="/api/v1/admin/homepage">BACK TO HOMEPAGE</a>

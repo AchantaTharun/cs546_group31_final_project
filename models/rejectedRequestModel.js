@@ -1,23 +1,31 @@
 import mongoose from "mongoose";
 import validator from "validator";
+import * as help from "../Helpers.js";
 
 const rejectedRequestSchema = new mongoose.Schema({
   requestType: {
     type: String,
     enum: ["gym", "trainer"],
+    required: [true, "Type of Rejected Request is required "],
   },
   email: {
     type: String,
     required: [true, "email is required"],
-    validator: [validator.isEmail, "Please enter a valid email"],
+    validate: [{validator:validator.isEmail, 
+      message:"Please enter a valid email"},
+    {
+      validator: help.emailc,
+      message: "Please enter a valid email"
+    }],
   },
   phone: {
     type: String,
     required: [true, "phone is required"],
-    validator: [validator.isMobilePhone, "Please enter a valid phone number"],
+    validate: [validator.isMobilePhone, "Please enter a valid phone number"],
   },
   reason: {
     type: String,
+    trim: true,
     required: [true, "reason is required"],
   },
   rejectedAt: {

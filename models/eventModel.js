@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import validator from "validator";
+import * as help from "../Helpers.js";
 
 
 const eventSchema = new mongoose.Schema({
@@ -22,7 +23,15 @@ const eventSchema = new mongoose.Schema({
     type: String,
     required: [true, "Please enter the contactEmail"],
     trim: true,
-    validate: [validator.isEmail, "Please enter a valid email"],
+    validate: [
+        {
+          validator:validator.isEmail, 
+          message:"Please enter a valid email"},
+        {
+          validator:help.emailc,
+          message:"Enter Valid Email Address"
+        }
+      ]
   },
   eventLocation: {
     streetAddress: {
@@ -118,13 +127,13 @@ const eventSchema = new mongoose.Schema({
       type: String,
     },
   },
-  eventDate: {
+  eventDate: {   //It has to be taken from date time local
     type: Date,
     required: [true, "Please enter the eventDate"],
     trim: true,
     validate: {
       validator: function (el) {
-        return el >= Date.now();
+        return el >= (new Date());
       },
       message: "Please enter a valid eventDate",
     },
@@ -140,12 +149,19 @@ const eventSchema = new mongoose.Schema({
     type: Date, // Changed from String to Date
     required: [true, "Please enter the startTime"],
     trim: true,
-    validate: {
+    validate: [{
       validator: function (el) {
-        return el >= Date.now();
+        return el >= this.eventDate;
       },
       message: "Please enter a valid startTime",
     },
+    {
+      validator:function (el) {
+        return isSameDay(this.eventDate, el);
+      },
+      message: "StartTime and evenDate must represent the same day"
+    }
+  ]
   },
   endTime: {
     type: Date, // Changed from String to Date
@@ -153,7 +169,7 @@ const eventSchema = new mongoose.Schema({
     trim: true,
     validate: [ {
       validator: function (el) {
-        return el >= this.startTime;
+        return el > this.startTime;    //Just to ensure that there is atleast a gap of one minute.
       },
       message: "Please enter a valid endTime",
     },

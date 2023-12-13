@@ -1,25 +1,50 @@
 import validator from "validator";
 import bcrypt from "bcryptjs";
 import mongoose from "mongoose";
+import * as help from "../Helpers.js";
+
 
 const adminSchema = new mongoose.Schema({
   firstName: {
     type: String,
     required: [true, "Please enter your first name"],
     trim: true,
-    validate: [validator.isAlpha, "Please enter a valid first name"],
+    validate: [
+      {
+        validator:validator.isAlpha, 
+        message:"Please enter a valid first name"
+      },
+      {
+        validator:help.checkNametf,
+        mesage:"Please enter a valid first name"
+      }],
   },
   lastName: {
     type: String,
     required: [true, "Please enter your last name"],
     trim: true,
-    validate: [validator.isAlpha, "Please enter a valid last name"],
+    validate: [
+      {
+        validator:validator.isAlpha, 
+        message:"Please enter a valid last name"
+      },
+      {
+        validator:help.checkNametf,
+        mesage:"Please enter a valid last name"
+      }],
   },
+
   email: {
     type: String,
     required: [true, "Please enter your email"],
     trim: true,
-    validate: [validator.isEmail, "Please enter a valid email"],
+    validate: [{
+      validator : validator.isEmail, 
+      message : "Please enter a valid email"},
+    {
+      validator: help.emailc,
+      message: "Please enter a valid email"
+    }],
     unique: true,
   },
   createdAt: {
@@ -31,6 +56,8 @@ const adminSchema = new mongoose.Schema({
     required: [true, "Please enter your password"],
     trim: true,
     minLength: [8, "Password must be at least 8 characters long"],
+    validate:{validator:help.checkPasswordtf,
+    message: "Enter a valid Password"},
   },
   passwordConfirm: {
     type: String,
@@ -38,7 +65,7 @@ const adminSchema = new mongoose.Schema({
     trim: true,
     validate: {
       validator: function (el) {
-        return el === this.password;
+        return el === this.password;          //You can also write the validator function inside of it
       },
       message: "Passwords do not match",
     },
@@ -64,7 +91,7 @@ const adminSchema = new mongoose.Schema({
 
 adminSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return next();
-  this.password = await bcrypt.hash(this.password, 12);
+  this.password = await bcrypt.hash(this.password, 12); //We have hardcoded the salt rounds
 
   // removing passwordConfirm field because we don't need to persist it
   this.passwordConfirm = undefined;
