@@ -5,7 +5,8 @@ import { Router } from "express";
 
 const router = Router();
 
-router.get("/", userController.getAllUsers);
-
+router.get("/fromCoord", userController.getFromCoord);
+router.get("/search", userController.search);
 router.get("/:id", userController.getUser);
+router.get("/", userController.getAllUsers);
 export default router;

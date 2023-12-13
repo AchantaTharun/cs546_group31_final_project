@@ -26,6 +26,18 @@ const userSchema = new mongoose.Schema({
     minLength: [2, "Last name must be at least 2 characters long"],
     maxLength: [20, "Last name must be less than 20 characters long"],
   },
+  userName: {
+    type: String,
+    required: [true, "Please enter your user name"],
+    trim: true,
+    unique: true,
+    validate: [
+      validator.isAlphanumeric,
+      "Please enter a valid user name, user name can only contain letters and numbers",
+    ],
+    minLength: [2, "User name must be at least 2 characters long"],
+    maxLength: [20, "User name must be less than 20 characters long"],
+  },
   email: {
     type: String,
     required: [true, "Please enter your email"],
@@ -61,7 +73,7 @@ const userSchema = new mongoose.Schema({
       type: String,
       default: "Point",
     },
-    coordinates: [Number],
+    coordinates: { type: [Number], index: "2dsphere" },
   },
   passwordChangedAt: {
     type: Date,
@@ -69,6 +81,19 @@ const userSchema = new mongoose.Schema({
   isUser: {
     type: Boolean,
     default: true,
+  },
+  favoriteWorkout: {
+    type: String,
+    enum: [
+      "cardio",
+      "strength",
+      "flexibility",
+      "sports",
+      "crossFit",
+      "body Weight",
+    ],
+    required: [true, "Please enter your favorite workout"],
+    trim: true,
   },
 });
 
