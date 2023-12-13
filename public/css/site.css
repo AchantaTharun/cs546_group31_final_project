@@ -80,3 +80,8 @@ input[type='file']:focus {
   border-color: #1a73e8;
   box-shadow: 0 0 5px rgba(26, 115, 232, 0.8);
 }
+
+img{
+  height: 200px;
+  width: 250px;
+}

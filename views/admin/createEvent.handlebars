@@ -1,4 +1,9 @@
 <form action="/api/v1/admin/createEvent" method="POST" id="create-event" novalidate>
+   <label for="imageInput">
+        UPLOAD IMAGE FILE :                                                 
+        <input type="file" accept="image/*" id="imageInput">
+    </label>
+   <br> 
     <label for="img">
         IMAGE FILE :                                                 
         <input type="text" name="img" id="img">
@@ -75,3 +80,5 @@
 <p id="error">{{error}}</p>
 
 <a href="/api/v1/admin/homepage">BACK TO HOMEPAGE</a>
+
+<script src="/public/js/createAdminEventValidation.js"></script>
