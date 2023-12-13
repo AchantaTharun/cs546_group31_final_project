@@ -36,11 +36,11 @@ create_event.addEventListener("submit",async event =>{
         create_event.submit();  //The Image link from the S3 bucket will be stored in the img field in the eventModel.
 
 
-} catch(e)
-{
-    event.preventDefault();
-    error.innerHTML = "Some fault in the AWS Image Upload part";
-    return false;
-}
+    } catch(e)
+    {
+        event.preventDefault();
+        error.innerHTML = "Some fault in the AWS Image Upload part";
+        return false;
+    }
 
 })
