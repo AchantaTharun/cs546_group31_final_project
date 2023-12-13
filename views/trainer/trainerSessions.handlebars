@@ -1,0 +1,139 @@
+<section>
+      
+      <span class="overlay"></span>
+      <div class="modal-box">
+        <i class="fa-regular fa-circle-check"></i>
+        <h1>Create Session</h1>
+
+    <form id="createSessionForm">
+  <label for="name">Session Name:</label>
+  <input type="text" id="name" name="name" >
+  <br>
+
+  <label for="place">Session Place/Gym:</label>
+  <input type="text" id="place" name="place" >
+  <br>
+
+  <label for="capacity">Session Capacity:</label>
+  <input type="number" id="capacity" name="capacity" min="1" >
+  <br>
+
+  <label for="workoutType">Workout Type:</label>
+  <input type="text" id="workoutType" name="workoutType" >
+  <br>
+
+  <label for="startDate">Start Date:</label>
+  <input type="date" id="startDate" name="startDate" >
+  <br>
+
+  <label for="endDate">End Date:</label>
+  <input type="date" id="endDate" name="endDate" >
+  <br>
+
+  <label for="sessionSlots">Session Slots:</label>
+  <div id="sessionSlotsContainer">
+  </div>
+  <button type="button" id="addSessionSlot">Add Session Slot</button>
+  <br>
+  <br>
+  <div class="add-session-error" id="form-error-style" hidden></div>
+</form>
+        <div class="buttons">
+          <button  id="createSession" value="Create Session">Create</button><button class="close-btn">Close</button>
+        </div>
+      </div>
+    </section>
+
+<div class='main-dashboard-content'>
+   <div>
+      <div class="sessionlist-container">
+        
+        <ul class='sessionlist active-list'>
+            <div><span class='activity-done'>Your Active Sessions</span></div>
+            <button class="show-modal">Create new session</button>
+            <br>
+          <div class="activesession-operation-error"></div>
+          {{#if activeSessions.length}}
+          {{#each activeSessions}}
+            <li>
+              <div><i
+                ></i>
+                <div>
+                  <h5>{{this.name}}</h5>
+                  </div>
+                  <div><button class="button-13">Edit</button></div>
+                  <div><button class="button-13" onclick="endSession('{{this._id}}', 'active', {{this.registeredUsers.length}})">End</button></div>
+                  <div class='date-time'>
+                    <div><span
+                      >Place: {{place}}</span></div>
+                    <div><span
+                      >Start Date: {{startDate}}</span></div>
+                    <div><span
+                       
+                      >End Date: {{endDate}}</span></div>
+                      <div>
+          <ul>
+            {{#each this.sessionSlots}}
+              <li>{{this.weekday}}, Time Slot: {{this.timeSlot}}</li>
+            {{/each}}
+          </ul>
+        </div>
+                </div>
+              </div>
+              <div >
+                <div>
+                  <a href="/{{../type}}/{{_id}}/users"><span class='date-time'>Capacity: {{this.registeredUsers.length}}/{{capacity}}</span></a></div>
+                <i></i>
+              </div>
+            </li>
+          {{/each}}
+          {{else}}
+    <li>No active sessions to display.</li>
+  {{/if}}
+        </ul>
+        
+          <ul class='sessionlist inactive-list'>
+            <div><span class='activity-done'>Your Past Sessions</span></div>
+            
+            <br>
+            <div class="inactivesession-operation-error" hidden></div>
+            {{#if inactiveSessions.length}}
+          {{#each inactiveSessions}}
+            <li>
+              <div><i
+                ></i>
+                <div>
+                  <h5>{{this.name}}</h5>
+                  </div>
+                  <div><button class="button-13">Edit</button></div>
+                  <div><button class="button-13" onclick="endSession('{{this._id}}', 'inactive', {{this.registeredUsers.length}})">Re-Open</button></div>
+                  <div class='date-time'>
+                    <div><span
+                      >Place: {{place}}</span></div>
+                    <div><span
+                      >Start Date: {{startDate}}</span></div>
+                    <div><span
+                       
+                      >End Date: {{endDate}}</span></div>
+                      <div>
+          <ul>
+            {{#each this.sessionSlots}}
+              <li>{{this.weekday}}, Time Slot: {{this.timeSlot}}</li>
+            {{/each}}
+          </ul>
+        </div>
+                </div>
+              </div>
+              <div >
+                <div>
+                  <a href="/{{../type}}/{{_id}}/users"><span class='date-time'>Capacity: {{this.registeredUsers.length}}/{{capacity}}</span></div></a>
+                <i></i>
+              </div>
+            </li>
+          {{/each}}
+          {{else}}
+    <li>No sessions to display.</li>
+  {{/if}}
+        </ul>
+      </div>
+</div>

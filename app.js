@@ -1,26 +1,21 @@
-import express from "express";
-import { engine as handlebarsEngine } from "express-handlebars";
-import mongoSanitizer from "express-mongo-sanitize";
+import express from 'express';
+import { engine as handlebarsEngine } from 'express-handlebars';
+import mongoSanitizer from 'express-mongo-sanitize';
+import dotenv from 'dotenv';
+import morgan from 'morgan';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
 import cookieParser from 'cookie-parser';
-import dotenv from "dotenv";
-import morgan from "morgan";
-import { fileURLToPath } from "url";
-import { dirname } from "path";
-import hpp from "hpp";
-
-import adminRouter from "./routes/adminRoutes.js";
-import eventRouter from "./routes/eventRoutes.js";
-import gymRouter from "./routes/gymRoutes.js";
-import postRouter from "./routes/postRoutes.js";
-import userRouter from "./routes/userRoutes.js";
-import trainerRouter from "./routes/trainerRoutes.js";
+import configRoutesFunction from './routes/index.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
+// Express app
 const app = express();
 
 // Middlewares
+app.use(cookieParser());
 app.use(express.json());
 dotenv.config({ path: "./.env" });
 app.use(morgan("dev"));
@@ -39,27 +34,20 @@ const rewriteUnsupportedBrowserMethods = (req, res, next) => {
   next();
 };
 
-const staticDir = express.static(__dirname + "/public");
-app.use("/public", staticDir);
+const staticDir = express.static(__dirname + '/public');
+app.use('/public', staticDir);
 app.use(express.urlencoded({ extended: true }));
 app.use(rewriteUnsupportedBrowserMethods);
-app.engine("handlebars", handlebarsEngine({ defaultLayout: "main" }));
-app.set("view engine", "handlebars");
+app.engine('handlebars', handlebarsEngine({ defaultLayout: 'main' }));
+app.set('view engine', 'handlebars');
 
-
-// Routes
-app.use("/api/v1/admin", adminRouter);
-app.use("/api/v1/events", eventRouter);
-app.use("/api/v1/gym", gymRouter);
-app.use("/api/v1/posts", postRouter);
-app.use("/api/v1/user", userRouter);
-app.use("/api/v1/trainer", trainerRouter);
-
-app.all("*", (req, res) => {
-  res.status(404).render("error",{
-    status: "fail",
-    message: `Can't find ${req.originalUrl} on this server!`,
-  });
+app.use((req, res, next) => {
+  if (req.url.startsWith('/user') || req.url.startsWith('/trainer')) {
+    if (!req.url.startsWith('/trainer/signup')) res.locals.layout = 'dashboard';
+  } else {
+    res.locals.layout = 'main';
+  }
+  next();
 });
-
+configRoutesFunction(app);
 export default app;
