@@ -2,7 +2,7 @@
 <form id="entity-display" novalidate>
     <label for="name">
         EVENT TITLE :                                                 
-        <input type="text" name="name" id="name" value="{{title}}" readonly>
+        <input type="text" name="name" id="name" value="{{titles}}" readonly>
     </label>
     <br>
     <label for="email">
@@ -28,6 +28,10 @@
     <label for="zip">
         ZIP :                                                 
         <input type="text" name="zip" value="{{zip}}" id="zip" readonly>
+    </label>
+    <label for="AWSImage">
+        IMAGE :
+        <img id="AWSImage" name="AWSImage" src="{{img}}" alt=" Not Found"></img>
     </label>
 </form>
 {{/if}}

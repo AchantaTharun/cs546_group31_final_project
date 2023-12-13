@@ -1,23 +1,35 @@
-// const S3 = require("aws-sdk/clients/s3");
-// const fs = require("fs");
-// const dotenv = require("dotenv").config();
+import dotenv from 'dotenv';
+dotenv.config({ path: "./.env" });
+import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
+import { PutObjectCommand, S3 } from '@aws-sdk/client-s3';
+import crypto from 'crypto';
+import { promisify } from "util"
 
-// const bucketName = process.env.bucketName;
-// const region = process.env.bucketRegion;
-// const accessKeyId = process.env.aws_accesskey;
-// const secretAccessKey = process.env.aws_secretkey;
-// console.log({ bucketName, region, accessKeyId, secretAccessKey });
 
-// const s3 = new S3({ region, accessKeyId, secretAccessKey });
-// console.log(s3);
+const randomBytes = promisify(crypto.randomBytes);
+const bucketName = process.env.BUCKET_NAME;
+const region = process.env.BUCKET_REGION;
+const accessKeyId = process.env.AWS_ACCESS_KEY;
+const secretAccessKey = process.env.AWS_SECRET_KEY;
 
-// exports.uploadFile = (file) => {
-//   const fileStream = fs.createReadStream(file.path);
+const s3 = new S3({
+    region,
+    credentials: {
+        accessKeyId,
+        secretAccessKey,
+    },
+    signatureVersion: 'v4',
+});
 
-//   const uploadParams = {
-//     Bucket: bucketName,
-//     Body: fileStream,
-//     Key: file.filename,
-//   };
-//   return s3.upload(uploadParams).promise();
-// };
+export const generateUploadURL = async () =>{
+    const rawBytes = await randomBytes(16);
+    const imageName = rawBytes.toString('hex');
+
+    const uploadParams = ({
+        Bucket: bucketName,
+        Key: imageName,
+    })
+
+    const uploadURL = await getSignedUrl(s3, new PutObjectCommand(uploadParams), {expiresIn: 60});
+    return uploadURL;
+}

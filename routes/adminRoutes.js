@@ -569,7 +569,8 @@ router
     }
 
     return res.status(200).render('admin/eventEntity',{title:"EVENT DATA",hasData:true,error:"",
-    title:object.title,
+    img:object.img,
+    titles:object.title,
     contactEmail:object.contactEmail,
     street:object.eventLocation.streetAddress,
     state:object.eventLocation.state,
