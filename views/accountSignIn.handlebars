@@ -1,0 +1,38 @@
+<div class='wrapper'>
+  <h1>Login</h1>
+  {{#if hasErrors}}
+    <div class='error-message'>
+      <ul>
+        {{#each errors}}
+          <li>
+            {{this}}
+          </li>
+        {{/each}}
+      </ul>
+    </div>
+  {{/if}}
+  <div id='errorContainer'></div>
+  <form id='loginForm' method='post'>
+    <label for='email'>Email:</label>
+    <input type='email' id='email' name='email' required />
+    <br />
+
+    <label for='password'>Password:</label>
+    <input type='password' id='password' name='password' required />
+    <br />
+
+    <label for='userType'>Select User Type:</label>
+    <select id='userType' name='userType' required>
+      <option value='user'>User</option>
+      <option value='trainer'>Trainer</option>
+      <option value='gym'>Gym</option>
+    </select>
+    <br />
+
+    <button
+      type='button'
+      id='loginButton'
+      onclick='submitAccountLoginForm()'
+    >Login</button>
+  </form>
+</div>

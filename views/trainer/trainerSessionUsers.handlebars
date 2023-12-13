@@ -1,0 +1,28 @@
+<div class='main-dashboard-content'>
+    <div>
+      <div class="sessionlist-container">
+        
+        <ul class='sessionlist active-list'>
+            <div><span class='activity-done'>Users registered for session : {{sessionName}}</span></div>
+            <br>
+          <div class="activesession-operation-error"></div>
+          {{#if users.length}}
+          {{#each users}}
+            <li>
+              <div><i
+                ></i>
+                <div>
+                  <h5>{{this.firstName}}</h5>
+                  </div>
+                  <div><button class="button-13" onclick="endSession('{{this._id}}', 'active')">Remove</button></div>
+                  
+            </li>
+            
+          {{/each}}
+          {{else}}
+    <li>No sessions to display.</li>
+  {{/if}}
+  </ul>
+          </div>
+          </div>
+</div>
