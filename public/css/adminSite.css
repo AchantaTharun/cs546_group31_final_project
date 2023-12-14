@@ -1,0 +1,129 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: rgb(220, 218, 218);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+  
+  header {
+    background-color: #333;
+    color: white;
+    padding: 20px;
+  }
+  
+  .container {
+    display: flex;
+    flex: 1;
+  }
+  
+  .left-panel {
+    width: 200px;
+    background-color: #ddd;
+    padding: 10px;
+  }
+  
+  .left-panel a {
+    display: block;
+    margin-bottom: 10px;
+    color: #333;
+    text-decoration: none;
+  }
+
+  .left-panel a:hover {
+    background-color: #f9f9f9;
+  }
+  
+  .content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    margin-left: 20px;
+  }
+  
+  .window {
+    width: 370px; /* Adjusted width to make it slightly shorter */
+    height: 400px;
+    overflow: auto;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .list {
+    list-style: none;
+    padding: 10px;
+    margin: 0;
+  }
+  
+  .list li {
+    padding: 8px 0;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .list li:last-child {
+    border-bottom: none;
+  }
+  
+  .list li:hover {
+    background-color: #b2b0b0;
+  }
+  
+  .heading {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 20px;
+  }
+
+  .big-heading {
+    font-size: 28px;
+    padding: 15px;
+    background-color: #b9b4b4;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .request-info {
+    display: flex;
+    justify-content: center;
+
+  }
+  
+  .tile {
+    background-color: #f2f2f2;
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    width: 85%;
+  }
+  
+  .tile h3,
+  .tile h4 {
+    margin: 5px 0;
+  }
+
+  .main-content {
+    margin-left: 240px; /* Adjust this to leave space for the left panel */
+    padding: 20px;
+  }
+  
+  .forms-container {
+    display: flex;
+  }
+  
+  .forms-container form {
+    width: 100%; /* Two forms side by side */
+    padding: 10px;
+    margin-right: 20px;
+  }
+  
+  .forms-container form:last-child {
+    margin-right: 0;
+  }
+
+  img{
+    height: 200px;
+    width: 250px;
+  }

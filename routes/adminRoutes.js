@@ -4,6 +4,8 @@ import Admin from "../models/adminModel.js";
 import { Router } from "express";
 import * as e_valid from 'email-validator'
 import * as help from "../Helpers.js";
+import { generateUploadURL } from '../utils/s3.js';
+import multer from 'multer';
 
 const router = Router();
 //ADD IT HERE The image storage and retrieval thing.
@@ -657,13 +659,30 @@ router
     return res.redirect('/api/v1/admin/manage');
   })
 
+  // Set up multer storage and file naming
+  const storage = multer.memoryStorage(); // Use memory storage for handling file in memory
+
+  // Initialize multer with specified storage options
+  const upload = multer({ storage: storage });
+
   router.
   route("/createEvent")
   .get(restrict,async(req,res)=>{
     return res.status(200).render("admin/createEvent",{title:"CREATE EVENT",error:""});
   })
-  .post(restrict,async(req,res)=>{
-    let {img,title,description,contactEmail,streetAddress,city,state,zipCode,maxCapacity,priceOfAdmission,eventDate,startTime,endTime,totalNumberOfAttendees}= req.body;
+  .post(restrict,upload.single('imageInput'),async(req,res)=>{
+    //Initially img value is going to be empty.
+    //Therefore we need to fill it first, before we start with the validation part
+    const url = await generateUploadURL();
+    await fetch(url,{
+              method:"PUT",
+              headers: {
+                  "Content-Type": "multipart/form-data"
+              },
+              body: req.file.buffer
+            });
+    let img = url.split('?')[0];
+    let {title,description,contactEmail,streetAddress,city,state,zipCode,maxCapacity,priceOfAdmission,eventDate,startTime,endTime,totalNumberOfAttendees}= req.body;
     try
     {
       maxCapacity = parseInt(maxCapacity);
