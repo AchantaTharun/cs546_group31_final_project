@@ -34,22 +34,12 @@ export const createSession = async (req, res) => {
       const errors = Object.values(validationErrors.errors).map(
         (error) => error.message
       );
+      console.log(errors);
       return res.status(400).json({ errors });
-    }
-
-    if (!sessionSlots || sessionSlots.length === 0) {
-      return res.status(400).json({
-        errors: ['Please enter at least one session slot'],
-      });
     }
 
     const currentDate = new Date();
 
-    if (new Date(endDate) < new Date(startDate)) {
-      return res.status(400).json({
-        errors: ['End date cannot be after Start Date'],
-      });
-    }
     if (new Date(startDate) < currentDate || new Date(endDate) < currentDate) {
       return res.status(400).json({
         errors: [
@@ -58,7 +48,7 @@ export const createSession = async (req, res) => {
       });
     }
 
-    const conflictingSessions = await Session.find({
+    const conflictingSession = await Session.findOne({
       isActive: true,
       $and: [
         {
@@ -74,11 +64,11 @@ export const createSession = async (req, res) => {
           },
         },
       ],
-    }).lean();
+    });
 
     if (
-      conflictingSessions &&
-      conflictingSessions.some((ses) => trainer.sessions.includes(ses._id))
+      conflictingSession &&
+      trainer.sessions.indexOf(conflictingSession._id) !== -1
     ) {
       return res.status(400).json({
         errors: [

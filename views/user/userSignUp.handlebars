@@ -1,0 +1,45 @@
+<div class="container" id="signUp">
+
+    <h1>Sign Up 💪
+    </h1>
+    {{#if hasErrors}}
+        <div class='error-message danger'>
+            <ul>
+                {{#each errors}}
+                    <li>
+                        {{this}}
+                    </li>
+                {{/each}}
+            </ul>
+        </div>
+    {{/if}}
+    <form action="/user/signup" id="user-signup" method="POST">
+
+
+        <label for="firstName">First Name:</label>
+        <input type="text" id="firstName" name="firstName" required>
+
+        <label for="lastName">Last Name:</label>
+        <input type="text" id="lastName" name="lastName" required>
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
+
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+
+        <label for="passwordConfirm">Confirm Password:</label>
+        <input type="password" id="passwordConfirm" name="passwordConfirm" required>
+
+        <input type="submit" id="submit-btn" value="Sign Up">
+        <div class="d-grid gap-2">
+            <button class="btn btn-primary col " id="loading" type="button" hidden disabled>
+                <span class="spinner-border spinner-border-lg" aria-hidden="true"></span>
+                <span role="status">Loading...</span>
+            </button>
+        </div>
+    </form>
+
+</div>
+<script id="getCoord" src="/public/js/user/getCoord.js"></script>
+<script id="validateSignUp" src="/public/js/user/validateSignup.js"></script>

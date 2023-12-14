@@ -1,0 +1,23 @@
+<div class="container mt-4">
+    <h1>User</h1>
+
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card user-card">
+                <div class="card-body">
+                    <button class="btn btn-primary"><a href="/user/home">go back</a></button>
+                    <h5 class="card-title">{{user.firstName}} {{user.lastName}}</h5>
+                    <p class="card-text">Email: {{user.email}}</p>
+                    <p class="card-text">{{#if user.location}}
+                            Location: Latitude {{user.location.lat}}, Longitude {{user.location.lng}}
+                        {{else}}
+                            Location: Not available
+                        {{/if}}
+                    </p>
+                    <p class="card-text">Created At: {{user.createdAt}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

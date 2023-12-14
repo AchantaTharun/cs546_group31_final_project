@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import validator from "validator";
 import * as help from "../Helpers.js";
 
-
+// Not Complete
 const eventSchema = new mongoose.Schema({
   img: {
     type: String,
@@ -24,14 +24,15 @@ const eventSchema = new mongoose.Schema({
     required: [true, "Please enter the contactEmail"],
     trim: true,
     validate: [
-        {
-          validator:validator.isEmail, 
-          message:"Please enter a valid email"},
-        {
-          validator:help.emailc,
-          message:"Enter Valid Email Address"
-        }
-      ]
+      {
+        validator: validator.isEmail,
+        message: "Please enter a valid email",
+      },
+      {
+        validator: help.emailc,
+        message: "Enter Valid Email Address",
+      },
+    ],
   },
   eventLocation: {
     streetAddress: {
@@ -52,12 +53,54 @@ const eventSchema = new mongoose.Schema({
       validate: {
         validator: function (el) {
           const states = [
-            "AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE",
-            "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS", 
-            "KY", "LA", "ME", "MD", "MA", "MI", "MS", "MO",
-            "MT", "NE", "NV", "NH", "NJ", "NM", "NY", "NC",
-            "ND", "OH", "OK", "OR", "PA", "RI", "SC", "SD",
-            "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI",
+            "AL",
+            "AK",
+            "AZ",
+            "AR",
+            "CA",
+            "CO",
+            "CT",
+            "DE",
+            "FL",
+            "GA",
+            "HI",
+            "ID",
+            "IL",
+            "IN",
+            "IA",
+            "KS",
+            "KY",
+            "LA",
+            "ME",
+            "MD",
+            "MA",
+            "MI",
+            "MS",
+            "MO",
+            "MT",
+            "NE",
+            "NV",
+            "NH",
+            "NJ",
+            "NM",
+            "NY",
+            "NC",
+            "ND",
+            "OH",
+            "OK",
+            "OR",
+            "PA",
+            "RI",
+            "SC",
+            "SD",
+            "TN",
+            "TX",
+            "UT",
+            "VT",
+            "VA",
+            "WA",
+            "WV",
+            "WI",
           ];
           return el.length === 2 && states.includes(el.toUpperCase());
         },
@@ -127,13 +170,14 @@ const eventSchema = new mongoose.Schema({
       type: String,
     },
   },
-  eventDate: {   //It has to be taken from date time local
+  eventDate: {
+    //It has to be taken from date time local
     type: Date,
     required: [true, "Please enter the eventDate"],
     trim: true,
     validate: {
       validator: function (el) {
-        return el >= (new Date());
+        return el >= new Date();
       },
       message: "Please enter a valid eventDate",
     },
@@ -146,40 +190,42 @@ const eventSchema = new mongoose.Schema({
     type: Date,
   },
   startTime: {
-    type: Date, // Changed from String to Date
+    type: String,
     required: [true, "Please enter the startTime"],
     trim: true,
-    validate: [{
-      validator: function (el) {
-        return el >= this.eventDate;
+    validate: [
+      {
+        validator: function (el) {
+          return el >= this.eventDate;
+        },
+        message: "Please enter a valid startTime",
       },
-      message: "Please enter a valid startTime",
-    },
-    {
-      validator:function (el) {
-        return isSameDay(this.eventDate, el);
+      {
+        validator: function (el) {
+          return isSameDay(this.eventDate, el);
+        },
+        message: "StartTime and evenDate must represent the same day",
       },
-      message: "StartTime and evenDate must represent the same day"
-    }
-  ]
+    ],
   },
   endTime: {
-    type: Date, // Changed from String to Date
+    type: String,
     required: [true, "Please enter the endTime"],
     trim: true,
-    validate: [ {
-      validator: function (el) {
-        return el > this.startTime;    //Just to ensure that there is atleast a gap of one minute.
+    validate: [
+      {
+        validator: function (el) {
+          return el >= this.startTime;
+        },
+        message: "Please enter a valid endTime",
       },
-      message: "Please enter a valid endTime",
-    },
-    {
-      validator: function (el) {
-        return isSameDay(this.startTime, el);
+      {
+        validator: function (el) {
+          return isSameDay(this.startTime, el);
+        },
+        message: "StartTime and EndTime must be on the same day",
       },
-      message: "StartTime and EndTime must be on the same day",
-    },
-  ],
+    ],
   },
 
   totalNumberOfAttendees: {
@@ -193,22 +239,14 @@ const eventSchema = new mongoose.Schema({
       message: "Please enter a valid totalNumberOfAttendees",
     },
   },
-  
+  // needs to change
   attendees: [
     {
       type: mongoose.Schema.ObjectId,
       ref: "User" || "Trainer" || "Gym",
     },
   ],
-},{
-timestamps: true
 });
-
-function isSameDay(date1, date2) {
-  return date1.getFullYear() === date2.getFullYear() &&
-    date1.getMonth() === date2.getMonth() &&
-    date1.getDate() === date2.getDate();
-}
 
 const Event = mongoose.model("Event", eventSchema);
 

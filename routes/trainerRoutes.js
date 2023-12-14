@@ -5,8 +5,6 @@ import * as trainerController from '../controllers/trainerController.js';
 
 const router = Router();
 
-router.get('/', authController.protectRoute, trainerController.getAllTrainers);
-
 router.get(
   '/:trainerId',
   authController.protectRoute,
