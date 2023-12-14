@@ -8,7 +8,6 @@ import { dirname } from 'path';
 import cookieParser from 'cookie-parser';
 import configRoutesFunction from './routes/index.js';
 import hpp from 'hpp';
-import { generateUploadURL } from './utils/s3.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -29,11 +28,11 @@ app.use(hpp());
 app.use(mongoSanitizer());
 
 //The first middleware, so that the file uploads doesn't runs into conflicts with the other routes.
-app.get('/admin/s3Url',async (req,res)=>{
-  console.log("Gonna get the URL for the file upload rn");
-  const url = await generateUploadURL();
-  res.send({url})
-})
+// app.get('/admin/s3Url',async (req,res)=>{
+//   console.log("Gonna get the URL for the file upload rn");
+//   const url = await generateUploadURL();
+//   res.send({url})
+// })
 
 const rewriteUnsupportedBrowserMethods = (req, res, next) => {
   if (req.body && req.body._method) {
@@ -54,9 +53,9 @@ app.use((req, res, next) => {
   if (req.url.startsWith('/user') || req.url.startsWith('/trainer')) {
     if (!req.url.startsWith('/trainer/signup')) res.locals.layout = 'dashboard';
   } else {
-    if(req.url.startsWith(`/${process.env.BUCKET_NAME}`))
+    if(req.url.startsWith('/api/v1/admin'))
     {
-      res.locals.layout = 'main2';
+      res.locals.layout = 'adminMain';
     }
     else
     {

@@ -12,7 +12,7 @@ import * as e_valid from 'email-validator';
 import {ObjectId} from 'mongodb';
 import  nodemailer from "nodemailer";
 import dotenv from "dotenv";
-dotenv.config({ path: "../.env" });   //This was the issue, why my Emails were not being sent.
+// dotenv.config({ path: "../.env" });   //This was the issue, why my Emails were not being sent.
 import Image from "../models/imageModel.js";
 
 // This is the one and only Administrator created during the running of the seed file.
@@ -320,7 +320,9 @@ export const createEvent = async (
     endTime : new Date(endTime),
     totalNumberOfAttendees : totalNumberOfAttendees
   }
+
   const adminEvent = await Event.create(eventbyAdmin);
+
   if(!adminEvent)
   {
     throw "Event couldn't be created";
