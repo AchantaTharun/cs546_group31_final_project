@@ -23,41 +23,16 @@ router.get("/home", authController.protectRoute, async (req, res) => {
   const user = req.user;
 
   try {
-    const { selectUser, favoriteWorkout, searchType, search } = req.query;
-
-    let users;
-
-    if (selectUser && favoriteWorkout && searchType && search) {
-      const response = await axios.get(
-        "http://localhost:3000/api/v1/user/search",
-        {
-          params: {
-            selectUser,
-            favoriteWorkout,
-            searchType,
-            search,
-          },
-        }
-      );
-      users = response.data.data.user;
-      console.log(users);
-      return res.render("user/userHome", {
-        layout: "userHome.layout.handlebars",
-        users,
-        user,
-      });
-    } else {
-      const response = await axios.get(
-        "http://localhost:3000/api/v1/user/fromCoord",
-        {
-          params: {
-            lng: user.location.coordinates[0],
-            lat: user.location.coordinates[1],
-          },
-        }
-      );
-      users = response.data.data.user;
-    }
+    const response = await axios.get(
+      "http://localhost:3000/api/v1/user/fromCoord",
+      {
+        params: {
+          lng: user.location.coordinates[0],
+          lat: user.location.coordinates[1],
+        },
+      }
+    );
+    let users = response.data.data.users;
     return res.render("user/userHome", {
       layout: "userHome.layout.handlebars",
       users,
@@ -81,6 +56,38 @@ router.get("/profile", authController.protectRoute, async (req, res) => {
     layout: "userProfile.layout.handlebars",
     user,
   });
+});
+
+router.get("/home/search", authController.protectRoute, async (req, res) => {
+  const user = req.user;
+  try {
+    const { selectUser, favoriteWorkout, searchType, search } = req.query;
+
+    let users;
+
+    if (selectUser && favoriteWorkout && searchType && search) {
+      const response = await axios.get(
+        "http://localhost:3000/api/v1/user/search",
+        {
+          params: {
+            selectUser,
+            favoriteWorkout,
+            searchType,
+            search,
+          },
+        }
+      );
+      users = response.data.data.user;
+      console.log(users);
+      return res.render("user/userHome", {
+        layout: "userHome.layout.handlebars",
+        users,
+        user,
+      });
+    }
+  } catch (err) {
+    console.log(err.message);
+  }
 });
 
 router.get("/events", authController.protectRoute, async (req, res) => {
@@ -113,11 +120,12 @@ router.get("/posts", authController.protectRoute, async (req, res) => {
   }
 });
 
-router.get("/:id", authController.protectRoute, async (req, res) => {
+router.get("/:userName", authController.protectRoute, async (req, res) => {
   const user = req.user;
+  console.log(req.params.userName);
   try {
     const response = await axios.get(
-      `http://localhost:3000/api/v1/user/${req.params.id}`
+      `http://localhost:3000/api/v1/user/${req.params.userName}`
     );
     const user = response.data.data.user;
     return res.render("user/userPage", {
@@ -134,6 +142,7 @@ router.get("/profile/edit", authController.protectRoute, async (req, res) => {
     layout: "userEditProfile.layout.handlebars",
   });
 });
+
 router.get(
   "/profile/workout",
   authController.protectRoute,

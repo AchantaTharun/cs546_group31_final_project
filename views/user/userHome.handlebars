@@ -1,6 +1,6 @@
 <div class="container mt-4 ">
 
-    <form class="row g-3 mb-4" action="/user/home" method="get">
+    <form class="row g-3 mb-4" action="/user/home/search" method="get">
         <div class="col-md-2">
             <label for="selectUser" class="form-label">Select User</label>
             <select id="selectUser" name="selectUser" class="form-select">
@@ -48,7 +48,7 @@
         </button>
     </p>
     <div class="collapse" id="collapseExample">
-        <div id="map" class="card card-body">
+        <div id="map" data="{{users}}" class="card card-body">
         </div>
     </div>
 
@@ -71,7 +71,7 @@
                         <hr>
 
                         <div class="d-flex justify-content-between">
-                            <button class="btn btn-primary"><a href="/user/{{this._id}}" class="text-white">View
+                            <button class="btn btn-primary"><a href="/user/{{this.userName}}" class="text-white">View
                                     Profile</a></button>
                             <button class="btn btn-secondary">Follow</button>
                         </div>

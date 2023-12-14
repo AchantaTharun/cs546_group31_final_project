@@ -12,7 +12,7 @@ import userWebRoutes from "./web/userWebRoutes.js";
 import gymWebRoutes from "./web/gymWebRoutes.js";
 
 const constructorMethod = (app) => {
-  // app.use("/", accountRoutes);
+  app.use("/", accountRoutes);
   app.use("/api/v1/admin", adminRouter);
   app.use("/api/v1/events", eventRouter);
   app.use("/api/v1/gym", gymRouter);

@@ -7,6 +7,6 @@ const router = Router();
 
 router.get("/fromCoord", userController.getFromCoord);
 router.get("/search", userController.search);
-router.get("/:id", userController.getUser);
+router.get("/:userName", userController.getUser);
 router.get("/", userController.getAllUsers);
 export default router;

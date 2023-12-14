@@ -1,66 +1,80 @@
-import mongoose from 'mongoose';
-import validator from 'validator';
-import bcrypt from 'bcryptjs';
+import mongoose from "mongoose";
+import validator from "validator";
+import bcrypt from "bcryptjs";
 
 const trainerSchema = new mongoose.Schema({
+  firstName: {
+    type: String,
+    required: [true, "Please enter your first name"],
+    trim: true,
+    minLength: [2, "First Name must be at least 3 characters long"],
+    maxLength: [50, "First Name must be less than 50 characters long"],
+  },
+  lastName: {
+    type: String,
+    required: [true, "Please enter your last name"],
+    trim: true,
+    minLength: [2, "Last Name must be at least 3 characters long"],
+    maxLength: [50, "Last Name must be less than 50 characters long"],
+  },
   trainerName: {
     type: String,
-    required: [true, 'Please enter your name'],
+    required: [true, "Please enter your name"],
     trim: true,
-    minLength: [3, 'Trainer Name must be at least 3 characters long'],
-    maxLength: [50, 'Trainer Name must be less than 50 characters long'],
+    minLength: [3, "Trainer Name must be at least 3 characters long"],
+    maxLength: [50, "Trainer Name must be less than 50 characters long"],
   },
   email: {
     type: String,
-    required: [true, 'Please enter your email'],
+    required: [true, "Please enter your email"],
     trim: true,
-    validate: [validator.isEmail, 'Please enter a valid email'],
+    validate: [validator.isEmail, "Please enter a valid email"],
     unique: true,
   },
   password: {
     type: String,
-    required: [true, 'Please enter your password'],
+    required: [true, "Please enter your password"],
     trim: true,
-    minLength: [8, 'Password must be at least 8 characters long'],
+    minLength: [8, "Password must be at least 8 characters long"],
   },
   address: {
     street: {
       type: String,
-      required: [true, 'Please enter your street'],
+      required: [true, "Please enter your street"],
       trim: true,
-      minLength: [3, 'Street must be at least 3 characters long'],
-      maxLength: [50, 'Street must be less than 50 characters long'],
+      minLength: [3, "Street must be at least 3 characters long"],
+      maxLength: [50, "Street must be less than 50 characters long"],
     },
     city: {
       type: String,
-      required: [true, 'Please enter your city'],
+      required: [true, "Please enter your city"],
       trim: true,
-      minLength: [3, 'City must be at least 3 characters long'],
-      maxLength: [50, 'City must be less than 50 characters long'],
+      minLength: [3, "City must be at least 3 characters long"],
+      maxLength: [50, "City must be less than 50 characters long"],
     },
     state: {
       type: String,
-      required: [true, 'Please enter your state'],
+      required: [true, "Please enter your state"],
       trim: true,
-      length: [2, 'State must be 2 characters long'],
+      length: [2, "State must be 2 characters long"],
     },
     zip: {
       type: String,
-      required: [true, 'Please enter your zip'],
+      required: [true, "Please enter your zip"],
       trim: true,
     },
   },
   phone: {
     type: String,
-    required: [true, 'Please enter your phone number'],
+    required: [true, "Please enter your phone number"],
     trim: true,
-    validate: [validator.isMobilePhone, 'Please enter a valid phone number'],
+    validate: [validator.isMobilePhone, "Please enter a valid phone number"],
     unique: true,
   },
   status: {
     type: String,
-    enum: ['pending', 'approved', 'rejected'],
-    default: 'pending',
+    enum: ["pending", "approved", "rejected"],
+    default: "pending",
   },
   reason: {
     type: String,
@@ -77,10 +91,29 @@ const trainerSchema = new mongoose.Schema({
   passwordChangedAt: {
     type: Date,
   },
+  location: {
+    type: {
+      type: String,
+      default: "Point",
+    },
+    coordinates: { type: [Number], index: "2dsphere" },
+  },
+  workoutType: {
+    type: [String],
+    enum: [
+      "cardio",
+      "strength",
+      "flexibility",
+      "sports",
+      "crossFit",
+      "body Weight",
+    ],
+    default: ["cardio"],
+  },
   sessions: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Session',
+      ref: "Session",
     },
   ],
   //   businessLicense: {
@@ -89,8 +122,8 @@ const trainerSchema = new mongoose.Schema({
   //   },
 });
 
-trainerSchema.pre('save', async function (next) {
-  if (!this.isModified('password')) return next();
+trainerSchema.pre("save", async function (next) {
+  if (!this.isModified("password")) return next();
   this.password = await bcrypt.hash(this.password, 12);
   this.passwordConfirm = undefined;
 });
@@ -109,6 +142,6 @@ trainerSchema.methods.isPasswordCorrect = async function (
 //   return true; // Skip validation for updates
 // }, 'Passwords do not match');
 
-const Trainer = mongoose.model('Trainer', trainerSchema);
+const Trainer = mongoose.model("Trainer", trainerSchema);
 
 export default Trainer;

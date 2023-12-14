@@ -27,7 +27,8 @@ export const getAllUsers = async (req, res) => {
 
 export const getUser = async (req, res) => {
   try {
-    const user = await User.findById(req.params.id);
+    console.log(req.params.userName);
+    const user = await User.findOne({ userName: req.params.userName });
     if (!user) {
       return res.status(404).json({
         status: "fail",
@@ -51,20 +52,22 @@ export const getUser = async (req, res) => {
 export const getFromCoord = async (req, res) => {
   try {
     const { lng, lat } = req.query;
-    console.log("inside");
-    const user = await User.aggregate([
+    const users = await User.aggregate([
       {
         $geoNear: {
           near: {
             type: "Point",
             coordinates: [parseFloat(lng), parseFloat(lat)],
           },
-          distanceField: "distance",
+          distanceField: "distanceFromSF",
           distanceMultiplier: 0.001,
+          spherical: true,
+          maxDistance: 15000,
         },
       },
     ]);
-    if (!user) {
+    // console.log(users);
+    if (!users) {
       return res.status(404).json({
         status: "fail",
         message: "No user found with that ID",
@@ -73,7 +76,7 @@ export const getFromCoord = async (req, res) => {
     return res.status(200).json({
       status: "success",
       data: {
-        user,
+        users,
       },
     });
   } catch (e) {
