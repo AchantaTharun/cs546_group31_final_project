@@ -33,12 +33,12 @@ export const protectRoute = async (req, res, next) => {
     let token;
     console.log(req.cookies);
     if (!req.cookies.jwt) {
-      return res.redirect("/user/login");
+      return res.redirect("/");
     }
 
     token = req.cookies.jwt;
     if (!token) {
-      return res.redirect("/user/login");
+      return res.redirect("/");
     }
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
@@ -46,13 +46,13 @@ export const protectRoute = async (req, res, next) => {
       case "user":
         const user = await User.findById(decoded.id);
         if (!user) {
-          return res.redirect("/user/login");
+          return res.redirect("/");
         }
         if (
           "passwordChangedAt" in user &&
           checkTokenValid(user.passwordChangedAt, decoded.iat)
         ) {
-          return res.redirect("/login");
+          return res.redirect("/");
         }
         req.user = user;
         break;
@@ -65,7 +65,7 @@ export const protectRoute = async (req, res, next) => {
           "passwordChangedAt" in admin &&
           checkTokenValid(admin.passwordChangedAt, decoded.iat)
         ) {
-          return res.redirect("/login");
+          return res.redirect("/");
         }
         req.admin = admin;
         break;
@@ -78,7 +78,7 @@ export const protectRoute = async (req, res, next) => {
           "passwordChangedAt" in gym &&
           checkTokenValid(gym.passwordChangedAt, decoded.iat)
         ) {
-          return res.redirect("/login");
+          return res.redirect("/");
         }
         req.gym = gym;
         break;
@@ -91,7 +91,7 @@ export const protectRoute = async (req, res, next) => {
           "passwordChangedAt" in trainer &&
           checkTokenValid(trainer.passwordChangedAt, decoded.iat)
         ) {
-          return res.redirect("/login");
+          return res.redirect("/");
         }
         req.trainer = trainer;
         break;
@@ -333,7 +333,8 @@ export const gymLogin = async (req, res) => {
 export const trainerSignup = async (req, res) => {
   try {
     const {
-      trainerName,
+      firstName,
+      lastName,
       email,
       password,
       passwordConfirm,
@@ -345,7 +346,9 @@ export const trainerSignup = async (req, res) => {
     } = req.body;
 
     const newTrainer = new Trainer({
-      trainerName,
+      firstName,
+      lastName,
+      trainerName: firstName + " " + lastName,
       email,
       password,
       passwordConfirm,
@@ -384,7 +387,7 @@ export const trainerSignup = async (req, res) => {
 
     const token = signJWT(createdTrainer._id, "trainer");
 
-    res.redirect("/accountSignIn");
+    res.redirect("/login");
   } catch (err) {
     if (err.code === 11000 && err.keyPattern.email) {
       return res.render("trainer/trainerSignUp", {
@@ -423,6 +426,6 @@ export const trainerLogin = async (req, res) => {
 
     res.redirect("/trainer/dashboard");
   } catch (err) {
-    res.render("accountSignIn", { errors: [err.message], hasErrors: true });
+    res.render("trainer/trainerLogin", { errors: [err.message], hasErrors: true, layout: "main" });
   }
 };

@@ -4,3 +4,9 @@ function submitAccountLoginForm() {
   form.action = `/login`;
   form.submit();
 }
+
+function submitTrainerLoginForm() {
+const form = document.getElementById('loginForm');
+  form.action = `/trainer/login`;
+  form.submit();
+}
