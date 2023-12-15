@@ -1,0 +1,25 @@
+<div>
+    <h2>{{event.title}}</h2>
+    <img src="{{event.img}}" alt="{{event.title}}">
+    <p>Description: {{event.description}}</p>
+    <p>Date: {{event.eventDate}}</p>
+    <p>Start Time: {{event.startTime}}</p>
+    <p>End Time: {{event.endTime}}</p>
+    <p>Location: {{event.eventLocation.streetAddress}}, {{event.eventLocation.city}}, {{event.eventLocation.state}} {{event.eventLocation.zipCode}}</p>
+    <p>Capacity: {{event.totalNumberOfAttendees}}/{{event.maxCapacity}}</p>
+    <p>Price of Admission: ${{event.priceOfAdmission}}</p>
+    <p>Event Type: {{#if event.publicEvent}}Public{{else}}Private{{/if}}</p>
+
+<h3>Attending?</h3>
+    <!-- RSVP Form for 'Yes' Response -->
+<form action="/user/events/rsvp/{{event._id}}/{{user._id}}/" method="post">
+    <button type="submit" class="btn btn-primary">Yes, I will attend</button>
+</form>
+<!-- RSVP Form for 'No' Response -->
+<form action="/user/events/rsvp/{{event._id}}/{{user._id}}/remove" method="post">
+    <input type="hidden" name="action" value="remove">
+    <button type="submit" class="btn btn-secondary">No, I cannot attend</button>
+     <a href="/user/events" class="btn btn-link">Cancel</a>
+</form>
+
+</div>
