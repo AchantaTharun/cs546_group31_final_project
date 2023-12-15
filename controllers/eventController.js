@@ -43,8 +43,9 @@ export const createEvent = async (req, res) => {
       endTime,
       publicEvent,
       attendees,
-      totalNumberOfAttendees,
     } = req.body;
+
+    const totalNumberOfAttendees = 0;
 
     const newEvent = new Event({
       img,
@@ -327,9 +328,9 @@ export const updateComment = async (req, res) => {
 export const addAttendee = async (req, res) => {
   try {
     const eventId = req.params.eventId;
-    const loggedInUserId = req.user.id;
+    const loggedInUserId = req.params.attendeeId;
     const event = await Event.findById(eventId);
-
+    
     if (!event) {
       return res
         .status(404)
