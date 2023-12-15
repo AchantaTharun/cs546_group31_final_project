@@ -1,17 +1,26 @@
+
+{{#if message}}
+  <div id="message" class="alert alert-success">
+    <button type="button" onclick="document.getElementById('message').style.display='none'">&times;</button>
+    {{message}}
+  </div>
+{{/if}}
+
 <div class="container">
+    <button class="createEventButton" style="margin-bottom: 20px;">
+        <a href="/user/events/createEvent">+ Create Event</a>
+    </button>
+
     {{#each events}}
         <div class="card">
             <div class="card-header">
-                {{this.title}}
+                <a href="/user/events/details/{{this._id}}">{{this.title}}</a>
             </div>
             <div class="card-body">
-                <blockquote class="blockquote mb-0">
-                    <p>A well-known quote, contained in a blockquote element.</p>
-                    <footer class="blockquote-footer">Someone famous in <cite title="Source Title">Source Title</cite>
-                    </footer>
-                </blockquote>
+                <p>{{this.eventDate}}</p>
             </div>
         </div>
     {{/each}}
 
 </div>
+
