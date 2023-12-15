@@ -95,33 +95,33 @@ const userSchema = new mongoose.Schema({
     required: [true, "Please enter your favorite workout"],
     trim: true,
   },
-  address: {
-    street: {
-      type: String,
-      required: [true, "Please enter your street address"],
-      trim: true,
-    },
-    city: {
-      type: String,
-      required: [true, "Please enter your city"],
-      trim: true,
-    },
-    state: {
-      type: String,
-      required: [true, "Please enter your state"],
-      trim: true,
-    },
-    zipCode: {
-      type: String,
-      required: [true, "Please enter your zip code"],
-      trim: true,
-    },
-    country: {
-      type: String,
-      required: [true, "Please enter your country"],
-      trim: true,
-    },
-  },
+  // address: {
+  //   street: {
+  //     type: String,
+  //     required: [true, "Please enter your street address"],
+  //     trim: true,
+  //   },
+  //   city: {
+  //     type: String,
+  //     required: [true, "Please enter your city"],
+  //     trim: true,
+  //   },
+  //   state: {
+  //     type: String,
+  //     required: [true, "Please enter your state"],
+  //     trim: true,
+  //   },
+  //   zipCode: {
+  //     type: String,
+  //     required: [true, "Please enter your zip code"],
+  //     trim: true,
+  //   },
+  //   country: {
+  //     type: String,
+  //     required: [true, "Please enter your country"],
+  //     trim: true,
+  //   },
+  // },
 });
 
 userSchema.pre("save", async function (next) {
