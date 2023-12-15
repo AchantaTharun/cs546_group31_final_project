@@ -1,0 +1,145 @@
+<!-- eventCreationForm.handlebars -->
+
+<form class="row g-3" action="/user/events/create" method="POST" novalidate>
+
+    <!-- Title -->
+    <div class="col-md-6">
+        <label for="title" class="form-label">Title</label>
+        <input type="text" class="form-control" id="title" name="title" value="Community Beach Cleanup" >
+    </div>
+    <!-- Image -->
+    <div class="col-md-6">
+        <label for="img" class="form-label">Image</label>
+        <input type="text" class="form-control" id="img" name="img" value="https://example.com/beach-cleanup.jpg" >
+    </div>
+    <!-- Description -->
+    <div class="col-12">
+        <label for="description" class="form-label">Description</label>
+        <textarea class="form-control" id="description" name="description" >Join us for a beach cleanup event!</textarea>
+    </div>
+    <!-- Contact Email -->
+    <div class="col-12">
+        <label for="contactEmail" class="form-label">Email</label>
+        <input type="email" class="form-control" id="contactEmail" name="contactEmail" value="contact@cleanup.org" >
+    </div>
+    <!-- Event Location Fields -->
+    <div class="col-12">
+        <label for="streetAddress" class="form-label">Street Address</label>
+        <input type="text" class="form-control" id="streetAddress" name="eventLocation[streetAddress]" value="123 Ocean Drive" >
+    </div>
+    <div class="col-md-6">
+        <label for="city" class="form-label">City</label>
+        <input type="text" class="form-control" id="city" name="eventLocation[city]" value="Beachtown" >
+    </div>
+    <div class="col-md-4">
+        <label for="state" class="form-label">State</label>
+        <select id="state" class="form-select" name="eventLocation[state]" >
+            <!-- List of states -->
+            <option value="AL">Alabama</option>
+            <option value="AK">Alaska</option>
+            <option value="AZ">Arizona</option>
+            <option value="AR">Arkansas</option>
+            <option value="CA" selected>California</option>
+            <option value="CO">Colorado</option>
+            <option value="CT">Connecticut</option>
+            <option value="DE">Delaware</option>
+            <option value="FL">Florida</option>
+            <option value="GA">Georgia</option>
+            <option value="HI">Hawaii</option>
+            <option value="ID">Idaho</option>
+            <option value="IL">Illinois</option>
+            <option value="IN">Indiana</option>
+            <option value="IA">Iowa</option>
+            <option value="KS">Kansas</option>
+            <option value="KY">Kentucky</option>
+            <option value="LA">Louisiana</option>
+            <option value="ME">Maine</option>
+            <option value="MD">Maryland</option>
+            <option value="MA">Massachusetts</option>
+            <option value="MI">Michigan</option>
+            <option value="MN">Minnesota</option>
+            <option value="MS">Mississippi</option>
+            <option value="MO">Missouri</option>
+            <option value="MT">Montana</option>
+            <option value="NE">Nebraska</option>
+            <option value="NV">Nevada</option>
+            <option value="NH">New Hampshire</option>
+            <option value="NJ">New Jersey</option>
+            <option value="NM">New Mexico</option>
+            <option value="NY">New York</option>
+            <option value="NC">North Carolina</option>
+            <option value="ND">North Dakota</option>
+            <option value="OH">Ohio</option>
+            <option value="OK">Oklahoma</option>
+            <option value="OR">Oregon</option>
+            <option value="PA">Pennsylvania</option>
+            <option value="RI">Rhode Island</option>
+            <option value="SC">South Carolina</option>
+            <option value="SD">South Dakota</option>
+            <option value="TN">Tennessee</option>
+            <option value="TX">Texas</option>
+            <option value="UT">Utah</option>
+            <option value="VT">Vermont</option>
+            <option value="VA">Virginia</option>
+            <option value="WA">Washington</option>
+            <option value="WV">West Virginia</option>
+            <option value="WI">Wisconsin</option>
+            <option value="WY">Wyoming</option>
+        </select>
+    </div>
+    <div class="col-md-2">
+        <label for="zipCode" class="form-label">Zip Code</label>
+        <input type="text" class="form-control" id="zipCode" name="eventLocation[zipCode]" value="90210" >
+    </div>
+    <!-- Max Capacity -->
+    <div class="col-md-6">
+        <label for="maxCapacity" class="form-label">Capacity</label>
+        <input type="number" class="form-control" id="maxCapacity" name="maxCapacity" value="100" min="0" >
+    </div>
+    <!-- Price of Admission -->
+    <div class="col-md-6">
+        <label for="priceOfAdmission" class="form-label">Price of Admission</label>
+        <input type="number" class="form-control" id="priceOfAdmission" name="priceOfAdmission" value="0" min="0" >
+    </div>
+    <!-- Event Date -->
+<div class="col-md-6">
+    <label for="eventDate" class="form-label">Date</label>
+    <input type="datetime-local" class="form-control" id="eventDate" name="eventDate" value="2024-12-12T09:00">
+</div>
+<!-- Start Time -->
+<div class="col-md-6">
+    <label for="startTime" class="form-label">Start Time</label>
+    <input type="datetime-local" class="form-control" id="startTime" name="startTime" value="2024-12-12T10:00">
+</div>
+<!-- End Time -->
+<div class="col-md-6">
+    <label for="endTime" class="form-label">End Time</label>
+    <input type="datetime-local" class="form-control" id="endTime" name="endTime" value="2024-12-12T15:00">
+</div>
+
+    <!-- Public Event Option -->
+    <div class="col-12">
+        <label for="publicEvent" class="form-label">Event Type</label>
+        <select id="publicEvent" class="form-select" name="publicEvent">
+            <option value="true" selected>Public Event</option>
+            <option value="false">Private Event</option>
+        </select>
+    </div>
+    <!-- Submit Button -->
+    <div class="col-12">
+        <button type="submit" class="btn btn-primary">Create Event</button>
+        <a href="/user/events" class="btn btn-secondary">Cancel</a>
+    </div>
+    
+</form>
+
+<script>
+    document.getElementById('priceOfAdmission').addEventListener('change', function() {
+        var priceInputGroup = document.getElementById('priceInputGroup');
+        if (this.value === 'other') {
+            priceInputGroup.classList.remove('d-none');
+        } else {
+            priceInputGroup.classList.add('d-none');
+        }
+    });
+</script>
