@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import validator from "validator";
 import * as help from "../Helpers.js";
 
-// Not Complete
+
 const eventSchema = new mongoose.Schema({
   img: {
     type: String,
@@ -177,7 +177,7 @@ const eventSchema = new mongoose.Schema({
     trim: true,
     validate: {
       validator: function (el) {
-        return el >= new Date();
+        return el >= (new Date());
       },
       message: "Please enter a valid eventDate",
     },
@@ -190,7 +190,7 @@ const eventSchema = new mongoose.Schema({
     type: Date,
   },
   startTime: {
-    type: String,
+    type: Date,
     required: [true, "Please enter the startTime"],
     trim: true,
     validate: [
@@ -209,7 +209,7 @@ const eventSchema = new mongoose.Schema({
     ],
   },
   endTime: {
-    type: String,
+    type: Date,
     required: [true, "Please enter the endTime"],
     trim: true,
     validate: [
@@ -239,14 +239,22 @@ const eventSchema = new mongoose.Schema({
       message: "Please enter a valid totalNumberOfAttendees",
     },
   },
-  // needs to change
+
   attendees: [
     {
       type: mongoose.Schema.ObjectId,
       ref: "User" || "Trainer" || "Gym",
     },
   ],
+},{
+  timestamps: true
 });
+
+function isSameDay(date1, date2) {
+  return date1.getFullYear() === date2.getFullYear() &&
+    date1.getMonth() === date2.getMonth() &&
+    date1.getDate() === date2.getDate();
+}
 
 const Event = mongoose.model("Event", eventSchema);
 
