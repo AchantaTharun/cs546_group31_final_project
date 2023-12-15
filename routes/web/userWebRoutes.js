@@ -92,19 +92,203 @@ router.get("/home/search", authController.protectRoute, async (req, res) => {
 
 router.get("/events", authController.protectRoute, async (req, res) => {
   const user = req.user;
+  try {
+    const response = await axios.get("http://localhost:3000/api/v1/events/");
+    
+    const events = response.data.data.events;
+    return res.render("user/userEvents", {
+      layout: "userHome.layout.handlebars",
+      events,
+      user
+    });
+  } catch (err) {
+    console.error(err);
+
+    if (err.response && err.response.data && err.response.data.errors) {
+      return res.render("user/userEvents", {
+        layout: "userHome.layout.handlebars",
+        events: [],
+        user,
+        message: err.response.data.errors[0] // 'No events have been made yet'
+      });
+    }
+    return res.render("user/userEvents", {
+      layout: "userHome.layout.handlebars",
+      events: [],
+      user,
+      message: "An error occurred while fetching events."
+    });
+  }
+});
+
+
+router.get(
+  "/events/createEvent",
+  authController.protectRoute,
+  async (req, res) => {
+    return res.render("user/userCreateEvent", {
+      layout: "userCreateEvent.layout.handlebars",
+    });
+  }
+);
+
+router.post("/events/create", authController.protectRoute, async (req, res) => {
+  const user = req.user;
+  try {
+
+    const response1 = await axios.post(
+      "http://localhost:3000/api/v1/events/create",
+      req.body,
+      {
+        headers: {
+          Cookie: `jwt=${req.cookies.jwt}`
+        }
+      }
+    );
+      const response2 = await axios.get("http://localhost:3000/api/v1/events/");
+      
+      const events = response2.data.data.events;
+  
+      return res.render("user/userEvents", {
+        layout: "userHome.layout.handlebars",
+        events,
+        user,
+        message: "Event created successfully!"
+      });
+  } catch (err) {
+    console.dir(err,{depth: null});
+  }
+});
+
+router.get("/events/details/:eventId", authController.protectRoute, async (req, res) => {
+  const inheritedUser = req.user;
+  const eventId = req.params.eventId;
+  try {
+    const response = await axios.get(`http://localhost:3000/api/v1/events/${eventId}`, {
+      headers: {
+        Cookie: `jwt=${req.cookies.jwt}`
+      }
+    });
+    const event = response.data.data.event; 
+    const user = Object.assign({}, inheritedUser, {_id: inheritedUser._id});
+    return res.render("user/userEventDetails", { 
+      layout: "userHome.layout.handlebars",
+      event,
+      user,
+    });
+  } catch (err) {
+    console.error(err);
+  }
+});
+
+router.post("/events/rsvp/:eventId/:attendeeId", authController.protectRoute, async (req, res) => {
+  const user = req.user;
 
   try {
-    const response = await axios.get("http://localhost:3000/api/v1/events");
-    const events = response.data.data;
+    await axios.post(
+      `http://localhost:3000/api/v1/events/${req.params.eventId}/${req.params.attendeeId}`,
+      {},
+      { headers: { Cookie: `jwt=${req.cookies.jwt}` } }
+    );
+
+    const response = await axios.get("http://localhost:3000/api/v1/events/");
+    const events = response.data.data.events;
+
+    let message = "You are attending the event!";
     return res.render("user/userEvents", {
       layout: "userHome.layout.handlebars",
       events,
       user,
+      message
     });
   } catch (err) {
-    console.log(err);
+    console.error(err);
+
+    let message = "An error occurred while processing your RSVP.";
+    if (err.response && err.response.status === 400) {
+      message = "You are already registered as an attendee.";
+    } else if (err.response && err.response.status === 404) {
+      message = "Event not found.";
+    }
+    
+    try {
+      const response = await axios.get("http://localhost:3000/api/v1/events/");
+      const events = response.data.data.events;
+
+      return res.render("user/userEvents", {
+        layout: "userHome.layout.handlebars",
+        events,
+        user,
+        message
+      });
+    } catch (error) {
+      console.error(error);
+      return res.render("user/userEvents", {
+        layout: "userHome.layout.handlebars",
+        events: [],
+        user,
+        message: "Failed to fetch events."
+      });
+    }
   }
 });
+
+router.post("/events/rsvp/:eventId/:attendeeId/remove", authController.protectRoute, async (req, res) => {
+  const user = req.user;
+  const eventId = req.params.eventId;
+  const attendeeId = req.params.attendeeId;
+
+  try {
+    await axios.delete(
+      `http://localhost:3000/api/v1/events/${eventId}/${attendeeId}/remove`,
+      {
+        data: { attendeeId: attendeeId },
+        headers: { Cookie: `jwt=${req.cookies.jwt}` }
+      }
+    );
+
+    const response = await axios.get("http://localhost:3000/api/v1/events/");
+    const events = response.data.data.events;
+
+    return res.render("user/userEvents", {
+      layout: "userHome.layout.handlebars",
+      events,
+      user,
+      message: "You have successfully withdrawn your RSVP."
+    });
+  } catch (err) {
+    console.error(err);
+
+    let message = "An error occurred while processing your RSVP withdrawal.";
+    if (err.response && err.response.status === 400) {
+      message = "You are already not registered for the event";
+    } else if (err.response && err.response.status === 404) {
+      message = "Event not found.";
+    }
+
+    try {
+      const response = await axios.get("http://localhost:3000/api/v1/events/");
+      const events = response.data.data.events;
+
+      return res.render("user/userEvents", {
+        layout: "userHome.layout.handlebars",
+        events,
+        user,
+        message
+      });
+    } catch (error) {
+      console.error(error);
+      return res.render("user/userEvents", {
+        layout: "userHome.layout.handlebars",
+        events: [],
+        user,
+        message: "Failed to fetch events."
+      });
+    }
+  }
+});
+
+
 router.get("/posts", authController.protectRoute, async (req, res) => {
   const user = req.user;
   try {
