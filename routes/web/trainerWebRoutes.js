@@ -8,10 +8,17 @@ import * as trainerController from '../../controllers/trainerController.js';
 const router = Router();
 
 router.get('/signup', async (req, res) => {
-  return res.render('trainer/trainerSignUp');
+  return res.render('trainer/trainerSignUp', {layout: "main",});
 });
 
 router.post('/signup', authController.trainerSignup);
+
+router.get("/login", async (req, res) => {
+  return res.render("trainer/trainerLogin", {layout: "main",});
+});
+
+router.post("/login", authController.trainerLogin);
+
 
 router.get(
   '/dashboard',

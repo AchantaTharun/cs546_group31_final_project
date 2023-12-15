@@ -12,6 +12,12 @@ router.post(
   // upload.single("businessLicense"),
   authController.gymSignup
 );
+router.get("/login", async (req, res) => {
+  return res.render("gym/gymLogin", {layout: "main",});
+});
+
+router.post("/login", authController.gymLogin);
+
 
 router.get("/dashboard", async (req, res) => {
   return res.render("gymDashboard");
