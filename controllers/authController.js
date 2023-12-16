@@ -364,6 +364,7 @@ export const trainerSignup = async (req, res) => {
       return res.render("trainer/trainerSignUp", {
         errors: ["Password and passwordConfirm should match"],
         hasErrors: true,
+        formData: req.body,
       });
     }
     // Validate schema errors
@@ -375,6 +376,7 @@ export const trainerSignup = async (req, res) => {
       return res.render("trainer/trainerSignUp", {
         errors,
         hasErrors: true,
+        formData: req.body,
       });
     }
 
@@ -389,15 +391,28 @@ export const trainerSignup = async (req, res) => {
 
     res.redirect("/login");
   } catch (err) {
-    if (err.code === 11000 && err.keyPattern.email) {
-      return res.render("trainer/trainerSignUp", {
-        errors: ["User already exists with the given email"],
-        hasErrors: true,
-      });
+    if (err.code === 11000) {
+      if (err.keyPattern.email) {
+        return res.render("trainer/trainerSignUp", {
+          errors: ["User already exists with the given email"],
+          hasErrors: true,
+          sendToLogin: true,
+          formData: req.body,
+        });
+      }
+      if (err.keyPattern.phone) {
+        return res.render("trainer/trainerSignUp", {
+          errors: ["User already exists with the given Phone number"],
+          hasErrors: true,
+          sendToLogin: true,
+          formData: req.body,
+        });
+      }
     }
     return res.render("trainer/trainerSignUp", {
       errors: [err.message],
       hasErrors: true,
+      formData: req.body,
     });
   }
 };
@@ -426,6 +441,10 @@ export const trainerLogin = async (req, res) => {
 
     res.redirect("/trainer/dashboard");
   } catch (err) {
-    res.render("trainer/trainerLogin", { errors: [err.message], hasErrors: true, layout: "main" });
+    res.render("trainer/trainerLogin", {
+      errors: [err.message],
+      hasErrors: true,
+      layout: "main",
+    });
   }
 };
