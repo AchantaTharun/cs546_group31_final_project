@@ -1,4 +1,6 @@
 import User from "../models/userModel.js";
+import Trainer from "../models/trainerModel.js";
+import Gym from "../models/gymModel.js";
 
 export const getHomePage = async (req, res) => {
   try {
@@ -10,7 +12,6 @@ export const getHomePage = async (req, res) => {
       });
     }
     const coords = user.location.coordinates;
-    console.log(user);
     const users = await User.aggregate([
       {
         $geoNear: {
@@ -30,8 +31,60 @@ export const getHomePage = async (req, res) => {
         },
       },
     ]);
-    console.log(users);
+
+    const trainers = await Trainer.aggregate([
+      {
+        $geoNear: {
+          near: {
+            type: "Point",
+            coordinates: [parseFloat(coords[0]), parseFloat(coords[1])],
+          },
+          distanceField: "distanceFromSF",
+          distanceMultiplier: 0.001,
+          spherical: true,
+          maxDistance: 15000,
+        },
+      },
+      {
+        $match: {
+          status: "approved",
+        },
+      },
+    ]);
+
+    const gyms = await Gym.aggregate([
+      {
+        $geoNear: {
+          near: {
+            type: "Point",
+            coordinates: [parseFloat(coords[0]), parseFloat(coords[1])],
+          },
+          distanceField: "distanceFromSF",
+          distanceMultiplier: 0.001,
+          spherical: true,
+          maxDistance: 15000,
+        },
+      },
+      {
+        $match: {
+          status: "approved",
+        },
+      },
+    ]);
+
     if (!users) {
+      return res.status(404).json({
+        status: "fail",
+        message: "No user found with that ID",
+      });
+    }
+    if (!trainers) {
+      return res.status(404).json({
+        status: "fail",
+        message: "No user found with that ID",
+      });
+    }
+    if (!gyms) {
       return res.status(404).json({
         status: "fail",
         message: "No user found with that ID",
@@ -41,6 +94,8 @@ export const getHomePage = async (req, res) => {
       layout: "userHome.layout.handlebars",
       users,
       user,
+      trainers,
+      gyms,
     });
   } catch (err) {
     console.log(err.message);
@@ -162,5 +217,79 @@ export const updateUser = async (req, res) => {
     });
   } catch (err) {
     console.log(err.message);
+  }
+};
+
+export const getEditProfile = async (req, res) => {
+  try {
+    const user = req.user;
+
+    if (!user) {
+      return res.status(404).json({
+        status: "fail",
+        message: "No user found with that ID",
+      });
+    }
+    return res.render("user/userEditProfile", {
+      layout: "userEditProfile.layout.handlebars",
+      user,
+    });
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
+export const editProfile = async (req, res) => {
+  try {
+    const userId = req.user._id;
+
+    const {
+      bio,
+      firstName,
+      lastName,
+      email,
+      dialingCode,
+      phoneNumber,
+      dateOfBirth,
+      gender,
+      height,
+      hUnit,
+      weight,
+      wUnit,
+      favoriteWorkout,
+      street,
+      apartment,
+      city,
+      state,
+      zip,
+    } = req.body;
+
+    await User.findByIdAndUpdate(userId, {
+      bio,
+      firstName,
+      lastName,
+      email,
+      dialingCode,
+      phoneNumber,
+      dateOfBirth,
+      gender,
+      height,
+      hUnit,
+      weight,
+      wUnit,
+      favoriteWorkout,
+      address: {
+        street,
+        apartment,
+        city,
+        state,
+        zip,
+      },
+    });
+
+    res.redirect("/user/profile");
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Internal server error" });
   }
 };

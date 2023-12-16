@@ -77,11 +77,7 @@ router.get("/posts", authController.protectRoute, async (req, res) => {
 // profile routes
 router
   .route("/profile/edit")
-  .get(authController.protectRoute, async (req, res) => {
-    res.render("user/userEditProfile", {
-      layout: "userEditProfile.layout.handlebars",
-    });
-  })
+  .get(authController.protectRoute, userControllerWeb.getEditProfile)
   .post(authController.protectRoute, userControllerWeb.updateUser);
 
 router.get(

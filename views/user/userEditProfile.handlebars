@@ -5,19 +5,19 @@
     <h3>Personal Information:</h3>
     <div class="col-md-12">
         <label for="bio" class="form-label">Bio</label>
-        <input type="text" class="form-control" id="bio">
+        <input type="text" class="form-control" id="bio" value={{#if user.bio}} {{user.bio}} {{/if}}>
     </div>
     <div class="col-md-6">
         <label for="firstName" class="form-label">First Name</label>
-        <input type="text" class="form-control" id="firstName">
+        <input type="text" class="form-control" id="firstName" value={{#if user.firstName}} {{user.firstName}} {{/if}}>
     </div>
     <div class="col-md-6">
         <label for="lastName" class="form-label">Last Name</label>
-        <input type="text" class="form-control" id="lastName">
+        <input type="text" class="form-control" id="lastName" value={{#if user.lastName}} {{user.lastName}} {{/if}}>
     </div>
     <div class="col-md-6">
         <label for="email" class="form-label">Email</label>
-        <input type="email" class="form-control" id="email">
+        <input type="email" class="form-control" id="email" value={{#if user.email}} {{user.email}} {{/if}}>
     </div>
     <div class="col-md-1">
         <label for="dialingCode" class="form-label">Dialing Code</label>
@@ -29,11 +29,12 @@
     <div class="col-md-5">
         <label for="phoneNumber" class="form-label">Phone</label>
 
-        <input type="text" class="form-control" id="phoneNumber">
+        <input type="text" class="form-control" id="phoneNumber" value={{#if user.phone}} {{user.phone}} {{/if}}>
     </div>
     <div class="col-md-6">
         <label for="dateOfBirth" class="form-label">Date Of Birth</label>
-        <input type="text" class="form-control" id="dateOfBirth" placeholder="MM/DD/YYYY">
+        <input type="text" class="form-control" id="dateOfBirth" placeholder="MM/DD/YYYY" value={{#if user.dateOfBirth}}
+            {{user.dateOfBirth}} {{/if}}>
     </div>
 
     <div class="col-md-12">
@@ -41,17 +42,19 @@
             <legend class="col-form-label col-sm-2 pt-0">Gender</legend>
             <div class="col-sm-10">
                 <div class="form-check">
-                    <input class="form-check-input" type="radio" name="gridRadios" id="male" value="option1" checked>
+                    <input class="form-check-input" type="radio" name="gridRadios" id="male" value="male">
                     <label class="form-check-label" for="male">
                         Male </label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input" type="radio" name="gridRadios" id="female" value="option2">
+                    <input class="form-check-input" type="radio" name="gridRadios" id="female" {{#if (eq
+                        user.gender "female" )}} checked {{/if}} value="female">
                     <label class="form-check-label" for="female">
                         Female </label>
                 </div>
                 <div class="form-check disabled">
-                    <input class="form-check-input" type="radio" name="gridRadios" id="other" value="option3">
+                    <input class="form-check-input" type="radio" name="gridRadios" id="other" value="other" {{#if (eq
+                        user.gender "other" )}} checked {{/if}}>
                     <label class="form-check-label" for="other">
                         Other </label>
                 </div>
