@@ -1,0 +1,73 @@
+<h1 class="mb-4"><a href="/user/get/myPosts">BACK TO MY POSTS</a></h1>
+{{#if hasData}}
+<form action="/user/delete/post" method="POST" id="entity-delete" novalidate>
+    <label for="title">
+        POST TITLE :                                                 
+        <input type="text" name="title" id="title" value="{{post.title}}" readonly>
+    </label>
+    <br>
+    <label for="img">
+        IMAGE :                                                 
+        <input type="text" name="img" value="{{post.img}}" id="img" readonly>
+    </label>
+    <br>
+    <label for="description">
+         DESCRIPTION:                                                 
+        <input type="text" name="description" value="{{post.description}}" id="description"readonly>
+    </label>
+    <br>
+    <label for="createdAt">
+        CREATED AT :                                                 
+        <input type="text" name="createdAt" value="{{post.createdAt}}" id="createdAt" readonly>
+    </label>
+    <br>
+        <label for="id">
+        <input name="id" id="id" value="{{post._id}}" readonly hidden></input>
+    </label>
+    <br>
+    <button type="submit">DELETE</button>
+</form>
+{{/if}}
+
+{{#unless hasData}}
+<p id="error">{{error}}</p>
+{{/unless}}
+
+
+<br>
+{{#if hasData}}
+<h2>USER COMMENTS</h2>
+{{#each post.comments.users}}
+        <div class="card mb-3">
+            <div class="card-body">
+                <h5 class="card-title">{{this.comment}}</h5>
+                <p class="card-text"><small class="text-muted">Posted on: {{this.createdAt}}</small></p>
+            </div>
+        </div>
+{{/each}}
+{{/if}}
+<br>
+{{#if hasData}}
+<h2>TRAINER COMMENTS</h2>
+{{#each post.comments.trainers}}
+        <div class="card mb-3">
+            <div class="card-body">
+                <h5 class="card-title">{{this.comment}}</h5>
+                <p class="card-text"><small class="text-muted">Posted on: {{this.createdAt}}</small></p>
+            </div>
+        </div>
+{{/each}}
+{{/if}}
+<br>
+{{#if hasData}}
+<h2>GYM COMMENTS</h2>
+{{#each post.comments.gyms}}
+        <div class="card mb-3">
+            <div class="card-body">
+                <h5 class="card-title">{{this.comment}}</h5>
+                <p class="card-text"><small class="text-muted">Posted on: {{this.createdAt}}</small></p>
+            </div>
+        </div>
+{{/each}}
+{{/if}}
+

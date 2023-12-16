@@ -1,0 +1,80 @@
+{{#if hasData}}
+<form id="entity-display" novalidate>
+    <label for="title">
+        POST TITLE :                                                 
+        <input type="text" name="title" id="title" value="{{post.title}}" readonly>
+    </label>
+    <br>
+    <label for="img">
+        IMAGE :                                                 
+        <input type="text" name="img" value="{{post.img}}" id="img" readonly>
+    </label>
+    <br>
+    <label for="description">
+         DESCRIPTION:                                                 
+        <input type="text" name="description" value="{{post.description}}" id="description"readonly>
+    </label>
+    <br>
+    <label for="createdAt">
+        CREATED AT :                                                 
+        <input type="text" name="createdAt" value="{{post.createdAt}}" id="createdAt" readonly>
+    </label>
+    <br>
+</form>
+{{/if}}
+
+{{#unless hasData}}
+<p id="error">{{error}}</p>
+{{/unless}}
+
+{{#if hasData}}
+<form action="/user/post/addComment" method="POST" id="entity-submit" novalidate>
+    <label for="comment"> 
+        <textarea name="comment" id="comment" placeholder="Add Your comments.." rows="4" cols="40"></textarea>
+    </label>
+    <label for="id">
+        <input name="id" id="id" value="{{post._id}}" readonly hidden></input>
+    </label>
+    <br>
+    <button type="submit">ADD COMMENTS</button>
+</form>
+{{/if}}
+
+
+<br>
+{{#if hasData}}
+<h2>USER COMMENTS</h2>
+{{#each post.comments.users}}
+        <div class="card mb-3">
+            <div class="card-body">
+                <h5 class="card-title">{{this.comment}}</h5>
+                <p class="card-text"><small class="text-muted">Posted on: {{this.createdAt}}</small></p>
+            </div>
+        </div>
+{{/each}}
+{{/if}}
+<br>
+{{#if hasData}}
+<h2>TRAINER COMMENTS</h2>
+{{#each post.comments.trainers}}
+        <div class="card mb-3">
+            <div class="card-body">
+                <h5 class="card-title">{{this.comment}}</h5>
+                <p class="card-text"><small class="text-muted">Posted on: {{this.createdAt}}</small></p>
+            </div>
+        </div>
+{{/each}}
+{{/if}}
+<br>
+{{#if hasData}}
+<h2>GYM COMMENTS</h2>
+{{#each post.comments.gyms}}
+        <div class="card mb-3">
+            <div class="card-body">
+                <h5 class="card-title">{{this.comment}}</h5>
+                <p class="card-text"><small class="text-muted">Posted on: {{this.createdAt}}</small></p>
+            </div>
+        </div>
+{{/each}}
+{{/if}}
+

@@ -9,7 +9,7 @@ export const getAllUsers = async (req, res) => {
         message: "No users have been made yet",
       });
     }
-    console.log(users);
+    //console.log(users);
     return res.status(200).json({
       status: "success",
       results: users.length,
@@ -27,7 +27,7 @@ export const getAllUsers = async (req, res) => {
 
 export const getUser = async (req, res) => {
   try {
-    console.log(req.params.userName);
+    //console.log(req.params.userName);
     const user = await User.findOne({ userName: req.params.userName });
     if (!user) {
       return res.status(404).json({
@@ -66,7 +66,7 @@ export const getFromCoord = async (req, res) => {
         },
       },
     ]);
-    // console.log(users);
+    // //console.log(users);
     if (!users) {
       return res.status(404).json({
         status: "fail",
@@ -97,7 +97,7 @@ export const search = async (req, res) => {
 
     if (searchType && search) {
       if (searchType.toLowerCase() === "names") {
-        console.log("inside");
+        //console.log("inside");
         query.$or = [
           { firstName: { $regex: `^${search}`, $options: "i" } },
           { lastName: { $regex: `^${search}`, $options: "i" } },

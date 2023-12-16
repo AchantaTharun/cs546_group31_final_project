@@ -1,0 +1,30 @@
+<h1 class="mb-4"><a href="/user/get/myPosts">BACK TO MY POSTS</a></h1>
+{{#if hasData}}
+<form action="/user/update/post" method="POST" id="entity-update" novalidate>
+    <label for="title">
+        POST TITLE :                                                 
+        <input type="text" name="title" id="title" value="{{post.title}}" >
+    </label>
+    <br>
+    <label for="img">
+        IMAGE :                                                 
+        <input type="text" name="img" value="{{post.img}}" id="img" >
+    </label>
+    <br>
+    <label for="description">
+         DESCRIPTION:                                                 
+        <input type="text" name="description" value="{{post.description}}" id="description">
+    </label>
+    <br>
+    <label for="id">
+        <input name="id" id="id" value="{{post._id}}" readonly hidden></input>
+    </label>
+    <br>
+    <button type="submit">UPDATE POST</button>
+</form>
+{{/if}}
+
+{{#unless hasData}}
+<p id="error">{{error}}</p>
+{{/unless}}
+

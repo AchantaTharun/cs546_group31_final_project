@@ -24,11 +24,56 @@ export const getAllPosts = async (req, res) => {
   }
 };
 
-export const createPost = async (req, res) => {
-  console.log("first");
+
+export const getPostByEntity = async (req, res) => {
+  let user = req.user;
+  console.log("This is the user",req.user);
   try {
-    const { title, description, author, img } = req.body;
-    const newPost = new Post({ title, description, author, img });
+    const posts = await Post.find({makerId:user._id,makerType:'user'});
+    if (!posts) {
+      return res.status(404).json({
+        status: "fail",
+        message: "No posts have been made by the user yet",
+      });
+    }
+    return res.status(200).json({
+      status: "success",
+      results: posts.length,
+      data: {
+        posts,
+      },
+    });
+  } catch (e) {
+    return res.status(500).json({
+      status: "fail",
+      message: e.message,
+    });
+  }
+};
+
+
+export const createPost = async (req, res) => {
+  //console.log("first");
+  try {
+    const { title, description, img } = req.body;
+    //First need to define the user itself.
+    let user = undefined;
+    let makerType = undefined;
+    let makerId = undefined;
+    if (req.user) {
+        user = req.user;
+        makerType = 'user';
+        makerId = user._id;
+    } else if(req.trainer){
+        user = req.trainer;
+        makerType = 'trainer';
+        makerId = user._id;
+    }else{
+        user = req.gym;
+        makerType = 'gym';
+        makerId = user._id;
+    }  
+    const newPost = new Post({ title, description, img, makerId, makerType });
     const validationErrors = newPost.validateSync();
     if (validationErrors) {
       const errors = Object.values(validationErrors.errors).map(
@@ -53,6 +98,7 @@ export const createPost = async (req, res) => {
 
 export const getPostById = async (req, res) => {
   try {
+    console.log("THe sent ID is: ",typeof req.params.id);
     const post = await Post.findById(req.params.id);
     if (!post) {
       return res.status(404).json({
@@ -83,10 +129,12 @@ export const updatePost = async (req, res) => {
         message: "No post found with that ID",
       });
     }
-    const { title, description, author, img } = req.body;
+
+    //MakerId and MakerType cannot be changed
+    const { title, description, img } = req.body;
     const updatedPost = await Post.findByIdAndUpdate(
       req.params.id,
-      { title, description, author, img },
+      { title, description , img },
       { new: true }
     );
     return res.status(200).json({
@@ -127,7 +175,25 @@ export const deletePost = async (req, res) => {
 
 export const addComment = async (req, res) => {
   const { comment } = req.body;
-  const user = req.user;
+  console.log("This is the comment",comment);
+  
+  let user = undefined;
+  let makerType = undefined;
+  let makerId = undefined;
+  if (req.user) {
+      user = req.user;
+      makerType = 'user';
+      makerId = user._id;
+  } else if(req.trainer){
+      user = req.trainer;
+      makerType = 'trainer';
+      makerId = user._id;
+  }else{
+      user = req.gym;
+      makerType = 'gym';
+      makerId = user._id;
+  }  
+  console.log("This is the user",user);
   try {
     const post = await Post.findById(req.params.id);
     if (!post) {
@@ -146,7 +212,6 @@ export const addComment = async (req, res) => {
       },
       { new: true }
     );
-    console.log(updatedPost);
     return res.status(200).json({
       status: "success",
       data: {
@@ -159,14 +224,6 @@ export const addComment = async (req, res) => {
       message: e.message,
     });
   }
-};
-
-export const deleteComment = async (req, res) => {
-  res.send("this route is not yet defined");
-};
-
-export const updateComment = async (req, res) => {
-  res.send("this route is not yet defined");
 };
 
 const commentedBy = (user) => {

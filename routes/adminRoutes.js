@@ -433,7 +433,7 @@ router
     {
       return res.status(404).render('admin/gymEntity',{title:"GYM DATA",hasData:false,error:e});
     }
-    // console.log("\nDeleted Object is:",object);
+    // //console.log("\nDeleted Object is:",object);
     return res.redirect('/api/v1/admin/manage');
   })
 
@@ -491,7 +491,7 @@ router
     {
       return res.status(404).render('admin/trainerEntity',{title:"TRAINER DATA",hasData:false,error:e});
     }
-    // console.log("\nDeleted Object is:",object);
+    // //console.log("\nDeleted Object is:",object);
     return res.redirect('/api/v1/admin/manage');
   })
 
@@ -544,7 +544,7 @@ router
     {
       return res.status(404).render('admin/userEntity',{title:"USER DATA",hasData:false,error:e});
     }
-    // console.log("\nDeleted Object is:",object);
+    // //console.log("\nDeleted Object is:",object);
     return res.redirect('/api/v1/admin/manage');
   })
 
@@ -602,7 +602,7 @@ router
     {
       return res.status(404).render('admin/eventEntity',{title:"EVENT DATA",hasData:false,error:e});
     }
-    //console.log("\nDeleted Object is:",object);
+    ////console.log("\nDeleted Object is:",object);
     return res.redirect('/api/v1/admin/manage');
   })
   
@@ -655,7 +655,7 @@ router
     {
       return res.status(404).render('admin/postEntity',{title:"POST DATA",hasData:false,error:e});
     }
-    //console.log("\nDeleted Object is:",object);
+    ////console.log("\nDeleted Object is:",object);
     return res.redirect('/api/v1/admin/manage');
   })
 
@@ -750,7 +750,7 @@ router
     {
       return res.status(500).render('admin/createEvent',{title:"CREATE EVENT",error:"Internal Server error"});
     } 
-    //console.log(adminEvent);
+    ////console.log(adminEvent);
     res.redirect("/api/v1/admin/homepage");
 
   })

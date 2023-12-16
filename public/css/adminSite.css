@@ -4,7 +4,6 @@ body {
     background-color: rgb(220, 218, 218);
     display: flex;
     flex-direction: column;
-    min-height: 100vh;
   }
   
   header {
@@ -36,11 +35,8 @@ body {
   }
   
   .content {
-    flex: 1;
     display: flex;
-    flex-direction: column;
-    padding: 10px;
-    margin-left: 20px;
+    flex-direction: column;    
   }
   
   .window {
@@ -75,6 +71,10 @@ body {
     font-size: 24px;
     color: #333;
     margin-bottom: 20px;
+    width: 450px;
+    padding: 10px;
+    margin-left: 20px;
+    margin-top: 50px;
   }
 
   .big-heading {
@@ -82,7 +82,6 @@ body {
     padding: 15px;
     background-color: #b9b4b4;
     text-align: center;
-    margin-bottom: 20px;
   }
 
   .request-info {
@@ -95,13 +94,14 @@ body {
     background-color: #f2f2f2;
     padding: 20px;
     border-radius: 8px;
-    border: 1px solid #ddd;
+    border: 1px solid ;
     width: 85%;
   }
   
   .tile h3,
-  .tile h4 {
+  .tile h4{
     margin: 5px 0;
+    width: 30%;
   }
 
   .main-content {
@@ -111,12 +111,18 @@ body {
   
   .forms-container {
     display: flex;
+    flex-direction: column;
   }
   
   .forms-container form {
-    width: 100%; /* Two forms side by side */
+    width: 50%; /* Two forms side by side */
     padding: 10px;
     margin-right: 20px;
+    width: 500px; /* Adjusted width to make it slightly shorter */
+    overflow: auto;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   }
   
   .forms-container form:last-child {
@@ -127,3 +133,48 @@ body {
     height: 200px;
     width: 250px;
   }
+
+  .forms-container {
+    max-width: 500px;
+    margin: 20px;
+}
+
+label {
+
+    margin-bottom: 8px;
+    font-weight: bold;
+    width: 450px;
+}
+
+input[type="file"],
+input[type="text"],
+input[type="number"],
+input[type="datetime-local"],
+input[type="email"],
+input[type="password"] {
+    width: 450px;
+    padding: 8px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
+
+button[type="submit"] {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+button[type="submit"]:hover {
+    background-color: #0056b3;
+}
+
+#error {
+    color: red;
+    font-weight: bold;
+    margin-top: 10px;
+}
