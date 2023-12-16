@@ -23,17 +23,15 @@
             <div class="container-fluid">
                 <a class="navbar-brand m-2" href="/user/home">GymMate</a>
                 <div class="d-flex flex-row-reverse">
-                    <form class=" m-2" role="search" action="/user/profile" method="get">
-                        <button class="btn btn-success" type="submit">Profile</button>
+                    <form class=" m-2" role="search" action="/user/profile/{{user.userName}}" method="get">
+                        <button class="btn btn-success" type="submit">{{user.userName}}</button>
                     </form>
-
                     <form class=" m-2" role="search" action="/user/logout" method="post">
                         <button class="btn btn-danger" type="submit">Logout</button>
                     </form>
                 </div>
             </div>
         </nav>
-
 
         <div class="container mt-3 mb-3">
             <div class="row justify-content-center">
@@ -48,6 +46,7 @@
                 </div>
             </div>
         </div>
+
 
 
 

@@ -2,7 +2,6 @@ import mongoose from "mongoose";
 import validator from "validator";
 import bcrypt from "bcryptjs";
 
-// Not Complete
 const userSchema = new mongoose.Schema({
   firstName: {
     type: String,
@@ -84,41 +83,70 @@ const userSchema = new mongoose.Schema({
   },
   favoriteWorkout: {
     type: String,
+    default: "cardio",
     enum: [
       "cardio",
       "strength",
       "flexibility",
       "sports",
       "crossFit",
-      "body Weight",
+      "bodyWeight",
     ],
     required: [true, "Please enter your favorite workout"],
     trim: true,
   },
+  bio: {
+    type: String,
+    trim: true,
+    minLength: [10, "Bio must be at least 10 characters long"],
+    maxLength: [200, "Bio must be less than 200 characters long"],
+  },
+  dateOfBirth: {
+    type: Date,
+    trim: true,
+    validate: [validator.isDate, "Please enter a valid date of birth"],
+  },
+  gender: {
+    type: String,
+    enum: ["male", "female", "other"],
+  },
+  height: {
+    type: Number,
+    trim: true,
+    validate: [validator.isNumeric, "Please enter a valid height"],
+  },
+  weight: {
+    type: Number,
+    trim: true,
+    validate: [validator.isNumeric, "Please enter a valid weight"],
+  },
+  hUnit: {
+    type: String,
+    enum: ["ft", "m"],
+  },
+  wUnit: {
+    type: String,
+    enum: ["lbs", "kg"],
+  },
   address: {
     street: {
       type: String,
-      required: [true, "Please enter your street address"],
       trim: true,
     },
     city: {
       type: String,
-      required: [true, "Please enter your city"],
       trim: true,
     },
     state: {
       type: String,
-      required: [true, "Please enter your state"],
       trim: true,
     },
     zipCode: {
       type: String,
-      required: [true, "Please enter your zip code"],
       trim: true,
     },
     country: {
       type: String,
-      required: [true, "Please enter your country"],
       trim: true,
     },
   },
@@ -128,7 +156,6 @@ userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return next();
   this.password = await bcrypt.hash(this.password, 12);
 
-  // removing passwordConfirm field because we don't need to persist it
   this.passwordConfirm = undefined;
   next();
 });

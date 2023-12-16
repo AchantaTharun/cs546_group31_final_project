@@ -2,7 +2,10 @@ import { Router } from "express";
 import * as authController from "../../controllers/authController.js";
 import axios from "axios";
 const router = Router();
+import * as userController from "../../controllers/userController.js";
+import * as userControllerWeb from "../../controllers/userControllerWeb.js";
 
+// login , signup, logout
 router
   .get("/signup", async (req, res) => {
     return res.render("user/userSignUp", {
@@ -19,30 +22,6 @@ router
   })
   .post("/login", authController.userLogin);
 
-router.get("/home", authController.protectRoute, async (req, res) => {
-  const user = req.user;
-
-  try {
-    const response = await axios.get(
-      "http://localhost:3000/api/v1/user/fromCoord",
-      {
-        params: {
-          lng: user.location.coordinates[0],
-          lat: user.location.coordinates[1],
-        },
-      }
-    );
-    let users = response.data.data.users;
-    return res.render("user/userHome", {
-      layout: "userHome.layout.handlebars",
-      users,
-      user,
-    });
-  } catch (err) {
-    console.log(err.message);
-  }
-});
-
 router.post("/logout", async (req, res) => {
   if (req.cookies.jwt) {
     res.clearCookie("jwt");
@@ -50,49 +29,23 @@ router.post("/logout", async (req, res) => {
   return res.render("user/userLogin");
 });
 
-router.get("/profile", authController.protectRoute, async (req, res) => {
-  const user = req.user;
-  return res.render("user/userProfile", {
-    layout: "userProfile.layout.handlebars",
-    user,
-  });
-});
+// home page and profile
+router.get("/home", authController.protectRoute, userControllerWeb.getHomePage);
 
-router.get("/home/search", authController.protectRoute, async (req, res) => {
-  const user = req.user;
-  try {
-    const { selectUser, favoriteWorkout, searchType, search } = req.query;
+router.get(
+  "/home/search",
+  authController.protectRoute,
+  userControllerWeb.search
+);
 
-    let users;
-
-    if (selectUser && favoriteWorkout && searchType && search) {
-      const response = await axios.get(
-        "http://localhost:3000/api/v1/user/search",
-        {
-          params: {
-            selectUser,
-            favoriteWorkout,
-            searchType,
-            search,
-          },
-        }
-      );
-      users = response.data.data.user;
-      console.log(users);
-      return res.render("user/userHome", {
-        layout: "userHome.layout.handlebars",
-        users,
-        user,
-      });
-    }
-  } catch (err) {
-    console.log(err.message);
-  }
-});
+router.get(
+  "/:userName",
+  authController.protectRoute,
+  userControllerWeb.getUserFromUserName
+);
 
 router.get("/events", authController.protectRoute, async (req, res) => {
   const user = req.user;
-
   try {
     const response = await axios.get("http://localhost:3000/api/v1/events");
     const events = response.data.data;
@@ -105,6 +58,7 @@ router.get("/events", authController.protectRoute, async (req, res) => {
     console.log(err);
   }
 });
+
 router.get("/posts", authController.protectRoute, async (req, res) => {
   const user = req.user;
   try {
@@ -120,28 +74,15 @@ router.get("/posts", authController.protectRoute, async (req, res) => {
   }
 });
 
-router.get("/:userName", authController.protectRoute, async (req, res) => {
-  const user = req.user;
-  console.log(req.params.userName);
-  try {
-    const response = await axios.get(
-      `http://localhost:3000/api/v1/user/${req.params.userName}`
-    );
-    const user = response.data.data.user;
-    return res.render("user/userPage", {
-      layout: "main.handlebars",
-      user,
+// profile routes
+router
+  .route("/profile/edit")
+  .get(authController.protectRoute, async (req, res) => {
+    res.render("user/userEditProfile", {
+      layout: "userEditProfile.layout.handlebars",
     });
-  } catch (err) {
-    console.log(err);
-  }
-});
-
-router.get("/profile/edit", authController.protectRoute, async (req, res) => {
-  res.render("user/userEditProfile", {
-    layout: "userEditProfile.layout.handlebars",
-  });
-});
+  })
+  .post(authController.protectRoute, userControllerWeb.updateUser);
 
 router.get(
   "/profile/workout",
@@ -151,5 +92,11 @@ router.get(
       layout: "userEditProfile.layout.handlebars",
     });
   }
+);
+
+router.get(
+  "/profile/:userName",
+  authController.protectRoute,
+  userControllerWeb.getProfilePage
 );
 export default router;

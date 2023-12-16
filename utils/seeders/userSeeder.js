@@ -11,7 +11,7 @@ function getRandomWorkoutType() {
     "flexibility",
     "sports",
     "crossFit",
-    "body Weight",
+    "bodyWeight",
   ];
 
   const randomIndex = Math.floor(Math.random() * workoutTypes.length);
