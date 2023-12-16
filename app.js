@@ -1,13 +1,13 @@
-import express from 'express';
-import { engine as handlebarsEngine } from 'express-handlebars';
-import mongoSanitizer from 'express-mongo-sanitize';
-import dotenv from 'dotenv';
-import morgan from 'morgan';
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
-import cookieParser from 'cookie-parser';
-import configRoutesFunction from './routes/index.js';
-import hpp from 'hpp';
+import express from "express";
+import { engine as handlebarsEngine } from "express-handlebars";
+import mongoSanitizer from "express-mongo-sanitize";
+import dotenv from "dotenv";
+import morgan from "morgan";
+import { fileURLToPath } from "url";
+import { dirname } from "path";
+import cookieParser from "cookie-parser";
+import configRoutesFunction from "./routes/index.js";
+import hpp from "hpp";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -42,24 +42,64 @@ const rewriteUnsupportedBrowserMethods = (req, res, next) => {
   next();
 };
 
-const staticDir = express.static(__dirname + '/public');
-app.use('/public', staticDir);
+const staticDir = express.static(__dirname + "/public");
+app.use("/public", staticDir);
 app.use(express.urlencoded({ extended: true }));
 app.use(rewriteUnsupportedBrowserMethods);
-app.engine('handlebars', handlebarsEngine({ defaultLayout: 'main' }));
-app.set('view engine', 'handlebars');
+app.engine(
+  "handlebars",
+  handlebarsEngine({
+    defaultLayout: "main",
+    helpers: {
+      getSlotId: function (obj, key, index) {
+        return obj[key][index].id;
+      },
+      getSlotName: function (obj, key, index) {
+        return obj[key][index].name;
+      },
+      getSlotPlace: function (obj, key, index) {
+        return obj[key][index].place;
+      },
+      getSlotAttendees: function (obj, key, index) {
+        return obj[key][index].attendees;
+      },
+      getSlotColor: function (day) {
+        day = day.toUpperCase();
+        if (day === "SUNDAY") {
+          return "bg-orange padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13";
+        } else if (day === "MONDAY") {
+          return "bg-orange padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13";
+        } else if (day === "TUESDAY") {
+          return "bg-green padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13";
+        } else if (day === "WEDNESDAY") {
+          return "bg-pink padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13";
+        } else if (day === "THURSDAY") {
+          return "bg-black padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13";
+        } else if (day === "FRIDAY") {
+          return "bg-gray padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13";
+        } else if (day === "SATURDAY") {
+          return "bg-orange padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13";
+        }
+      },
+      ifEquals: function (arg1, arg2) {
+        return arg1 === arg2 ? true : false;
+      },
+      ifNotEquals: function (arg1, arg2) {
+        return arg1 !== arg2 ? true : false;
+      },
+    },
+  })
+);
+app.set("view engine", "handlebars");
 
 app.use((req, res, next) => {
-  if (req.url.startsWith('/user') || req.url.startsWith('/trainer')) {
-    if (!req.url.startsWith('/trainer/signup')) res.locals.layout = 'dashboard';
+  if (req.url.startsWith("/user") || req.url.startsWith("/trainer")) {
+    if (!req.url.startsWith("/trainer/signup")) res.locals.layout = "dashboard";
   } else {
-    if(req.url.startsWith('/api/v1/admin'))
-    {
-      res.locals.layout = 'adminMain';
-    }
-    else
-    {
-      res.locals.layout = 'main';
+    if (req.url.startsWith("/api/v1/admin")) {
+      res.locals.layout = "adminMain";
+    } else {
+      res.locals.layout = "main";
     }
   }
   next();

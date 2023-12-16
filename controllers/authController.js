@@ -341,105 +341,120 @@ export const gymLogin = async (req, res) => {
 
 // trainer
 export const trainerSignup = async (req, res) => {
-	try {
-		const {
-			firstName,
-			lastName,
-			email,
-			password,
-			passwordConfirm,
-			street,
-			city,
-			state,
-			zip,
-			phone,
-		} = req.body;
+  try {
+    const {
+      firstName,
+      lastName,
+      email,
+      password,
+      passwordConfirm,
+      street,
+      city,
+      state,
+      zip,
+      phone,
+    } = req.body;
 
-		const newTrainer = new Trainer({
-			firstName,
-			lastName,
-			trainerName: firstName + " " + lastName,
-			email,
-			password,
-			passwordConfirm,
-			address: {
-				street,
-				city,
-				state,
-				zip,
-			},
-			phone,
-		});
-		if (password !== passwordConfirm) {
-			return res.render("trainer/trainerSignUp", {
-				errors: ["Password and passwordConfirm should match"],
-				hasErrors: true,
-			});
-		}
-		// Validate schema errors
-		const validationErrors = newTrainer.validateSync();
-		if (validationErrors) {
-			const errors = Object.values(validationErrors.errors).map(
-				(error) => error.message
-			);
-			return res.render("trainer/trainerSignUp", {
-				errors,
-				hasErrors: true,
-			});
-		}
+    const newTrainer = new Trainer({
+      firstName,
+      lastName,
+      trainerName: firstName + " " + lastName,
+      email,
+      password,
+      passwordConfirm,
+      address: {
+        street,
+        city,
+        state,
+        zip,
+      },
+      phone,
+    });
+    if (password !== passwordConfirm) {
+      return res.render("trainer/trainerSignUp", {
+        errors: ["Password and passwordConfirm should match"],
+        hasErrors: true,
+        formData: req.body,
+      });
+    }
+    // Validate schema errors
+    const validationErrors = newTrainer.validateSync();
+    if (validationErrors) {
+      const errors = Object.values(validationErrors.errors).map(
+        (error) => error.message
+      );
+      return res.render("trainer/trainerSignUp", {
+        errors,
+        hasErrors: true,
+        formData: req.body,
+      });
+    }
 
-		const createdTrainer = await newTrainer.save();
+    const createdTrainer = await newTrainer.save();
 
-		const signUpRequest = await SignUpRequest.create({
-			requestedBy: createdTrainer._id,
-			requestType: "trainer",
-		});
+    const signUpRequest = await SignUpRequest.create({
+      requestedBy: createdTrainer._id,
+      requestType: "trainer",
+    });
 
-		const token = signJWT(createdTrainer._id, "trainer");
+    const token = signJWT(createdTrainer._id, "trainer");
 
-		res.redirect("/login");
-	} catch (err) {
-		if (err.code === 11000 && err.keyPattern.email) {
-			return res.render("trainer/trainerSignUp", {
-				errors: ["User already exists with the given email"],
-				hasErrors: true,
-			});
-		}
-		return res.render("trainer/trainerSignUp", {
-			errors: [err.message],
-			hasErrors: true,
-		});
-	}
+    res.redirect("/login");
+  } catch (err) {
+    if (err.code === 11000) {
+      if (err.keyPattern.email) {
+        return res.render("trainer/trainerSignUp", {
+          errors: ["User already exists with the given email"],
+          hasErrors: true,
+          sendToLogin: true,
+          formData: req.body,
+        });
+      }
+      if (err.keyPattern.phone) {
+        return res.render("trainer/trainerSignUp", {
+          errors: ["User already exists with the given Phone number"],
+          hasErrors: true,
+          sendToLogin: true,
+          formData: req.body,
+        });
+      }
+    }
+    return res.render("trainer/trainerSignUp", {
+      errors: [err.message],
+      hasErrors: true,
+      formData: req.body,
+    });
+  }
 };
 
 export const trainerLogin = async (req, res) => {
-	try {
-		const { email, password } = req.body;
-		if (!email || !password) {
-			throw new Error("Please provide email and password");
-		}
+  try {
+    const { email, password } = req.body;
+    if (!email || !password) {
+      throw new Error("Please provide email and password");
+    }
 
-		const trainer = await Trainer.findOne({ email }).select("+password");
+    const trainer = await Trainer.findOne({ email }).select("+password");
 
-		if (
-			!trainer ||
-			!(await trainer.isPasswordCorrect(password, trainer.password))
-		) {
-			throw new Error("Incorrect email or password");
-		}
-		const token = signJWT(trainer._id, "trainer");
-		res.cookie("jwt", token, {
-			httpOnly: true,
-			secure: true,
-			sameSite: "Strict",
-		});
+    if (
+      !trainer ||
+      !(await trainer.isPasswordCorrect(password, trainer.password))
+    ) {
+      throw new Error("Incorrect email or password");
+    }
+    const token = signJWT(trainer._id, "trainer");
+    res.cookie("jwt", token, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "Strict",
+    });
 
-		res.redirect("/trainer/dashboard");
-	} catch (err) {
-		res.render("trainer/trainerLogin", {
-			errors: [err.message],
-			hasErrors: true,
-			layout: "main",
-		});
-	}
+    res.redirect("/trainer/dashboard");
+  } catch (err) {
+    res.render("trainer/trainerLogin", {
+      errors: [err.message],
+      hasErrors: true,
+      layout: "main",
+    });
+  }
 };
