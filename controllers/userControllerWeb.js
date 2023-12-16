@@ -107,23 +107,50 @@ export const search = async (req, res) => {
     const user = req.user;
 
     const { selectUser, favoriteWorkout, searchType, search } = req.query;
+    console.log({ selectUser, favoriteWorkout, searchType, search });
     let query = {};
-
-    if (favoriteWorkout) {
-      query.favoriteWorkout = favoriteWorkout;
-    }
-
+    let users;
     if (searchType && search) {
       if (searchType.toLowerCase() === "names") {
-        query.$or = [
-          { firstName: { $regex: `^${search}`, $options: "i" } },
-          { lastName: { $regex: `^${search}`, $options: "i" } },
-        ];
+        if (selectUser === "Trainers") {
+          query.$or = [
+            { firstName: { $regex: `^${search}`, $options: "i" } },
+            { lastName: { $regex: `^${search}`, $options: "i" } },
+            { trainerName: { $regex: `^${search}`, $options: "i" } },
+          ];
+          users = await Trainer.find(query).lean();
+        }
+        if (selectUser === "Gyms") {
+          query.$or = [{ gymName: { $regex: `^${search}`, $options: "i" } }];
+          users = await Gym.find(query).lean();
+        }
+
+        if (selectUser === "People") {
+          query.$or = [
+            { firstName: { $regex: `^${search}`, $options: "i" } },
+            { lastName: { $regex: `^${search}`, $options: "i" } },
+            { userName: { $regex: `^${search}`, $options: "i" } },
+          ];
+          users = await User.find(query).lean();
+        }
       } else if (searchType.toLowerCase() === "location") {
-        query.location = { $regex: `^${search}`, $options: "i" };
+        query.$or = [
+          { "address.city": { $regex: `^${search}`, $options: "i" } },
+          { "address.state": { $regex: `^${search}`, $options: "i" } },
+          { "address.street": { $regex: `^${search}`, $options: "i" } },
+        ];
+        if (selectUser === "Trainers") {
+          users = await Trainer.find(query).lean();
+        }
+        if (selectUser === "Gyms") {
+          users = await Gym.find(query).lean();
+        }
+        if (selectUser === "People") {
+          users = await User.find(query).lean();
+        }
       }
     }
-    const users = await User.find(query).lean();
+    console.log(users);
     if (!users) {
       return res.render("user/userSearch", {
         layout: "userHome.layout.handlebars",
