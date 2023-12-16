@@ -1,0 +1,76 @@
+{{! <div class="main-dashboard-content">
+	<h1>I dont have shit to display here</h1>
+</div> }}
+
+<div class="container mt-4">
+
+	<form class="row g-3 mb-4" action="/user/home/search" method="get">
+		<div class="col-md-2">
+			<label for="selectUser" class="form-label">Select User</label>
+			<select id="selectUser" name="selectUser" class="form-select">
+				<option selected disabled>Choose...</option>
+				<option value="People">People</option>
+				<option value="Trainers">Trainers</option>
+				{{! <option value="Gyms">Gyms</option> }}
+			</select>
+		</div>
+		{{! <div class="col-md-2">
+			<label for="favoriteWorkout" class="form-label">Favorite Workout</label>
+			<select
+				id="favoriteWorkout"
+				name="favoriteWorkout"
+				class="form-select"
+			>
+				<option selected disabled>Choose...</option>
+				<option value="cardio">Cardio</option>
+				<option value="strength">Strength</option>
+				<option value="flexibility">Flexibility</option>
+				<option value="sports">Sports</option>
+				<option value="crossFit">CrossFit</option>
+				<option value="body Weight">Body Weight</option>
+			</select>
+		</div> }}
+		<div class="col-md-2">
+			<label for="searchType" class="form-label">Search Type</label>
+			<select id="searchType" name="searchType" class="form-select">
+				<option selected disabled>Choose...</option>
+				<option value="Location">Location</option>
+				<option value="Names">Names</option>
+				<option value="Emails">Emails</option>
+			</select>
+		</div>
+
+		<div class="col-md-5">
+			<label for="search" class="form-label">Search</label>
+			<input
+				type="text"
+				name="search"
+				class="form-control"
+				id="search"
+				placeholder="Search"
+			/>
+		</div>
+		<div class="col-md-1 mt-5">
+			<button type="submit" class="btn btn-primary">Search</button>
+		</div>
+	</form>
+
+	<h1>GymMates</h1>
+	<button onclick="addMemberForm()" class="btn btn-primary">Add Members</button>
+
+	<div id="formContainer"></div>
+</div>
+<script>
+	function addMemberForm() { var formContainer =
+	document.getElementById('formContainer'); var form =
+	document.createElement('form'); form.setAttribute('class', 'row g-3 mb-4');
+	form.setAttribute('action', '/gym/addMembers'); form.setAttribute('method',
+	'post'); form.innerHTML = ` <div class="col-md-6"> <label for="inputName"
+	class="form-label">Name</label> <input type="text" class="form-control"
+	id="name" name="name" placeholder="Enter your name" /> </div> <div
+	class="col-md-6"> <label for="inputEmail" class="form-label">Email
+	Address</label> <input type="email" class="form-control" id="email"
+	name="email" placeholder="Enter your email" /> </div> <div class="col-12">
+	<input type="submit" value="Submit" /> </div> `;
+	formContainer.appendChild(form); }
+</script>

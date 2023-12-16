@@ -1,4 +1,5 @@
 import Gym from "../models/gymModel.js";
+import User from "../models/userModel.js";
 
 export const getAllGyms = async (req, res) => {
 	try {
@@ -97,4 +98,47 @@ export const deleteGym = async (req, res) => {
 			errors: [e.message],
 		});
 	}
+};
+
+export const search = async (req, res) => {
+	try {
+		const { selectUser, searchType, search } = req.query;
+		let query = {};
+
+		if (searchType && search) {
+			if (searchType.toLowerCase() === "names") {
+				console.log("inside");
+				query.$or = [
+					{ firstName: { $regex: `^${search}`, $options: "i" } },
+					{ lastName: { $regex: `^${search}`, $options: "i" } },
+				];
+			} else if (searchType.toLowerCase() === "location") {
+				query.location = { $regex: `^${search}`, $options: "i" };
+			} else if (searchType.toLowerCase() === "email") {
+				query.email = { $regex: `^${search}`, $options: "i" };
+			}
+		}
+		const user = await User.find(query);
+		if (!user) {
+			return res.status(404).json({
+				status: "fail",
+				message: "No user found with that ID",
+			});
+		}
+		return res.status(200).json({
+			status: "success",
+			data: {
+				user,
+			},
+		});
+	} catch (e) {
+		return res.status(500).json({
+			status: "fail",
+			message: e.message,
+		});
+	}
+};
+
+export const addMembers = async (req, res) => {
+	console.log(req.body);
 };

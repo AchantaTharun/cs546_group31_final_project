@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import validator from "validator";
 import bcrypt from "bcryptjs";
+import * as help from "../Helpers.js";
 
 const gymSchema = new mongoose.Schema({
 	gymName: {
@@ -134,7 +135,15 @@ const gymSchema = new mongoose.Schema({
 	members: [
 		{
 			type: mongoose.Schema.ObjectId,
-			ref: "User" || "Trainer",
+			ref: "User",
+			membership: {
+				startDate: {
+					type: Date,
+				},
+				endDate: {
+					type: Date,
+				},
+			},
 		},
 	],
 });

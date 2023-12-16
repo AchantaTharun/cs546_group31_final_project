@@ -260,17 +260,23 @@ export const gymSignup = async (req, res) => {
 	//   console.log(err);
 	//   res.send("error");
 	// }
+	// console.log(req.body);
+
 	try {
 		const {
 			gymName,
 			email,
 			password,
 			passwordConfirm,
-			address,
+			street,
+			city,
+			state,
+			zip,
 			phone,
 			ownerFName,
 			ownerLName,
 		} = req.body;
+		let address = { street: street, city: city, state: state, zip: zip };
 		const newGym = await Gym.create({
 			gymName,
 			email,
@@ -287,14 +293,14 @@ export const gymSignup = async (req, res) => {
 		});
 
 		const token = signJWT(newGym._id, "gym");
-
-		res.status(201).json({
-			status: "success",
-			token,
-			data: {
-				gym: newGym,
-			},
-		});
+		res.redirect("/login");
+		// res.status(201).json({
+		// 	status: "success",
+		// 	token,
+		// 	data: {
+		// 		gym: newGym,
+		// 	},
+		// });
 	} catch (err) {
 		res.status(400).json({
 			status: "fail",
@@ -316,16 +322,20 @@ export const gymLogin = async (req, res) => {
 		) {
 			throw new Error("Incorrect email or password");
 		}
+
 		const token = signJWT(gymUser._id, "gym");
 		res.cookie("jwt", token, {
 			httpOnly: true,
 			secure: true,
 			sameSite: "Strict",
 		});
-
-		res.redirect("/admin/dashboard");
+		return res.redirect("/gym/dashboard");
 	} catch (err) {
-		res.render("accountSignIn", { errors: [err.message], hasErrors: true });
+		res.render("gym/gymLogin", {
+			errors: [err.message],
+			hasErrors: true,
+			layout: "main",
+		});
 	}
 };
 

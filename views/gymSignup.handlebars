@@ -1,8 +1,4 @@
-<form
-	action="http://127.0.0.1:3000/gym/signup"
-	method="POST"
-	enctype="multipart/form-data"
->
+<form action="/gym/signup" method="POST">
 	<label for="gymName">Gym Name:</label>
 	<input type="text" id="gymName" name="gymName" />
 	<!-- Add error message placeholder if needed: -->
@@ -24,22 +20,22 @@
 	<!-- <p class="error-message">{{errorMessages.passwordConfirm}}</p> -->
 
 	<label for="street">Street Address:</label>
-	<input type="text" id="street" name="address.street" />
+	<input type="text" id="street" name="street" />
 	<!-- Add error message placeholder if needed: -->
 	<!-- <p class="error-message">{{errorMessages.address.street}}</p> -->
 
 	<label for="city">City:</label>
-	<input type="text" id="city" name="address.city" />
+	<input type="text" id="city" name="city" />
 	<!-- Add error message placeholder if needed: -->
 	<!-- <p class="error-message">{{errorMessages.address.city}}</p> -->
 
 	<label for="state">State:</label>
-	<input type="text" id="state" name="address.state" />
+	<input type="text" id="state" name="state" />
 	<!-- Add error message placeholder if needed: -->
 	<!-- <p class="error-message">{{errorMessages.address.state}}</p> -->
 
 	<label for="zip">Zip:</label>
-	<input type="text" id="zip" name="address.zip" />
+	<input type="text" id="zip" name="zip" />
 	<!-- Add error message placeholder if needed: -->
 	<!-- <p class="error-message">{{errorMessages.address.zip}}</p> -->
 
@@ -58,13 +54,13 @@
 	<!-- Add error message placeholder if needed: -->
 	<!-- <p class="error-message">{{errorMessages.ownerLName}}</p> -->
 
-	<label for="businessLicense">Business License:</label>
+	{{! <label for="businessLicense">Business License:</label>
 	<input
 		type="file"
 		id="businessLicense"
 		name="businessLicense"
 		accept="image/*"
-	/>
+	/> }}
 	<!-- Add error message placeholder if needed: -->
 	<!-- <p class="error-message">{{errorMessages.businessLicense}}</p> -->
 
