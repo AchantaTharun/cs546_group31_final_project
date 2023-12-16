@@ -95,4 +95,16 @@ router.get(
   authController.protectRoute,
   userControllerWeb.getProfilePage
 );
+
+router.get(
+  "/trainerProfile/:userName",
+  authController.protectRoute,
+  userControllerWeb.getTrainerProfilePage
+);
+
+router.get(
+  "/gymProfile/:id",
+  authController.protectRoute,
+  userControllerWeb.getGymProfilePage
+);
 export default router;

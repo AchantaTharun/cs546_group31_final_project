@@ -17,13 +17,10 @@ export const renderTrainerSessions = async (req, res) => {
       isActive: false,
     }).lean();
     res.render("trainer/trainerSessions", {
-      name: trainer.trainerName,
-    res.render("trainer/trainerSessions", {
       trainer: trainer.toObject(),
       trainerId: trainer._id.toString(),
       activeSessions,
       inactiveSessions,
-      type: "trainer",
       type: "trainer",
       layout: "trainerHome",
     });
@@ -67,12 +64,6 @@ export const renderTrainerDashboard = async (req, res) => {
       _id: { $in: sessionIds },
       isActive: true,
     }).lean();
-    const inactiveSessions = await Session.find({
-      _id: { $in: sessionIds },
-      isActive: false,
-    }).lean();
-    res.render("trainer/trainerDashboard", {
-      name: trainer.trainerName,
     let totalRegisteredUsersCount = 0;
     for (const ss of activeSessions) {
       totalRegisteredUsersCount =
@@ -94,8 +85,6 @@ export const renderTrainerDashboard = async (req, res) => {
     res.render("trainer/trainerDashboard", {
       trainer: trainer.toObject(),
       activeSessions,
-      inactiveSessions,
-      type: "trainer",
       stats: {
         activeSessionsCount: activeSessions.length,
         totalRegisteredUsersCount,
@@ -129,7 +118,6 @@ export const renderTrainerSessionUsers = async (req, res) => {
       trainerId: trainer._id.toString(),
       sessionName: session.name,
       users,
-      type: "trainer",
       type: "trainer",
       layout: "trainerHome",
     });

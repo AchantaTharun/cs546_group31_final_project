@@ -71,25 +71,11 @@ window.onload = async () => {
           .setPopup(popup)
           .addTo(map);
       });
+
       const popupContent = `
-          <div class="popup-content ">
-    <div class="user-card-mapBox">
-        <div class="card-body-mapBox ">
-            <div class="profile-picture-mapBox">
-                <img src="/public/imgs/pp.png" alt="{user.userName}'s Profile Picture">
-            </div>
-            <div class="user-details m-2">
-                <h5 class="card-title-mapBox m-1">{user.userName}</h5>
-                <p class="card-text m-1">{user.firstName} {user.lastName}</p>
-                <p class="card-text m-1">{user.email}</p>
-            </div>
-            <hr>
-            <div class="profile-button">
-                <button class="btn btn-primary-mapBox"><a href="/user/profile" class="text-white">Your Profile</a></button>
-            </div>
-        </div>
+    <div class="popup-content ">
+    <h5 class="card-title-mapBox m-1">You</h5>
     </div>
-</div>
 `;
       const popup = new mapboxgl.Popup({
         offset: 50,

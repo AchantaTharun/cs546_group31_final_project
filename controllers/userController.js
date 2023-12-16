@@ -36,7 +36,7 @@ export const getUser = async (req, res) => {
       });
     }
     res.render("user/userPage", {
-      layout: "main.handlebars",
+      layout: "profilePage.layout.handlebars",
       user,
     });
   } catch (e) {
@@ -60,11 +60,10 @@ export const getFromCoord = async (req, res) => {
           distanceField: "distanceFromSF",
           distanceMultiplier: 0.001,
           spherical: true,
-          maxDistance: 15000,
+          maxDistance: 30000,
         },
       },
     ]);
-    // console.log(users);
     if (!users) {
       return res.status(404).json({
         status: "fail",

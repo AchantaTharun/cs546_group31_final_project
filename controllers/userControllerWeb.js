@@ -5,6 +5,8 @@ import Gym from "../models/gymModel.js";
 export const getHomePage = async (req, res) => {
   try {
     const user = req.user;
+    const { lat, lng } = req.query;
+    console.log({ lat, lng });
     if (!user) {
       return res.status(404).json({
         status: "fail",
@@ -12,6 +14,7 @@ export const getHomePage = async (req, res) => {
       });
     }
     const coords = user.location.coordinates;
+    console.log(coords);
     const users = await User.aggregate([
       {
         $geoNear: {
@@ -204,7 +207,7 @@ export const getUserFromUserName = async (req, res) => {
       });
     }
     return res.render("user/userPage", {
-      layout: "main.handlebars",
+      layout: "profilePage.layout.handlebars",
       user,
     });
   } catch (err) {
@@ -221,42 +224,65 @@ export const updateUser = async (req, res) => {
         message: "No user found with that ID",
       });
     }
-    const { firstName, lastName, favoriteWorkout, location } = req.body;
-    const updatedUser = await User.findByIdAndUpdate(
-      user._id,
-      {
-        firstName,
-        lastName,
-        favoriteWorkout,
-        location,
+    const updatedFields = {
+      firstName: req.body.firstName,
+      lastName: req.body.lastName,
+      userName: req.body.userName,
+      email: req.body.email,
+      phone: req.body.phone,
+      favoriteWorkout: req.body.favoriteWorkout,
+      bio: req.body.bio,
+      dateOfBirth: req.body.dateOfBirth,
+      gender: req.body.gender,
+      height: req.body.height,
+      weight: req.body.weight,
+      hUnit: req.body.hUnit,
+      wUnit: req.body.wUnit,
+      address: {
+        street: req.body.street,
+        apartment: req.body.apartment,
+        city: req.body.city,
+        state: req.body.state,
+        zip: req.body.zip,
       },
-      { new: true }
-    );
+    };
+    console.log({ updatedFields });
+    const updatedUser = await User.findByIdAndUpdate(user._id, updatedFields, {
+      new: true,
+      runValidators: true,
+    }).lean();
+    console.log({ updatedUser });
     if (!updatedUser) {
       return res.status(404).json({
         status: "fail",
         message: "No user found with that ID",
       });
     }
-    return res.render("user/userProfile", {
-      layout: "userProfile.layout.handlebars",
-      user: updatedUser,
+    return res.render("user/userEditProfile", {
+      layout: "userEditProfile.layout.handlebars",
+      user: Object.assign(updatedUser),
     });
   } catch (err) {
-    console.log(err.message);
+    res.status(400).render("user/userEditProfile", {
+      layout: "userEditProfile.layout.handlebars",
+      user: Object.assign(req.user),
+      error: [Object.assign(err.message)],
+    });
   }
 };
 
 export const getEditProfile = async (req, res) => {
   try {
-    const user = req.user;
-
+    const user = Object.assign(req.user);
+    const findUser = await User.findById(user._id).lean();
+    console.log(findUser);
     if (!user) {
       return res.status(404).json({
         status: "fail",
         message: "No user found with that ID",
       });
     }
+    console.log(user);
     return res.render("user/userEditProfile", {
       layout: "userEditProfile.layout.handlebars",
       user,
@@ -266,57 +292,55 @@ export const getEditProfile = async (req, res) => {
   }
 };
 
-export const editProfile = async (req, res) => {
+export const getTrainerProfilePage = async (req, res) => {
   try {
-    const userId = req.user._id;
-
-    const {
-      bio,
-      firstName,
-      lastName,
-      email,
-      dialingCode,
-      phoneNumber,
-      dateOfBirth,
-      gender,
-      height,
-      hUnit,
-      weight,
-      wUnit,
-      favoriteWorkout,
-      street,
-      apartment,
-      city,
-      state,
-      zip,
-    } = req.body;
-
-    await User.findByIdAndUpdate(userId, {
-      bio,
-      firstName,
-      lastName,
-      email,
-      dialingCode,
-      phoneNumber,
-      dateOfBirth,
-      gender,
-      height,
-      hUnit,
-      weight,
-      wUnit,
-      favoriteWorkout,
-      address: {
-        street,
-        apartment,
-        city,
-        state,
-        zip,
-      },
+    const user = req.user;
+    if (!user) {
+      return res.status(404).json({
+        status: "fail",
+        message: "No user found with that ID",
+      });
+    }
+    const userName = req.params.userName;
+    const trainer = await Trainer.findOne({ trainerName: userName }).lean();
+    if (!trainer) {
+      return res.status(404).json({
+        status: "fail",
+        message: "No trainer found with that ID",
+      });
+    }
+    return res.render("user/trainerProfile", {
+      layout: "main.handlebars",
+      trainer,
     });
-
-    res.redirect("/user/profile");
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "Internal server error" });
+    console.log(err.message);
+  }
+};
+
+export const getGymProfilePage = async (req, res) => {
+  try {
+    const user = req.user;
+    if (!user) {
+      return res.status(404).json({
+        status: "fail",
+        message: "No user found with that ID",
+      });
+    }
+    const id = req.params.id;
+    console.log(id);
+    const gym = await Gym.findById(id).lean();
+    if (!gym) {
+      return res.status(404).json({
+        status: "fail",
+        message: "No gym found with that ID",
+      });
+    }
+    return res.render("user/gymProfile", {
+      layout: "main.handlebars",
+      gym,
+    });
+  } catch (err) {
+    console.log(err.message);
   }
 };

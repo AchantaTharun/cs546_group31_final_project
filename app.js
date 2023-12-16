@@ -9,16 +9,6 @@ import cookieParser from "cookie-parser";
 import configRoutesFunction from "./routes/index.js";
 import hpp from "hpp";
 import { generateUploadURL } from "./utils/s3.js";
-import express from "express";
-import { engine as handlebarsEngine } from "express-handlebars";
-import mongoSanitizer from "express-mongo-sanitize";
-import dotenv from "dotenv";
-import morgan from "morgan";
-import { fileURLToPath } from "url";
-import { dirname } from "path";
-import cookieParser from "cookie-parser";
-import configRoutesFunction from "./routes/index.js";
-import hpp from "hpp";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -97,6 +87,9 @@ app.engine(
       },
       ifNotEquals: function (arg1, arg2) {
         return arg1 !== arg2 ? true : false;
+      },
+      eq: function (arg1, arg2, options) {
+        return arg1 === arg2 ? options.fn(this) : options.inverse(this);
       },
     },
   })

@@ -40,98 +40,96 @@
     </form>
 
 
-    <p class="d-inline-flex gap-1">
-        <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample"
-            aria-expanded="false" aria-controls="collapseExample">
-            Show in Map
-        </button>
-    </p>
-    <div class="collapse" id="collapseExample">
-        <div id="map" data="{{users}}" class="card card-body">
+    <div id="map" data="{{users}}" class="card card-body">
+    </div>
+    {{#if users }}
+        <h1>GymMates</h1>
+        <div class="row">
+            {{#each users}}
+                <div class="col-md-6 mb-4 col-lg-4">
+                    <div class="card user-card">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <img src="/public/imgs/pp.png" alt="{{this.userName}}'s Profile Picture"
+                                    class="profile-picture">
+                                <div class="ml-3">
+                                    <h5 class="card-title mb-0">{{this.userName}}</h5>
+                                    <p class="card-text text-muted">{{this.firstName}} {{this.lastName}}</p>
+                                    <p class="card-text text-muted">{{this.email}}</p>
+                                </div>
+                            </div>
+                            <hr>
+
+                            <div class="d-flex justify-content-between">
+                                <button class="btn btn-primary"><a href="/user/{{this.userName}}"
+                                        class="text-white">View
+                                        Profile</a></button>
+                                <button class="btn btn-secondary">Follow</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {{/each}}
         </div>
-    </div>
-
-
-    <h1>GymMates</h1>
-    <div class="row">
-        {{#each users}}
-            <div class="col-md-6 mb-4 col-lg-4">
-                <div class="card user-card">
-                    <div class="card-body">
-                        <div class="d-flex align-items-center">
-                            <img src="/public/imgs/pp.png" alt="{{this.userName}}'s Profile Picture"
-                                class="profile-picture">
-                            <div class="ml-3">
-                                <h5 class="card-title mb-0">{{this.userName}}</h5>
-                                <p class="card-text text-muted">{{this.firstName}} {{this.lastName}}</p>
-                                <p class="card-text text-muted">{{this.email}}</p>
+    {{/if}}
+    {{#if trainers}}
+        <h1>Trainers</h1>
+        <div class="row">
+            {{#each trainers}}
+                <div class="col-md-6 mb-4 col-lg-4">
+                    <div class="card user-card">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <img src="/public/imgs/pp.png" alt="{{this.trainerName}}'s Profile Picture"
+                                    class="profile-picture">
+                                <div class="ml-3">
+                                    <h5 class="card-title mb-0">{{this.trainerName}}</h5>
+                                    <p class="card-text text-muted">{{this.firstName}} {{this.lastName}}</p>
+                                    <p class="card-text text-muted">{{this.email}}</p>
+                                </div>
                             </div>
-                        </div>
-                        <hr>
+                            <hr>
 
-                        <div class="d-flex justify-content-between">
-                            <button class="btn btn-primary"><a href="/user/{{this.userName}}" class="text-white">View
-                                    Profile</a></button>
-                            <button class="btn btn-secondary">Follow</button>
+                            <div class="d-flex justify-content-between">
+                                <button class="btn btn-success"><a href="/user/trainerProfile/{{this.trainerName}}"
+                                        class="text-white">View
+                                        Profile</a></button>
+                                <button class="btn btn-secondary">Follow</button>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        {{/each}}
-    </div>
-
-    <h1>Trainers</h1>
-    <div class="row">
-        {{#each trainers}}
-            <div class="col-md-6 mb-4 col-lg-4">
-                <div class="card user-card">
-                    <div class="card-body">
-                        <div class="d-flex align-items-center">
-                            <img src="/public/imgs/pp.png" alt="{{this.userName}}'s Profile Picture"
-                                class="profile-picture">
-                            <div class="ml-3">
-                                <h5 class="card-title mb-0">{{this.userName}}</h5>
-                                <p class="card-text text-muted">{{this.firstName}} {{this.lastName}}</p>
-                                <p class="card-text text-muted">{{this.email}}</p>
+            {{/each}}
+        </div>
+    {{/if}}
+    {{#if gyms}}
+        <h1>Gyms</h1>
+        <div class="row">
+            {{#each gyms}}
+                <div class="col-md-6 mb-4 col-lg-4">
+                    <div class="card user-card">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <img src="/public/imgs/pp.png" alt="{{this.gymName}}'s Profile Picture"
+                                    class="profile-picture">
+                                <div class="ml-3">
+                                    <h5 class="card-title mb-0">{{this.gymName}}</h5>
+                                    <p class="card-text text-muted">{{this.email}}</p>
+                                    <p class="card-text text-muted">{{this.address.city}}</p>
+                                </div>
                             </div>
-                        </div>
-                        <hr>
+                            <hr>
 
-                        <div class="d-flex justify-content-between">
-                            <button class="btn btn-success"><a href="/user/{{this.userName}}" class="text-white">View
-                                    Profile</a></button>
-                            <button class="btn btn-secondary">Follow</button>
+                            <div class="d-flex justify-content-between">
+                                <button class="btn btn-warning"><a href="/user/gymProfile/{{this._id}}"
+                                        class="text-white">View
+                                        Profile</a></button>
+                                <button class="btn btn-secondary">Follow</button>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        {{/each}}
-    </div>
-    <h1>Gyms</h1>
-    <div class="row">
-        {{#each gyms}}
-            <div class="col-md-6 mb-4 col-lg-4">
-                <div class="card user-card">
-                    <div class="card-body">
-                        <div class="d-flex align-items-center">
-                            <img src="/public/imgs/pp.png" alt="{{this.gymName}}'s Profile Picture"
-                                class="profile-picture">
-                            <div class="ml-3">
-                                <h5 class="card-title mb-0">{{this.gymName}}</h5>
-                                <p class="card-text text-muted">{{this.email}}</p>
-                                <p class="card-text text-muted">{{this.address.city}}</p>
-                            </div>
-                        </div>
-                        <hr>
-
-                        <div class="d-flex justify-content-between">
-                            <button class="btn btn-warning"><a href="/user/{{this.userName}}" class="text-white">View
-                                    Profile</a></button>
-                            <button class="btn btn-secondary">Follow</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        {{/each}}
-    </div>
+            {{/each}}
+        </div>
+    {{/if}}
 </div>

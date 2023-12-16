@@ -10,6 +10,47 @@ let emailc = (mail) => {
     return false;
   }
 };
+let isValidDOB = (dateString) => {
+  const regex = /^(0[1-9]|1[0-2])\/(0[1-9]|[12][0-9]|3[01])\/(19|20)\d{2}$/;
+  if (!regex.test(dateString)) {
+    return false;
+  }
+
+  const [month, day, year] = dateString.split("/").map(Number);
+  const date = new Date(year, month - 1, day);
+
+  const today = new Date();
+  const eighteenYearsAgo = new Date(
+    today.getFullYear() - 18,
+    today.getMonth(),
+    today.getDate()
+  );
+  if (date > eighteenYearsAgo) {
+    return false;
+  }
+
+  const isLeapYear = (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;
+  const daysInMonth = [
+    31,
+    isLeapYear ? 29 : 28,
+    31,
+    30,
+    31,
+    30,
+    31,
+    31,
+    30,
+    31,
+    30,
+    31,
+  ];
+
+  if (day > daysInMonth[month - 1]) {
+    return false;
+  }
+
+  return true;
+};
 
 let checkId = (id) => {
   if (!id) throw "You must provide an id to search for";
@@ -284,4 +325,5 @@ export {
   isEarlierInSameDay,
   checkState,
   checkZip,
+  isValidDOB,
 };

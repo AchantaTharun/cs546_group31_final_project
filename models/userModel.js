@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import validator from "validator";
 import bcrypt from "bcryptjs";
+import * as Helpers from "../Helpers.js";
 
 const userSchema = new mongoose.Schema({
   firstName: {
@@ -43,6 +44,17 @@ const userSchema = new mongoose.Schema({
     trim: true,
     unique: true,
     validate: [validator.isEmail, "Please enter a valid email"],
+  },
+  phone: {
+    type: String,
+    required: [true, "Please enter your phone number"],
+    trim: true,
+    unique: true,
+    validate: [
+      validator.isMobilePhone,
+      "Please enter a valid phone number",
+      "en-US",
+    ],
   },
   createdAt: {
     type: Date,
@@ -102,21 +114,24 @@ const userSchema = new mongoose.Schema({
     maxLength: [200, "Bio must be less than 200 characters long"],
   },
   dateOfBirth: {
-    type: Date,
+    type: String,
     trim: true,
-    validate: [validator.isDate, "Please enter a valid date of birth"],
+    validate: {
+      validator: Helpers.isValidDOB,
+      message: "Please enter a valid date of birth",
+    },
   },
   gender: {
     type: String,
     enum: ["male", "female", "other"],
   },
   height: {
-    type: Number,
+    type: String,
     trim: true,
     validate: [validator.isNumeric, "Please enter a valid height"],
   },
   weight: {
-    type: Number,
+    type: String,
     trim: true,
     validate: [validator.isNumeric, "Please enter a valid weight"],
   },
@@ -126,28 +141,42 @@ const userSchema = new mongoose.Schema({
   },
   wUnit: {
     type: String,
-    enum: ["lbs", "kg"],
+    enum: ["lb", "kg"],
   },
   address: {
     street: {
       type: String,
       trim: true,
+      minLength: [3, "Street must be at least 3 characters long"],
+      maxLength: [50, "Street must be less than 50 characters long"],
+    },
+    apartment: {
+      type: String,
+      trim: true,
+      minLength: [3, "Apartment must be at least 3 characters long"],
+      maxLength: [50, "Apartment must be less than 50 characters long"],
     },
     city: {
       type: String,
       trim: true,
+      minLength: [3, "City must be at least 3 characters long"],
+      maxLength: [50, "City must be less than 50 characters long"],
     },
     state: {
       type: String,
       trim: true,
+      uppercase: true,
+      length: [2, "State must be 2 characters long"],
+      validate: {
+        validator: Helpers.checkState,
+        message: "Please enter a valid state",
+      },
     },
-    zipCode: {
+    zip: {
       type: String,
       trim: true,
-    },
-    country: {
-      type: String,
-      trim: true,
+      length: [5, "Zip must be 5 characters long"],
+      validate: [validator.isNumeric, "Please enter a valid zip code"],
     },
   },
 });

@@ -1,0 +1,47 @@
+<div class="container mt-5">
+    <a class="mt-5" href="/user/home"> <button class="btn btn-primary">go back</button></a>
+    <div class="card">
+        <h5 class="card-header">{{trainer.userName}}</h5>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="firstName">First Name:</label>
+                        <input type="text" class="form-control" id="firstName" value="{{trainer.firstName}}" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="lastName">Last Name:</label>
+                        <input type="text" class="form-control" id="lastName" value="{{trainer.lastName}}" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="username">Username:</label>
+                        <input type="text" class="form-control" id="username" value="{{trainer.trainerName}}" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email:</label>
+                        <input type="email" class="form-control" id="email" value="{{trainer.email}}" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="dateOfBirth">Date of Birth:</label>
+                        <input type="text" class="form-control" id="dateOfBirth" value="{{trainer.dateOfBirth}}"
+                            readonly>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="bio">Bio:</label>
+                        <textarea class="form-control" id="bio" rows="5" readonly>{{trainer.bio}}</textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="address">Address:</label>
+                        <textarea class="form-control" id="address" rows="3" readonly value="">
+                        "{{trainer.address.city}}, {{trainer.address.state}}"
+                        "{{trainer.address.country}}"
+                        
+                        </textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
