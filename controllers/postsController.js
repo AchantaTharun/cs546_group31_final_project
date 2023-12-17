@@ -26,16 +26,24 @@ export const getAllPosts = async (req, res) => {
 
 
 export const getPostByEntity = async (req, res) => {
-  let user = req.user;
-  console.log("This is the user",req.user);
+  let user = undefined;
+    if (req.user) {
+          user = req.user;;
+      } else if(req.trainer){
+          user = req.trainer;
+      }else{
+          user = req.gym;
+      }  
+  // console.log("This is the body",req.body);
   try {
-    const posts = await Post.find({makerId:user._id,makerType:'user'});
+    const posts = await Post.find({makerId:user._id,makerType:getEntity(user)});
     if (!posts) {
       return res.status(404).json({
         status: "fail",
         message: "No posts have been made by the user yet",
       });
     }
+    // console.log(posts);
     return res.status(200).json({
       status: "success",
       results: posts.length,
@@ -56,6 +64,14 @@ export const createPost = async (req, res) => {
   //console.log("first");
   try {
     const { title, description, img } = req.body;
+
+    if(!title || !description || !img )
+    {
+      return res.status(400).json({
+        status: "fail",
+        message: "Input parameters are missing",
+      });
+    }
     //First need to define the user itself.
     let user = undefined;
     let makerType = undefined;
@@ -98,7 +114,6 @@ export const createPost = async (req, res) => {
 
 export const getPostById = async (req, res) => {
   try {
-    console.log("THe sent ID is: ",typeof req.params.id);
     const post = await Post.findById(req.params.id);
     if (!post) {
       return res.status(404).json({
@@ -131,10 +146,17 @@ export const updatePost = async (req, res) => {
     }
 
     //MakerId and MakerType cannot be changed
-    const { title, description, img } = req.body;
+    const { title, description } = req.body;
+    if(post.title===title && post.description===description)
+    {
+      return res.status(400).json({
+        status: "fail",
+        message: "Nothing was updated",
+      });
+    }
     const updatedPost = await Post.findByIdAndUpdate(
       req.params.id,
-      { title, description , img },
+      { title, description },
       { new: true }
     );
     return res.status(200).json({
@@ -146,7 +168,7 @@ export const updatePost = async (req, res) => {
   } catch (e) {
     return res.status(500).json({
       status: "fail",
-      message: e.message,
+      message: "Internal Server Error",
     });
   }
 };
@@ -175,8 +197,13 @@ export const deletePost = async (req, res) => {
 
 export const addComment = async (req, res) => {
   const { comment } = req.body;
-  console.log("This is the comment",comment);
-  
+  if(!comment)
+  {
+    return res.status(400).json({
+      status: "fail",
+      message: "No comment was given to AXIOS",
+    });
+  }
   let user = undefined;
   let makerType = undefined;
   let makerId = undefined;
@@ -193,7 +220,7 @@ export const addComment = async (req, res) => {
       makerType = 'gym';
       makerId = user._id;
   }  
-  console.log("This is the user",user);
+  // console.log("This is the user",user);
   try {
     const post = await Post.findById(req.params.id);
     if (!post) {
@@ -237,5 +264,19 @@ const commentedBy = (user) => {
 
   if ("isTrainer" in user) {
     return "trainers";
+  }
+};
+
+const getEntity = (user) => {
+  if ("isUser" in user) {
+    return "user";
+  }
+
+  if ("isGym" in user) {
+    return "gym";
+  }
+
+  if ("isTrainer" in user) {
+    return "trainer";
   }
 };

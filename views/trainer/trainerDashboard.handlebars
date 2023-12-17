@@ -1,3 +1,90 @@
-<div class='main-dashboard-content'>
-  <h1>I dont have shit to display here</h1>
+<link rel="stylesheet" href="/public/css/trainerDashboard.css" />
+<link rel="stylesheet" href="/public/css/trainerCalendar.css" />
+<div class="container bootstrap snippet">
+  <div class="row">
+    <div class="col-lg-2 col-sm-6">
+      <div class="circle-tile ">
+        <div class="circle-tile-heading dark-blue"><i class="bi bi-people-fill fa-3x p-2"></i></div>
+        <div class="circle-tile-content dark-blue">
+          <div class="circle-tile-description text-faded">Total Registered Users</div>
+          <div class="circle-tile-number text-faded ">{{stats.totalRegisteredUsersCount}}</div>
+          <a class="circle-tile-footer" href="#">More Info<i class="fa fa-chevron-circle-right"></i></a>
+        </div>
+      </div>
+    </div>
+     
+    <div class="col-lg-2 col-sm-6">
+      <div class="circle-tile ">
+        <div class="circle-tile-heading red"><i class="bi bi-calendar-check-fill fa-3x p-2"></i></div>
+        <div class="circle-tile-content red">
+          <div class="circle-tile-description text-faded"> Total Active Sessions </div>
+          <div class="circle-tile-number text-faded ">{{stats.activeSessionsCount}}</div>
+          <a class="circle-tile-footer" href="/trainer/sessions">More Info<i class="fa fa-chevron-circle-right"></i></a>
+        </div>
+      </div>
+    </div> 
+    <div class="col-lg-2 col-sm-6">
+      <div class="circle-tile ">
+        <div class="circle-tile-heading yellow"><i class="bi bi-person-plus-fill fa-3x p-2"></i></div>
+        <div class="circle-tile-content yellow">
+          <div class="circle-tile-description text-faded"> Total Followers </div>
+          <div class="circle-tile-number text-faded ">{{stats.totalFollowers}}</div>
+          <a class="circle-tile-footer" href="#">More Info<i class="fa fa-chevron-circle-right"></i></a>
+        </div>
+      </div>
+    </div> 
+     <div class="col-lg-2 col-sm-6">
+      <div class="circle-tile ">
+       <div class="circle-tile-heading gray"><i class="bi bi-egg-fried fa-3x p-2"></i></div>
+        <div class="circle-tile-content gray">
+          <div class="circle-tile-description text-faded"> Total Active Meal Plans </div>
+          <div class="circle-tile-number text-faded ">{{stats.totalMealPlans}}</div>
+          <a class="circle-tile-footer" href="#">More Info<i class="fa fa-chevron-circle-right"></i></a>
+        </div>
+      </div>
+    </div> 
+  </div> 
+</div>  
+
+
+<div>
+  <div>
+    <h2>This Week Schedule</h2>
+    <div class="container">
+      <div class="timetable-img text-center">
+        <img src="img/content/timetable.png" alt="">
+      </div>
+      <div class="table-responsive">
+        <table class="table table-bordered text-center">
+          <thead>
+            <tr class="bg-light-gray">
+              <th class="text-uppercase">Time</th>
+              {{#each weekdays as |weekday|}}
+                <th class="text-uppercase">{{weekday}}</th>
+              {{/each}}
+            </tr>
+          </thead>
+          <tbody>
+            {{#each timeSlots as |timeSlot|}}
+              <tr>
+                <td class="align-middle">{{timeSlot}}</td>
+                {{#each ../weekdays as |weekday|}}
+                  <td>
+                    {{#if (ifEquals (getSlotName ../../sessionsByWeekdayAndSlot weekday timeSlot) "No Session")}}
+                      <div class="margin-10px-top font-size14">{{getSlotName ../../sessionsByWeekdayAndSlot weekday timeSlot}}</div>
+                    {{/if}}
+                    {{#if (ifNotEquals (getSlotName ../../sessionsByWeekdayAndSlot weekday timeSlot) "No Session")}}
+                      <a href="{{getSlotId ../../sessionsByWeekdayAndSlot weekday timeSlot}}/users" class="{{getSlotColor weekday}}">{{getSlotName ../../sessionsByWeekdayAndSlot weekday timeSlot as name}}</a>
+                      <div class="margin-10px-top font-size14">Place: {{getSlotPlace ../../sessionsByWeekdayAndSlot weekday timeSlot as name}}</div>
+                      <div class="font-size13 text-light-gray">Attendees: {{getSlotAttendees ../../sessionsByWeekdayAndSlot weekday timeSlot as name}}</div>
+                    {{/if}}
+                  </td>
+                {{/each}}
+              </tr>
+            {{/each}}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
 </div>

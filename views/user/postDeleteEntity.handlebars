@@ -1,4 +1,5 @@
-<h1 class="mb-4"><a href="/user/get/myPosts">BACK TO MY POSTS</a></h1>
+<h4 class="mb-4"><a href="/user/get/myPosts">BACK TO MY POSTS</a></h4>
+<hr>
 {{#if hasData}}
 <form action="/user/delete/post" method="POST" id="entity-delete" novalidate>
     <label for="title">
@@ -32,7 +33,7 @@
 {{#unless hasData}}
 <p id="error">{{error}}</p>
 {{/unless}}
-
+<hr>
 
 <br>
 {{#if hasData}}

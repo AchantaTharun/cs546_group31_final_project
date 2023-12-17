@@ -7,7 +7,7 @@
     <br>
     <label for="img">
         IMAGE :                                                 
-        <input type="text" name="img" value="{{post.img}}" id="img" readonly>
+        <img src="{{post.img}}">
     </label>
     <br>
     <label for="description">
@@ -23,9 +23,9 @@
 </form>
 {{/if}}
 
-{{#unless hasData}}
+
 <p id="error">{{error}}</p>
-{{/unless}}
+
 
 {{#if hasData}}
 <form action="/user/post/addComment" method="POST" id="entity-submit" novalidate>

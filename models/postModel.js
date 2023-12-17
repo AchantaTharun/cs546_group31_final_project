@@ -87,6 +87,8 @@ const postSchema = new mongoose.Schema({
       },
     ],
   },
+
+  //These two were added by me so as to differentiate the post streams
   makerId:{
     type: String,
     required: [true, "The maker ID was not provided."],

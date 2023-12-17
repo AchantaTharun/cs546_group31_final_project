@@ -1,49 +1,109 @@
-<h1>Trainer Signup</h1>
-{{#if hasErrors}}
-  <div class="error-message">
-    <ul>
-      {{#each errors}}
-        <li>
-          {{this}}
-        </li>
-      {{/each}}
-    </ul>
-  </div>
-{{/if}}
-<form action="/trainer/signup" method="POST">
-  <label for="firstName">First Name:</label>
-  <input type="text" id="firstName" name="firstName" required /><br />
-  <label for="lastName">Last Name:</label>
-  <input type="text" id="lastName" name="lastName" required /><br />
+<div class="container">
+  <h1 class="mt-5">Trainer Sign up</h1>
 
-  <label for="email">Email:</label>
-  <input type="email" id="email" name="email" required /><br />
+  {{#if hasErrors}}
+    <div class="alert alert-danger mt-3">
+      <ul>
+        {{#each errors}}
+          <li>{{this}}</li>
+        {{/each}}
+        {{#if sendToLogin}}
+        <a href="/trainer/login"> Go to Log in page</a>
+        {{/if}}
+      </ul>
+    </div>
+  {{/if}}
 
-  <label for="password">Password:</label>
-  <input type="password" id="password" name="password" required /><br />
+  <form action="/trainer/signup" method="POST" class="needs-validation" novalidate>
 
-  <label for="passwordConfirm">Confirm Password:</label>
-  <input
-    type="password"
-    id="passwordConfirm"
-    name="passwordConfirm"
-    required
-  /><br />
+    <div class="row g-3">
+      <div class="col-md-4">
+        <label for="firstName">First Name:</label>
+        <input type="text" class="form-control" id="firstName" name="firstName" value="{{#if hasErrors}}{{formData.firstName}}{{/if}}" required>
+        <div class="invalid-feedback">First Name must be between 3 to 50 characters long.</div>
+      </div>
 
-  <label for="street">Street:</label>
-  <input type="text" id="street" name="street" required /><br />
+      <div class="col-md-4">
+        <label for="lastName">Last Name:</label>
+        <input type="text" class="form-control" id="lastName" name="lastName" value="{{#if hasErrors}}{{formData.lastName}}{{/if}}" required>
+        <div class="invalid-feedback">Last Name must be between 3 to 50 characters long.</div>
+      </div>
 
-  <label for="city">City:</label>
-  <input type="text" id="city" name="city" required /><br />
+      <div class="col-md-4">
+        <label for="email">Email:</label>
+        <input type="email" class="form-control" id="email" name="email" value="{{#if hasErrors}}{{formData.email}}{{/if}}" required>
+        <div class="invalid-feedback">Please enter valid email</div>
+      </div>
+    </div>
 
-  <label for="state">State:</label>
-  <input type="text" id="state" name="state" required /><br />
+    <div class="row g-3">
+      <div class="col-md-6">
+        <label for="password">Password:</label>
+        <input type="password" class="form-control" id="password" name="password" required>
+        <div class="invalid-feedback">Please enter valid password</div>
+      </div>
+      
 
-  <label for="zip">ZIP Code:</label>
-  <input type="text" id="zip" name="zip" required /><br />
+      <div class="col-md-6">
+        <label for="passwordConfirm">Confirm Password:</label>
+        <input type="password" class="form-control" id="passwordConfirm" name="passwordConfirm" required>
+        <div class="invalid-feedback">Password and Confirm Password does not match</div>
+      </div>
+    </div>
 
-  <label for="phone">Phone:</label>
-  <input type="tel" id="phone" name="phone" required /><br />
+    <div class="row g-3">
+      <div class="col-md-12 mb-3">
+        <label for="workoutType">Workout Type:</label>
+        <select id="workoutType" name="workoutType" class="form-control" multiple>
+          <option value="cardio">Cardio</option>
+          <option value="strength">Strength</option>
+          <option value="flexibility">Flexibility</option>
+          <option value="sports">Sports</option>
+          <option value="crossFit">CrossFit</option>
+          <option value="bodyWeight">Body Weight</option>
+        </select>
+        <div class="invalid-feedback">Please select at least one workout type</div>
+      </div>
+    </div>
 
-  <button type="submit">Signup</button>
-</form>
+    <div class="row g-3">
+      <div class="col-md-3">
+        <label for="street">Street:</label>
+        <input type="text" class="form-control" id="street" name="street" value="{{#if hasErrors}}{{formData.street}}{{/if}}" required>
+        <div class="invalid-feedback">Street must be 3 to 50 characters long</div>
+      </div>
+
+      <div class="col-md-3">
+        <label for="city">City:</label>
+        <input type="text" class="form-control" id="city" name="city" value="{{#if hasErrors}}{{formData.city}}{{/if}}" required>
+         <div class="invalid-feedback">City must be 3 to 50 characters long</div>
+      </div>
+
+      <div class="col-md-3">
+        <label for="state">State:</label>
+        <input type="text" class="form-control" id="state" name="state" value="{{#if hasErrors}}{{formData.state}}{{/if}}" required>
+         <div class="invalid-feedback">State must be at least 2 characters long</div>
+      </div>
+      <div class="col-md-3">
+        <label for="zip">ZIP Code:</label>
+        <input type="text" class="form-control" id="zip" name="zip" value="{{#if hasErrors}}{{formData.zip}}{{/if}}" required>
+         <div class="invalid-feedback">Please enter valid zip code of 5 digits</div>
+      </div>
+    </div>
+
+    <div class="row g-3">
+      <div class="col-md-4">
+        <label for="phone">Phone:</label>
+        <input type="tel" class="form-control" id="phone" name="phone" value="{{#if hasErrors}}{{formData.phone}}{{/if}}" required>
+        <div class="invalid-feedback">Please enter your phone number</div>
+      </div>
+    </div>
+
+    <br>
+
+    <button class="btn btn-primary" type="submit">Signup</button><br>
+    <a href="/trainer/login">Already have an account? Go to Log in page</a>
+  </form>
+</div>
+
+ <script src="/public/js/trainer/trainerSignUpClient.js"></script>

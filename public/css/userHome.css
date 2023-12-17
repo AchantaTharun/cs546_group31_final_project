@@ -103,3 +103,8 @@ a:hover {
 .btn-primary-mapBox:hover {
     background-color: #0056b3;
 }
+
+img{
+    height: 200px;
+    width: 250px;
+  }

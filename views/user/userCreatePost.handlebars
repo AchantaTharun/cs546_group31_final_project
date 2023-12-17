@@ -3,15 +3,15 @@
 {{/unless}}
 
 {{#if hasData}}
-<form id="entity-display" action="/user/create/newPosts" method="POST" novalidate>
+<form id="entity-display" action="/user/create/newPosts" method="POST" enctype="multipart/form-data" novalidate>
     <label for="title">
         TITLE :                                                 
         <input type="text" name="title" id="title" >
     </label>
     <br>
-    <label for="img">
-        IMAGE :                                                 
-        <input type="text" name="img" id="img">
+    <label for="imageInput">
+        UPLOAD IMAGE FILE :                                                 
+        <input type="file" accept="image/*" id="imageInput" name="imageInput">
     </label>
     <br>
     <label for="description">
@@ -27,9 +27,10 @@
 </form>
 {{/if}}
 
-{{#unless hasData}}
+
 <p id="error">{{error}}</p>
-{{/unless}}
+
 
 <a href="/user/posts">GO BACK TO POSTS PAGE</a>
 
+<script src="/public/js/user/validatePostCreation.js"> </script>
