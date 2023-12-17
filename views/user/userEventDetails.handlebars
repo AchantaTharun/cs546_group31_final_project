@@ -1,4 +1,23 @@
-<div>
+{{#if message}}
+  <div id="message" class="alert alert-success">
+    <button type="button" onclick="window.location.href='/user/events/details/'">&times;</button>
+    {{message}}
+  </div>
+{{/if}}
+
+<div class="user-event-details">
+{{#if errors.length}}
+<div class="alert alert-danger" id="form-error-style">
+<ul>
+    {{#each errors}}
+    <li>
+        {{this}}
+    </li>
+    {{/each}}
+</ul>
+</div>
+{{else}}
+
     <h2>{{event.title}}</h2>
     <img src="{{event.img}}" alt="{{event.title}}">
     <p>Description: {{event.description}}</p>
@@ -10,16 +29,30 @@
     <p>Price of Admission: ${{event.priceOfAdmission}}</p>
     <p>Event Type: {{#if event.publicEvent}}Public{{else}}Private{{/if}}</p>
 
-<h3>Attending?</h3>
-    <!-- RSVP Form for 'Yes' Response -->
-<form action="/user/events/rsvp/{{event._id}}/{{user._id}}/" method="post">
-    <button type="submit" class="btn btn-primary">Yes, I will attend</button>
-</form>
-<!-- RSVP Form for 'No' Response -->
-<form action="/user/events/rsvp/{{event._id}}/{{user._id}}/remove" method="post">
-    <input type="hidden" name="action" value="remove">
-    <button type="submit" class="btn btn-secondary">No, I cannot attend</button>
-     <a href="/user/events" class="btn btn-link">Cancel</a>
-</form>
+    {{#if isEventCreator}}
+        <a href="/user/events/edit/{{event._id}}" class="btn btn-warning">Edit Event</a>
+        <form action="/user/events/delete/{{event._id}}" method="post">
+            <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this event?');">Delete Event</button>
+        </form>
+{{else}}
+    {{#if maxCapacityReached}}
+            <p>Sorry, this event has reached its maximum capacity.</p>
+            
+    {{else}}
+      <h3>Attending?</h3>
+            <!-- RSVP Form for 'Yes' Response -->
+            <form action="/user/events/rsvp/{{event._id}}/{{user._id}}/" method="post">
+                <button type="submit" class="btn btn-primary">Yes, I will attend</button>
+            </form>
+            <!-- RSVP Form for 'No' Response -->
+            <form action="/user/events/rsvp/{{event._id}}/{{user._id}}/remove" method="post">
+                <input type="hidden" name="action" value="remove">
+                <button type="submit" class="btn btn-secondary">No, I cannot attend</button>
+            </form>
+       
+    {{/if}}
+{{/if}}
 
+{{/if}}
+    <a href="/user/events" class="btn btn-link">Go back</a>
 </div>
