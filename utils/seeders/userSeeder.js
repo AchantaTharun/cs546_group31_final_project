@@ -4,6 +4,22 @@ mongoose.connect("mongodb://localhost:27017/GymMate", {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
+function generateRandomBirthdate() {
+  const randomMonth = Math.floor(Math.random() * 12) + 1;
+  const randomDay = Math.floor(Math.random() * 28) + 1;
+  const randomYear = Math.floor(Math.random() * (2003 - 1930 + 1)) + 1930;
+  const formattedMonth =
+    randomMonth < 10 ? `0${randomMonth}` : `${randomMonth}`;
+  const formattedDay = randomDay < 10 ? `0${randomDay}` : `${randomDay}`;
+
+  return `${formattedMonth}/${formattedDay}/${randomYear}`;
+}
+function generateRandomPhoneNumber() {
+  const phoneNumber = Math.floor(1000000000 + Math.random() * 9000000000)
+    .toString()
+    .substring(0, 10);
+  return `${phoneNumber}`;
+}
 function getRandomWorkoutType() {
   const workoutTypes = [
     "cardio",
@@ -11,12 +27,99 @@ function getRandomWorkoutType() {
     "flexibility",
     "sports",
     "crossFit",
-    "body Weight",
+    "bodyWeight",
   ];
 
   const randomIndex = Math.floor(Math.random() * workoutTypes.length);
 
   return workoutTypes[randomIndex];
+}
+function generateRandomAddress() {
+  const streetNames = [
+    "Maple Street",
+    "Oak Avenue",
+    "Cedar Lane",
+    "Pine Road",
+    "Elm Boulevard",
+    "Willow Lane",
+    "Main Street",
+    "First Avenue",
+    "Second Street",
+    "Third Avenue",
+    "Park Avenue",
+    "Center Street",
+  ];
+
+  const cities = [
+    "New York",
+    "Los Angeles",
+    "Chicago",
+    "Houston",
+    "Phoenix",
+    "Philadelphia",
+    "San Antonio",
+    "San Diego",
+    "Dallas",
+    "San Jose",
+    "Austin",
+    "Jacksonville",
+  ];
+
+  const states = [
+    "NY",
+    "CA",
+    "IL",
+    "TX",
+    "AZ",
+    "PA",
+    "FL",
+    "OH",
+    "GA",
+    "NC",
+    "MI",
+    "WA",
+  ];
+
+  const randomStreet =
+    streetNames[Math.floor(Math.random() * streetNames.length)];
+  const randomApartment = `Apt ${Math.floor(Math.random() * 100) + 1}`;
+  const randomCity = cities[Math.floor(Math.random() * cities.length)];
+  const randomState = states[Math.floor(Math.random() * states.length)];
+  const randomZip = Math.floor(10000 + Math.random() * 90000)
+    .toString()
+    .substring(0, 5);
+
+  return {
+    street: `${Math.floor(Math.random() * 1000) + 1} ${randomStreet}`,
+    apartment: randomApartment,
+    city: randomCity,
+    state: randomState,
+    zip: randomZip,
+  };
+}
+
+function generateRandomHeight() {
+  const height = Math.floor(Math.random() * 200) + 100;
+  return height;
+}
+
+function generateRandomWeight() {
+  const weight = Math.floor(Math.random() * 150) + 50;
+  return weight;
+}
+
+function generateRandomHeightUnit() {
+  const heightUnits = ["ft", "m"];
+  const randomHeightUnit =
+    heightUnits[Math.floor(Math.random() * heightUnits.length)];
+  return randomHeightUnit;
+}
+
+function generateRandomWeightUnit() {
+  const weightUnits = ["lb", "kg"];
+  const randomWeightUnit =
+    weightUnits[Math.floor(Math.random() * weightUnits.length)];
+  return randomWeightUnit;
 }
 
 // give random coordinates within a radius of a given point
@@ -47,9 +150,14 @@ function generateRandomCoordinates(latitude, longitude, radiusInKm) {
     );
 
   const finalLatitude = (newLatitude * 180) / Math.PI;
-  const finalLongitude = (((newLongitude * 180) / Math.PI + 540) % 360) - 180; // Normalize longitude
+  const finalLongitude = (((newLongitude * 180) / Math.PI + 540) % 360) - 180;
 
   return { coordinates: [finalLongitude, finalLatitude] };
+}
+function getRandomGender() {
+  const genders = ["male", "female", "other"];
+  const randomIndex = Math.floor(Math.random() * genders.length);
+  return genders[randomIndex];
 }
 
 // gives random coordinates within the continental USA
@@ -81,6 +189,7 @@ const users = [
     email: "walter@example.com",
     password: "walterpassword",
     passwordConfirm: "walterpassword",
+    bio: "High school chemistry teacher turned methamphetamine manufacturer.",
   },
   {
     firstName: "Tony",
@@ -89,6 +198,7 @@ const users = [
     email: "tony@example.com",
     password: "tonypassword",
     passwordConfirm: "tonypassword",
+    bio: "New Jersey mob boss trying to balance family life and organized crime.",
   },
   {
     firstName: "Tyrion",
@@ -97,6 +207,7 @@ const users = [
     email: "tyrion@example.com",
     password: "tyrionpassword",
     passwordConfirm: "tyrionpassword",
+    bio: "Clever and resourceful noble known for his wit and strategic thinking.",
   },
   {
     firstName: "Jesse",
@@ -105,6 +216,7 @@ const users = [
     email: "jesse@example.com",
     password: "jessepassword",
     passwordConfirm: "jessepassword",
+    bio: "Former meth manufacturer partnering with Heisenberg. Calls everyone 'Yo.'",
   },
   {
     firstName: "Rick",
@@ -113,6 +225,7 @@ const users = [
     email: "rick@example.com",
     password: "rickpassword",
     passwordConfirm: "rickpassword",
+    bio: "Genius scientist with a penchant for interdimensional adventures.",
   },
   {
     firstName: "Al",
@@ -121,6 +234,7 @@ const users = [
     email: "al@example.com",
     password: "alpassword",
     passwordConfirm: "alpassword",
+    bio: "Deadwood's notorious saloon owner and a shrewd businessman.",
   },
   {
     firstName: "Carmela",
@@ -129,6 +243,7 @@ const users = [
     email: "carmela@example.com",
     password: "carmelapassword",
     passwordConfirm: "carmelapassword",
+    bio: "Dedicated wife to a mob boss, striving to maintain family values in a complicated world.",
   },
   {
     firstName: "Jon",
@@ -137,6 +252,7 @@ const users = [
     email: "jon@example.com",
     password: "jonpassword",
     passwordConfirm: "jonpassword",
+    bio: "Former Lord Commander of the Night's Watch with a claim to the Iron Throne.",
   },
   {
     firstName: "Skyler",
@@ -145,6 +261,7 @@ const users = [
     email: "skyler@example.com",
     password: "skylpassword",
     passwordConfirm: "skylpassword",
+    bio: "Walter White's wife caught in the chaos of his secret life as a drug manufacturer.",
   },
   {
     firstName: "Morty",
@@ -153,6 +270,7 @@ const users = [
     email: "morty@example.com",
     password: "mortypassword",
     passwordConfirm: "mortypassword",
+    bio: "Constantly dragged into interdimensional adventures by his genius grandfather, Rick.",
   },
   {
     firstName: "Saul",
@@ -161,6 +279,7 @@ const users = [
     email: "saul@example.com",
     password: "saulpassword",
     passwordConfirm: "saulpassword",
+    bio: "Savvy lawyer with a penchant for morally ambiguous cases and colorful suits.",
   },
   {
     firstName: "Anthony",
@@ -169,6 +288,7 @@ const users = [
     email: "aj@example.com",
     password: "ajpassword",
     passwordConfirm: "ajpassword",
+    bio: "Son of Tony Soprano, navigating life under the shadow of organized crime.",
   },
   {
     firstName: "Tyrion",
@@ -177,6 +297,7 @@ const users = [
     email: "tyrionjr@example.com",
     password: "tyrionpassword",
     passwordConfirm: "tyrionpassword",
+    bio: "Clever and strategic member of the Soprano family, handling complex situations.",
   },
   {
     firstName: "Daenerys",
@@ -185,6 +306,7 @@ const users = [
     email: "daenerys@example.com",
     password: "daeneryspassword",
     passwordConfirm: "daeneryspassword",
+    bio: "Last surviving Targaryen, aiming to reclaim the Iron Throne with her dragons.",
   },
   {
     firstName: "Hank",
@@ -193,6 +315,7 @@ const users = [
     email: "hank@example.com",
     password: "hankpassword",
     passwordConfirm: "hankpassword",
+    bio: "Dedicated DEA agent with a passion for collecting minerals as a hobby.",
   },
   {
     firstName: "Beth",
@@ -201,6 +324,7 @@ const users = [
     email: "beth@example.com",
     password: "bethpassword",
     passwordConfirm: "bethpassword",
+    bio: "Veterinarian with a penchant for intergalactic adventures alongside her eccentric family.",
   },
   {
     firstName: "Seth",
@@ -209,6 +333,7 @@ const users = [
     email: "seth@example.com",
     password: "sethpassword",
     passwordConfirm: "sethpassword",
+    bio: "Honor-bound lawman in the rough and tumble town of Deadwood.",
   },
   {
     firstName: "Paulie",
@@ -217,6 +342,7 @@ const users = [
     email: "paulie@example.com",
     password: "pauliepassword",
     passwordConfirm: "pauliepassword",
+    bio: "Soprano crime family capo known for his loyal and sometimes unpredictable nature.",
   },
   {
     firstName: "Arya",
@@ -225,6 +351,7 @@ const users = [
     email: "arya@example.com",
     password: "aryapassword",
     passwordConfirm: "aryapassword",
+    bio: "Fearless and vengeful assassin seeking justice and reclaiming her identity.",
   },
   {
     firstName: "Gus",
@@ -233,6 +360,7 @@ const users = [
     email: "gus@example.com",
     password: "guspassword",
     passwordConfirm: "guspassword",
+    bio: "Meticulous and calculating drug lord with a front in the fast-food industry.",
   },
   {
     firstName: "Summer",
@@ -241,6 +369,7 @@ const users = [
     email: "summer@example.com",
     password: "summerpassword",
     passwordConfirm: "summerpassword",
+    bio: "Adventure-loving teenager, often caught up in her family's chaotic escapades.",
   },
   {
     firstName: "Calamity",
@@ -249,6 +378,7 @@ const users = [
     email: "calamity@example.com",
     password: "calamitypassword",
     passwordConfirm: "calamitypassword",
+    bio: "Wild and adventurous frontierswoman with a knack for getting into trouble.",
   },
   {
     firstName: "Junior",
@@ -257,6 +387,7 @@ const users = [
     email: "junior@example.com",
     password: "juniorpassword",
     passwordConfirm: "juniorpassword",
+    bio: "Tony Soprano's uncle, navigating life within the complex dynamics of the Soprano family.",
   },
 ];
 
@@ -277,6 +408,15 @@ const users = [
           passwordConfirm: "1" + user.password,
           location: location,
           favoriteWorkout,
+          gender: getRandomGender(),
+          height: generateRandomHeight(),
+          weight: generateRandomWeight(),
+          hUnit: generateRandomHeightUnit(),
+          wUnit: generateRandomWeightUnit(),
+          address: generateRandomAddress(),
+          phone: generateRandomPhoneNumber(),
+          dateOfBirth: generateRandomBirthdate(),
+          bio: user.bio,
         });
 
         await newUser.save();
@@ -288,10 +428,50 @@ const users = [
     }
   }
 
+  async function seedUsersUSANearPoint(num, location) {
+    try {
+      for (const user of users) {
+        const newLoc = generateRandomCoordinates(
+          location.coordinates[1],
+          location.coordinates[0],
+          10
+        );
+        let parts = user.email.split("@");
+        let newEmail =
+          parts[0] + "@example" + num + "." + parts[1].split(".")[1];
+        const favoriteWorkout = getRandomWorkoutType();
+        const newUser = new User({
+          firstName: user.firstName,
+          lastName: user.lastName,
+          userName: "1" + user.userName + num,
+          email: "1" + newEmail,
+          password: "1" + user.password + num,
+          passwordConfirm: "1" + user.password + num,
+          location: newLoc,
+          favoriteWorkout,
+          gender: getRandomGender(),
+          height: generateRandomHeight(),
+          weight: generateRandomWeight(),
+          hUnit: generateRandomHeightUnit(),
+          wUnit: generateRandomWeightUnit(),
+          address: generateRandomAddress(),
+          phone: generateRandomPhoneNumber(),
+          dateOfBirth: generateRandomBirthdate(),
+          bio: user.bio,
+        });
+
+        await newUser.save();
+      }
+
+      // console.log("User seeded successfully!");
+    } catch (err) {
+      console.error("Error seeding users:", err);
+    }
+  }
   async function seedUsersUSA() {
     try {
       for (const user of users) {
-        for (let i = 2; i <= 10; i++) {
+        for (let i = 2; i <= 30; i++) {
           const location = generateRandomCoordinatesUSA();
           const favoriteWorkout = getRandomWorkoutType();
           const newUser = new User({
@@ -303,9 +483,19 @@ const users = [
             passwordConfirm: `${i}` + user.password,
             location: location,
             favoriteWorkout,
+            gender: getRandomGender(),
+            height: generateRandomHeight(),
+            weight: generateRandomWeight(),
+            hUnit: generateRandomHeightUnit(),
+            wUnit: generateRandomWeightUnit(),
+            address: generateRandomAddress(),
+            phone: generateRandomPhoneNumber(),
+            dateOfBirth: generateRandomBirthdate(),
+            bio: user.bio,
           });
 
           await newUser.save();
+          // await seedUsersUSANearPoint(i, location);
         }
       }
 
