@@ -1,0 +1,151 @@
+<div class="container mt-4 ">
+    <form class="row g-3 mb-4" action="/user/home/search" method="get">
+        <div class="col-md-2">
+            <label for="selectUser" class="form-label">Select User</label>
+            <select id="selectUser" name="selectUser" class="form-select">
+                <option selected disabled>Choose...</option>
+                <option value="People">People</option>
+                <option value="Trainers">Trainers</option>
+                <option value="Gyms">Gyms</option>
+            </select>
+        </div>
+        <div class="col-md-2">
+            <label for="favoriteWorkout" class="form-label">Favorite Workout</label>
+            <select id="favoriteWorkout" name="favoriteWorkout" class="form-select">
+                <option selected disabled>Choose...</option>
+                <option value="cardio">Cardio</option>
+                <option value="strength">Strength</option>
+                <option value="flexibility">Flexibility</option>
+                <option value="sports">Sports</option>
+                <option value="crossFit">CrossFit</option>
+                <option value="body Weight">Body Weight</option>
+            </select>
+        </div>
+        <div class="col-md-2">
+            <label for="searchType" class="form-label">Search Type</label>
+            <select id="searchType" name="searchType" class="form-select">
+                <option selected disabled>Choose...</option>
+                <option value="Location">Location</option>
+                <option value="Names">Names</option>
+            </select>
+        </div>
+
+        <div class="col-md-5">
+            <label for="search" class="form-label">Search</label>
+            <input type="text" name="search" class="form-control" id="search" placeholder="Search">
+        </div>
+        <div class="col-md-1 mt-5">
+            <button type="submit" class="btn btn-primary">Search</button>
+        </div>
+    </form>
+
+
+    <div id="map" data="{{users}}" class="card card-body">
+    </div>
+    {{#if users }}
+        <h1>GymMates</h1>
+        <div class="row">
+
+            {{#each users}}
+                <div class="col-md-6 mb-4 col-lg-4">
+                    <div class="card user-card">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <img src="/public/imgs/pp.png" alt="{{this.userName}}'s Profile Picture"
+                                    class="profile-picture">
+                                <div class="ml-3">
+                                    <h5 class="card-title mb-0">{{this.userName}}</h5>
+                                    <p class="card-text text-muted">{{this.firstName}} {{this.lastName}}</p>
+                                    <p class="card-text text-muted">{{this.email}}</p>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="d-flex justify-content-between">
+                                <button class="btn btn-primary"><a href="/user/{{this.userName}}"
+                                        class="text-white">View
+                                        Profile</a></button>
+                                {{#if this.isFollowing}}
+                                    <p>Following</p>
+                                {{else}}
+                                    <button class="btn btn-secondary follow-btn" data-userid="{{this._id}}"
+                                        data-type="user">Follow</button>
+                                {{/if}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {{/each}}
+        </div>
+    {{/if}}
+
+    {{#if trainers}}
+        <h1>Trainers</h1>
+        <div class="row">
+            {{#each trainers}}
+                <div class="col-md-6 mb-4 col-lg-4">
+                    <div class="card user-card">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <img src="/public/imgs/pp.png" alt="{{this.trainerName}}'s Profile Picture"
+                                    class="profile-picture">
+                                <div class="ml-3">
+                                    <h5 class="card-title mb-0">{{this.trainerName}}</h5>
+                                    <p class="card-text text-muted">{{this.firstName}} {{this.lastName}}</p>
+                                    <p class="card-text text-muted">{{this.email}}</p>
+                                </div>
+                            </div>
+                            <hr>
+
+                            <div class="d-flex justify-content-between">
+                                <button class="btn btn-success"><a href="/user/trainerProfile/{{this.trainerName}}"
+                                        class="text-white">View
+                                        Profile</a></button>
+                                {{#if this.isFollowing}}
+                                    <p>Following</p>
+                                {{else}}
+                                    <button class="btn btn-secondary follow-btn" data-userid="{{this._id}}"
+                                        data-type="trainer">Follow</button>
+                                {{/if}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {{/each}}
+        </div>
+    {{/if}}
+    {{#if gyms}}
+        <h1>Gyms</h1>
+        <div class="row">
+            {{#each gyms}}
+                <div class="col-md-6 mb-4 col-lg-4">
+                    <div class="card user-card">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <img src="/public/imgs/pp.png" alt="{{this.gymName}}'s Profile Picture"
+                                    class="profile-picture">
+                                <div class="ml-3">
+                                    <h5 class="card-title mb-0">{{this.gymName}}</h5>
+                                    <p class="card-text text-muted">{{this.email}}</p>
+                                    <p class="card-text text-muted">{{this.address.city}}</p>
+                                </div>
+                            </div>
+                            <hr>
+
+                            <div class="d-flex justify-content-between">
+                                <button class="btn btn-warning"><a href="/user/gymProfile/{{this._id}}"
+                                        class="text-white">View
+                                        Profile</a></button>
+                                {{#if this.isFollowing}}
+                                    <p>Following</p>
+                                {{else}}
+                                    <button class="btn btn-secondary follow-btn" data-userid="{{this._id}}"
+                                        data-type="gym">Follow</button>
+                                {{/if}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {{/each}}
+        </div>
+    {{/if}}
+</div>

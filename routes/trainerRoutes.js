@@ -1,38 +1,36 @@
-import { Router } from 'express';
+import { Router } from "express";
 
-import * as authController from '../controllers/authController.js';
-import * as trainerController from '../controllers/trainerController.js';
+import * as authController from "../controllers/authController.js";
+import * as trainerController from "../controllers/trainerController.js";
 
 const router = Router();
 
-router.get('/', authController.protectRoute, trainerController.getAllTrainers);
-
 router.get(
-  '/:trainerId',
+  "/:trainerId",
   authController.protectRoute,
   trainerController.getTrainerDetails
 );
 
 router.put(
-  '/:trainerId',
+  "/:trainerId",
   authController.protectRoute,
   trainerController.updateTrainer
 );
 
 router.delete(
-  '/:trainerId',
+  "/:trainerId",
   authController.protectRoute,
   trainerController.deleteTrainer
 );
 
 router.put(
-  '/:trainerId/updatepassword',
+  "/:trainerId/updatepassword",
   authController.protectRoute,
   trainerController.updateTrainerPassword
 );
 
 router.get(
-  '/:trainerId/sessions',
+  "/:trainerId/sessions",
   authController.protectRoute,
   trainerController.getSessionsOfTrainer
 );

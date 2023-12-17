@@ -1,0 +1,54 @@
+{{#if hasData}}
+<form id="entity-display" novalidate>
+    <label for="name">
+        EVENT TITLE :                                                 
+        <input type="text" name="name" id="name" value="{{titles}}" readonly>
+    </label>
+    <br>
+    <label for="email">
+        EMAIL :                                                 
+        <input type="text" name="email" value="{{contactEmail}}" id="email" readonly>
+    </label>
+    <br>
+    <label for="street">
+         STREET:                                                 
+        <input type="text" name="street" value= "{{street}}" id="street" readonly>
+    </label>
+    <br>
+    <label for="city">
+        CITY :                                                 
+        <input type="text" name="city" value="{{city}}" id="city" readonly>
+    </label>
+    <br>
+    <label for="state">
+        STATE :                                                 
+        <input type="text" name="state" value="{{state}}" id="state" readonly>
+    </label>
+    <br>
+    <label for="zip">
+        ZIP :                                                 
+        <input type="text" name="zip" value="{{zip}}" id="zip" readonly>
+    </label>
+    <label for="AWSImage">
+        IMAGE :
+        <img id="AWSImage" name="AWSImage" src="{{img}}" alt=" Not Found"></img>
+    </label>
+</form>
+{{/if}}
+
+{{#unless hasData}}
+<p id="error">{{error}}</p>
+{{/unless}}
+
+{{#if hasData}}
+<form action="/api/v1/admin/manage/event/{{objectId}}" method="POST" id="entity-submit" novalidate>
+    <label for="id"> 
+        EVENT ID:                                                 
+        <input type="text" name="id" id="id" value="{{objectId}}" readonly>
+    </label>
+    <br>
+    <button type="submit">DELETE</button>
+</form>
+{{/if}}
+
+<a href="/api/v1/admin/manage">BACK TO SYSTEM MANAGEMENT PAGE</a>

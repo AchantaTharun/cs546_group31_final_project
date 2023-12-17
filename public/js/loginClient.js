@@ -30,6 +30,7 @@ async function handleLogin(email, password, userType) {
 
     const response = await apiRequest('post', apiUrl, credentials);
     //sessionStorage.setItem('jwt', response.token);
+    //console.log('Login successful! Token:', response.token);
     window.location.href = `/${userType}/dashboard`;
   } catch (error) {
     const errorContainer = document.getElementById('errorContainer');

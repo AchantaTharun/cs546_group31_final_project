@@ -38,3 +38,7 @@ utils/signUpAdmin.js
 utils/setJWTSecret.js
 
 uploads/*
+
+practice.js
+
+practiceHTML.html

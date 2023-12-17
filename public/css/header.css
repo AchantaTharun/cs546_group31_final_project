@@ -1,161 +1,6 @@
-body {
-  margin: 0;
-  padding: 0;
-}
-.navbar-primary {
-  background-color: #333;
-  bottom: 0px;
-  left: 0px;
-  position: fixed;
-  top: 80px;
-  width: 200px;
-  z-index: 1000;
-  overflow: hidden;
-  -webkit-transition: all 0.1s ease-in-out;
-  -moz-transition: all 0.1s ease-in-out;
-  transition: all 0.1s ease-in-out;
-}
-
-.user-name-navbar {
-  position: absolute;
-  display: block;
-  left: 0px;
-  bottom: 0;
-  width: 100%;
-  padding: 8px 0;
-  border-top: solid 1px #666;
-  color: grey;
-  font-size: 20px;
-  text-align: center;
-}
-
-.user-name-navbar:hover,
-.user-name-navbar:focus {
-  background-color: #222;
-  color: white;
-}
-
-.user-name-navbar:active {
-  background-color: #111;
-}
-
-.navbar-primary-menu,
-.navbar-primary-menu li {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.navbar-primary-menu li a {
-  display: block;
-  padding: 20px 18px;
-  text-align: center;
-  border-bottom: solid 1px #444;
-  color: #ccc;
-}
-
-.navbar-primary-menu li a:hover {
-  background-color: #000;
-  text-decoration: none;
-  color: white;
-}
-
-.navbar-primary-menu li a .glyphicon {
-  margin-right: 6px;
-}
-
-.navbar-primary-menu li a:hover .glyphicon {
-  color: orchid;
-}
-
 .main-dashboard-content {
-  margin-left: 200px;
-  padding: 20px;
-
-  padding-top: 90px;
+  background-color: rgba(48, 43, 43, 0.735);
 }
-
-.collapsed + .main-dashboard-content {
-  margin-left: 60px;
-}
-
-header {
-  width: 100%;
-  height: 80px;
-  background-color: #3f3e3e;
-  border-bottom: solid 1px rgba(16, 16, 16, 0.1);
-  font-family: 'Poppins';
-  color: white;
-  position: fixed;
-  z-index: 1000;
-}
-
-header .inner {
-  width: 98%; /* This is the inner width of the content inside of your header (80%, etc) */
-  height: 100%;
-  display: block;
-  margin: 0 auto;
-}
-
-header .logo {
-  padding: 0;
-  display: table;
-  height: 100%;
-  float: left;
-}
-
-header .logo div {
-  height: 100%;
-  display: table-cell;
-  vertical-align: middle;
-}
-
-header .logo img {
-  height: 50px;
-  margin-top: 5px; /* Optical alignment of the logo */
-}
-
-header nav {
-  float: right;
-  height: 100%;
-}
-
-header nav li {
-  display: table;
-  height: 100%;
-  float: left;
-  margin-right: 30px;
-}
-
-header nav li:last-of-type {
-  margin-right: 0;
-}
-
-header nav span {
-  display: table-cell;
-  vertical-align: middle;
-}
-
-header nav a {
-  color: #101010;
-}
-
-header h1 {
-  padding: 15px 20px;
-  border-radius: 4px;
-}
-
-header nav .button {
-  background-color: #1ab26b; /* This HEX is the color of the button */
-  color: #fff;
-  padding: 10px 20px;
-  border-radius: 4px;
-}
-
-header nav .button:hover {
-  filter: brightness(1.05);
-}
-
 .activity-done {
   font-weight: 600;
 }
@@ -167,12 +12,13 @@ header nav .button:hover {
 .sessionlist li {
   list-style: none;
   padding: 10px;
-  box-shadow: rgba(213, 217, 217, 0.5) 0 2px 5px 0;
+  margin-top: 12px;
+  width: 90%;
+  /*box-shadow: rgba(213, 217, 217, 0.5) 0 2px 5px 0;
   margin-top: 12px;
   border: 1px solid #d5d9d9;
   border-radius: 8px;
-  background: #fff;
-  width: 90%;
+  */
 }
 .sessionlist-container {
   display: flex;
@@ -181,13 +27,14 @@ header nav .button:hover {
 .active-list,
 .inactive-list {
   list-style: none;
-  padding: 10px;
-  box-shadow: rgba(213, 217, 217, 0.5) 0 2px 5px 0;
   margin-top: 12px;
+  padding: 10px;
+  width: 90%;
+  /*box-shadow: rgba(213, 217, 217, 0.5) 0 2px 5px 0;
   border: 1px solid #d5d9d9;
   border-radius: 8px;
-  background: #fff;
   width: 50%;
+  */
 }
 .date-time {
   font-size: 12px;

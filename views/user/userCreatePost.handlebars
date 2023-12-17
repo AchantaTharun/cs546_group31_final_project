@@ -1,0 +1,36 @@
+{{#unless hasData}}
+<a href="/user/create/newPosts">CLICK HERE TO TRY AGAIN</a>
+{{/unless}}
+
+{{#if hasData}}
+<form id="entity-display" action="/user/create/newPosts" method="POST" enctype="multipart/form-data" novalidate>
+    <label for="title">
+        TITLE :                                                 
+        <input type="text" name="title" id="title" >
+    </label>
+    <br>
+    <label for="imageInput">
+        UPLOAD IMAGE FILE :                                                 
+        <input type="file" accept="image/*" id="imageInput" name="imageInput">
+    </label>
+    <br>
+    <label for="description">
+         DESCRIPTION:                                                 
+        <input type="text" name="description" id="description">
+    </label>
+    <br>
+    <label for="comment">                                                 
+        <textarea name="comment" placeholder="First Comment.." id="comment"></textarea>
+    </label>
+    <br>
+    <button type="submit">ADD POST</button>
+</form>
+{{/if}}
+
+
+<p id="error">{{error}}</p>
+
+
+<a href="/user/posts">GO BACK TO POSTS PAGE</a>
+
+<script src="/public/js/user/validatePostCreation.js"> </script>

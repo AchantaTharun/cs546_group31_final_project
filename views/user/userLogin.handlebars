@@ -1,0 +1,34 @@
+<div class="container" id="Login">
+
+    <h1>Login 🏋️
+    </h1>
+    {{#if hasErrors}}
+        <div class='error-message danger'>
+            <ul>
+                {{#each errors}}
+                    <li>
+                        {{this}}
+                    </li>
+                {{/each}}
+            </ul>
+        </div>
+    {{/if}}
+    <form action="/user/login" id="user-login" method="POST">
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
+
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+
+        <input type="submit" id="submit-btn" value="Login">
+        <div class="d-grid gap-2">
+            <button class="btn btn-primary col " id="loading" type="button" hidden disabled>
+                <span class="spinner-border spinner-border-lg" aria-hidden="true"></span>
+                <span role="status">Loading...</span>
+            </button>
+        </div>
+    </form>
+
+</div>
+<script id="getCoord" src="/public/js/user/getCoord.js"></script>
+<script id="validateLogin" src="/public/js/user/validateLogin.js"></script>

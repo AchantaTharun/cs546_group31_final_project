@@ -1,0 +1,48 @@
+<div class="container">
+  <aside class="left-panel">
+    <h1 class="big-heading">{{title}}</h1>
+    <a href="/api/v1/admin/createEvent">NEW EVENT</a>
+    <a href="/api/v1/admin/changePassword">CHANGE PASSWORD</a>
+    <a href="/api/v1/admin/manage">SYSTEM MANAGEMENT</a>
+    <a href="/api/v1/admin/rejectedRequests">REJECTED REQUESTS</a>
+    <a href="/api/v1/admin/logout">LOGOUT</a>
+  </aside>
+  <div class="content">
+    <h2 class="heading">PENDING SIGN UP REQUESTS</h2>
+    <div class="window">
+      <ol class="list">
+            {{#each data}}
+            <li><a href="/api/v1/admin/signupRequests/{{requestType}}/{{requestedBy}}">
+            <div class="request-info">
+              <div class="tile">
+                <h3>{{requestType}}<h3><h4>ID: {{requestedBy}}</h4>
+              </div>
+            </div>
+            </a></li>
+            {{/each}}
+      </ol>
+    </div>
+    <p class="error">{{error}}</p>
+  </div>
+</div>
+
+
+{{!-- <h1>{{title}}</h1>
+<div class="container">
+  <div class="window">
+    <ol class="list">
+    {{#each data}}
+      <li><a href="/api/v1/admin/signupRequests/{{requestType}}/{{requestedBy}}">{{requestType}}, with the ID {{requestedBy}}</a></li>
+    {{/each}}
+    </ol>
+  </div>
+</div>
+<p class="error">{{error}}</p>
+
+<a href="/api/v1/admin/createEvent">NEW EVENT</a>
+<a href="/api/v1/admin/changePassword">CHANGE PASSWORD</a>
+<a href="/api/v1/admin/manage">SYSTEM MANAGEMENT</a>
+<a href="/api/v1/admin/rejectedRequests">REJECTED REQUESTS</a>
+<a href="/api/v1/admin/logout">LOGOUT</a> --}}
+
+

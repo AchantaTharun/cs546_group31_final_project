@@ -1,0 +1,180 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: rgb(220, 218, 218);
+    display: flex;
+    flex-direction: column;
+  }
+  
+  header {
+    background-color: #333;
+    color: white;
+    padding: 20px;
+  }
+  
+  .container {
+    display: flex;
+    flex: 1;
+  }
+  
+  .left-panel {
+    width: 200px;
+    background-color: #ddd;
+    padding: 10px;
+  }
+  
+  .left-panel a {
+    display: block;
+    margin-bottom: 10px;
+    color: #333;
+    text-decoration: none;
+  }
+
+  .left-panel a:hover {
+    background-color: #f9f9f9;
+  }
+  
+  .content {
+    display: flex;
+    flex-direction: column;    
+  }
+  
+  .window {
+    width: 370px; /* Adjusted width to make it slightly shorter */
+    height: 400px;
+    overflow: auto;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .list {
+    list-style: none;
+    padding: 10px;
+    margin: 0;
+  }
+  
+  .list li {
+    padding: 8px 0;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .list li:last-child {
+    border-bottom: none;
+  }
+  
+  .list li:hover {
+    background-color: #b2b0b0;
+  }
+  
+  .heading {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 20px;
+    width: 450px;
+    padding: 10px;
+    margin-left: 20px;
+    margin-top: 50px;
+  }
+
+  .big-heading {
+    font-size: 28px;
+    padding: 15px;
+    background-color: #b9b4b4;
+    text-align: center;
+  }
+
+  .request-info {
+    display: flex;
+    justify-content: center;
+
+  }
+  
+  .tile {
+    background-color: #f2f2f2;
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid ;
+    width: 85%;
+  }
+  
+  .tile h3,
+  .tile h4{
+    margin: 5px 0;
+    width: 30%;
+  }
+
+  .main-content {
+    margin-left: 240px; /* Adjust this to leave space for the left panel */
+    padding: 20px;
+  }
+  
+  .forms-container {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .forms-container form {
+    width: 50%; /* Two forms side by side */
+    padding: 10px;
+    margin-right: 20px;
+    width: 500px; /* Adjusted width to make it slightly shorter */
+    overflow: auto;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .forms-container form:last-child {
+    margin-right: 0;
+  }
+
+  img{
+    height: 200px;
+    width: 250px;
+  }
+
+  .forms-container {
+    max-width: 500px;
+    margin: 20px;
+}
+
+label {
+
+    margin-bottom: 8px;
+    font-weight: bold;
+    width: 450px;
+}
+
+input[type="file"],
+input[type="text"],
+input[type="number"],
+input[type="datetime-local"],
+input[type="email"],
+input[type="password"] {
+    width: 450px;
+    padding: 8px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
+
+button[type="submit"] {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+button[type="submit"]:hover {
+    background-color: #0056b3;
+}
+
+#error {
+    color: red;
+    font-weight: bold;
+    margin-top: 10px;
+}

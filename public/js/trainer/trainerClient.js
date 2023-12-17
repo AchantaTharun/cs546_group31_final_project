@@ -35,94 +35,26 @@ document.getElementById('createSession').addEventListener('click', () => {
   const sessionSlotsContainer = document.getElementById(
     'sessionSlotsContainer'
   );
-  const sessionSlotGroups =
-    sessionSlotsContainer.getElementsByClassName('sessionSlotGroup');
+  const sessionSlots = Array.from(
+    sessionSlotsContainer.getElementsByClassName('sessionSlotGroup')
+  ).map((group) => {
+    const weekday = group.querySelector('[name="weekdays[]"]').value;
+    const timeSlot = group.querySelector('[name="timeSlots[]"]').value;
+    return { weekday, timeSlot };
+  });
 
-  const errors = validateCreateSessionFields(
-    name,
-    place,
-    capacity,
+  const formData = {
+    sessionName: name,
+    sessionPlace: place,
+    sessionCapacity: capacity,
+    sessionSlots,
     workoutType,
     startDate,
     endDate,
-    sessionSlotGroups
-  );
-  if (errors.length === 0) {
-    const formData = {
-      sessionName: name,
-      sessionPlace: place,
-      sessionCapacity: capacity,
-      sessionSlots: Array.from(sessionSlotGroups).map((group) => {
-        const weekday = group.querySelector('[name="weekdays[]"]').value;
-        const timeSlot = group.querySelector('[name="timeSlots[]"]').value;
-        return { weekday, timeSlot };
-      }),
-      workoutType,
-      startDate,
-      endDate,
-    };
+  };
 
-    createSession(formData);
-  } else {
-    const errorsList = errors.map((error) => `<li>${error}</li>`).join('');
-    createSessionErrorDiv.hidden = false;
-    createSessionErrorDiv.innerHTML = `<p>Please correct the errors:</p><ul>${errorsList}</ul>`;
-  }
+  createSession(formData);
 });
-
-function validateCreateSessionFields(
-  name,
-  place,
-  capacity,
-  workoutType,
-  startDate,
-  endDate,
-  sessionSlotGroups
-) {
-  const errors = [];
-
-  if (!name) {
-    errors.push('Please enter a session name.');
-  }
-
-  if (!place) {
-    errors.push('Please enter the session place/gym.');
-  }
-
-  if (!capacity || isNaN(capacity) || parseInt(capacity) < 1) {
-    errors.push('Please enter a valid session capacity (at least 1).');
-  }
-
-  if (!workoutType) {
-    errors.push('Please enter the type of workout or goal of the session.');
-  }
-
-  if (!startDate) {
-    errors.push('Please enter the start date.');
-  }
-
-  if (!endDate) {
-    errors.push('Please enter the end date.');
-  }
-
-  if (sessionSlotGroups.length === 0) {
-    errors.push('Please enter at least one session slot.');
-  }
-
-  for (const group of sessionSlotGroups) {
-    const weekday = group.querySelector('[name="weekdays[]"]').value.trim();
-    const timeSlot = group.querySelector('[name="timeSlots[]"]').value.trim();
-
-    if (!weekday || !timeSlot) {
-      errors.push(
-        'Please select both weekday and time slot for each session slot.'
-      );
-      break;
-    }
-  }
-
-  return errors;
-}
 
 async function createSession(formData) {
   try {
@@ -130,6 +62,7 @@ async function createSession(formData) {
     const apiUrl = '/session/createsession';
     const response = await apiRequest('post', apiUrl, formData);
 
+    //console.log('Session created successfully!', response);
     window.location.href = '/trainer/sessions';
   } catch (error) {
     console.error('Error creating session:', error);
@@ -257,6 +190,7 @@ async function endSession(sessionId, sessionType, registeredUsersCount) {
     const apiUrl = `/session/toggle/${sessionId}`;
     const response = await apiRequest('post', apiUrl);
 
+    //console.log(`Session ${sessionId} ended successfully!`, response);
     window.location.href = '/trainer/sessions';
   } catch (error) {
     console.error(`Error toggling session ${sessionId}:`, error);

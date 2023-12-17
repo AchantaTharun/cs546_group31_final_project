@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import validator from "validator";
 import bcrypt from "bcryptjs";
+import * as help from "../Helpers.js";
 
 const gymSchema = new mongoose.Schema({
   gymName: {
@@ -86,7 +87,7 @@ const gymSchema = new mongoose.Schema({
   status: {
     type: String,
     enum: ["pending", "approved", "rejected"],
-    default: "pending",
+    default: "approved",
   },
   passwordChangedAt: {
     type: Date,
@@ -130,6 +131,67 @@ const gymSchema = new mongoose.Schema({
   ratingAvg: {
     type: Number,
     default: 0,
+  },
+  members: [
+    {
+      type: mongoose.Schema.ObjectId,
+      ref: "User",
+      membership: {
+        startDate: {
+          type: Date,
+        },
+        endDate: {
+          type: Date,
+        },
+      },
+    },
+  ],
+  following: {
+    users: [
+      {
+        type: mongoose.Schema.ObjectId,
+        ref: "User",
+      },
+    ],
+    gyms: [
+      {
+        type: mongoose.Schema.ObjectId,
+        ref: "Gym",
+      },
+    ],
+    trainers: [
+      {
+        type: mongoose.Schema.ObjectId,
+        ref: "Trainer",
+      },
+    ],
+  },
+  followers: {
+    users: [
+      {
+        type: mongoose.Schema.ObjectId,
+        ref: "User",
+      },
+    ],
+    gyms: [
+      {
+        type: mongoose.Schema.ObjectId,
+        ref: "Gym",
+      },
+    ],
+    trainers: [
+      {
+        type: mongoose.Schema.ObjectId,
+        ref: "Trainer",
+      },
+    ],
+  },
+  location: {
+    type: {
+      type: String,
+      default: "Point",
+    },
+    coordinates: { type: [Number], index: "2dsphere" },
   },
 });
 

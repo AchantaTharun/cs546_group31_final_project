@@ -1,0 +1,33 @@
+<form action="/api/v1/admin/manage" method="POST" id="manage-submit" novalidate>
+    <label for= "type">
+        SELECT ENTITY TYPE :
+        <select id="type" name="type">
+            <option value="gym">GYM</option>
+            <option value="trainer">TRAINER</option>
+            <option value="user">USER</option>
+            <option value="post">POST</option>
+            <option value="event">EVENT</option>
+        </select>
+    </label>
+    <br>
+    <label for="name">
+        LAST NAME(in case of Users and Trainers) / TITLE :                                                 
+        <input type="text" name="name" id="name">
+    </label>
+    <br>
+    <button type="submit">SEARCH</button>
+</form>
+
+{{#if hasData}}
+<div>
+    <ol>
+    {{#each data}}
+      <li><a href="/api/v1/admin/manage/{{Type}}/{{ID}}">{{Name}}, with the ID {{ID}}</a></li>
+    {{/each}}
+    </ol>
+</div>
+{{/if}}
+
+<p class="error">{{error}}</p>
+
+<a href="/api/v1/admin/homepage">BACK TO HOMEPAGE</a>
