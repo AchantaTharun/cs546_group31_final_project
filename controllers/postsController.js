@@ -24,19 +24,21 @@ export const getAllPosts = async (req, res) => {
   }
 };
 
-
 export const getPostByEntity = async (req, res) => {
   let user = undefined;
-    if (req.user) {
-          user = req.user;;
-      } else if(req.trainer){
-          user = req.trainer;
-      }else{
-          user = req.gym;
-      }  
+  if (req.user) {
+    user = req.user;
+  } else if (req.trainer) {
+    user = req.trainer;
+  } else {
+    user = req.gym;
+  }
   // console.log("This is the body",req.body);
   try {
-    const posts = await Post.find({makerId:user._id,makerType:getEntity(user)});
+    const posts = await Post.find({
+      makerId: user._id,
+      makerType: getEntity(user),
+    });
     if (!posts) {
       return res.status(404).json({
         status: "fail",
@@ -59,14 +61,12 @@ export const getPostByEntity = async (req, res) => {
   }
 };
 
-
 export const createPost = async (req, res) => {
   //console.log("first");
   try {
     const { title, description, img } = req.body;
 
-    if(!title || !description || !img )
-    {
+    if (!title || !description || !img) {
       return res.status(400).json({
         status: "fail",
         message: "Input parameters are missing",
@@ -77,25 +77,25 @@ export const createPost = async (req, res) => {
     let makerType = undefined;
     let makerId = undefined;
     if (req.user) {
-        user = req.user;
-        makerType = 'user';
-        makerId = user._id;
-    } else if(req.trainer){
-        user = req.trainer;
-        makerType = 'trainer';
-        makerId = user._id;
-    }else{
-        user = req.gym;
-        makerType = 'gym';
-        makerId = user._id;
-    }  
+      user = req.user;
+      makerType = "user";
+      makerId = user._id;
+    } else if (req.trainer) {
+      user = req.trainer;
+      makerType = "trainer";
+      makerId = user._id;
+    } else {
+      user = req.gym;
+      makerType = "gym";
+      makerId = user._id;
+    }
     const newPost = new Post({ title, description, img, makerId, makerType });
     const validationErrors = newPost.validateSync();
     if (validationErrors) {
       const errors = Object.values(validationErrors.errors).map(
         (error) => error.message
       );
-      return res.status(400).json({ status: 'fail', errors });
+      return res.status(400).json({ status: "fail", errors });
     }
     const savedPost = await newPost.save();
     return res.status(201).json({
@@ -147,8 +147,7 @@ export const updatePost = async (req, res) => {
 
     //MakerId and MakerType cannot be changed
     const { title, description } = req.body;
-    if(post.title===title && post.description===description)
-    {
+    if (post.title === title && post.description === description) {
       return res.status(400).json({
         status: "fail",
         message: "Nothing was updated",
@@ -197,8 +196,7 @@ export const deletePost = async (req, res) => {
 
 export const addComment = async (req, res) => {
   const { comment } = req.body;
-  if(!comment)
-  {
+  if (!comment) {
     return res.status(400).json({
       status: "fail",
       message: "No comment was given to AXIOS",
@@ -208,18 +206,18 @@ export const addComment = async (req, res) => {
   let makerType = undefined;
   let makerId = undefined;
   if (req.user) {
-      user = req.user;
-      makerType = 'user';
-      makerId = user._id;
-  } else if(req.trainer){
-      user = req.trainer;
-      makerType = 'trainer';
-      makerId = user._id;
-  }else{
-      user = req.gym;
-      makerType = 'gym';
-      makerId = user._id;
-  }  
+    user = req.user;
+    makerType = "user";
+    makerId = user._id;
+  } else if (req.trainer) {
+    user = req.trainer;
+    makerType = "trainer";
+    makerId = user._id;
+  } else {
+    user = req.gym;
+    makerType = "gym";
+    makerId = user._id;
+  }
   // console.log("This is the user",user);
   try {
     const post = await Post.findById(req.params.id);

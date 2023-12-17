@@ -653,7 +653,13 @@ select.form-control:not([size]):not([multiple]) {
     color: #ff5b57 !important;
 }
 
-img{
+/* img{
     height: 200px;
     width: 250px;
-  }
+  } */
+
+
+.profile-content {
+    margin-top: 20px;
+    display: flex;
+}

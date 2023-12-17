@@ -1,4 +1,4 @@
-import MealPlan from '../models/mealPlanModel.js';
+import MealPlan from "../models/mealPlanModel.js";
 
 export const createMealPlan = async (req, res) => {
   try {
@@ -11,6 +11,10 @@ export const createMealPlan = async (req, res) => {
       assignedBy,
       meals,
     });
+
+    const trainer = req.trainer;
+    trainer.mealPlans.push(newMealPlan._id);
+    await trainer.save();
 
     res.status(201).json(newMealPlan);
   } catch (error) {
@@ -30,6 +34,6 @@ export const assignMealPlan = async (req, res) => {
 
     res.json(updatedMealPlan);
   } catch (error) {
-    res.status(500).json({ error: 'Internal Server Error' });
+    res.status(500).json({ error: "Internal Server Error" });
   }
 };

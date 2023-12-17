@@ -49,7 +49,26 @@ document.addEventListener("DOMContentLoaded", function () {
     btn.toggleAttribute("hidden");
     const submitBtn = document.getElementById("submit-btn");
     submitBtn.toggleAttribute("hidden");
+    getLocation()
+      .then((location) => {
+        const hiddenLat = document.createElement("input");
+        hiddenLat.setAttribute("type", "hidden");
+        hiddenLat.setAttribute("name", "latitude");
+        hiddenLat.setAttribute("value", location.lat);
+        form.appendChild(hiddenLat);
 
+        const hiddenLng = document.createElement("input");
+        hiddenLng.setAttribute("type", "hidden");
+        hiddenLng.setAttribute("name", "longitude");
+        hiddenLng.setAttribute("value", location.lng);
+        form.appendChild(hiddenLng);
+        form.submit();
+      })
+      .catch((error) => {
+        btn.toggleAttribute("hidden");
+        submitBtn.toggleAttribute("hidden");
+        alert("Error getting location,cannot submit form");
+      });
     setLocation()
       .then((location) => {
         form.submit();
