@@ -38,11 +38,84 @@ export const renderTrainerMealPlans = async (req, res) => {
     const mealplans = await MealPlan.find({
       _id: { $in: mealPlanIds },
     }).lean();
+
+    for (const meal of mealplans) {
+      const user = await User.findOne({
+        _id: meal.assignedTo.toString(),
+      }).lean();
+      if (user) meal.assignedTo = user.userName;
+    }
     const activeSessions = await Session.find({
       _id: { $in: sessionIds },
       isActive: true,
     }).lean();
     res.render("trainer/trainerMealPlans", {
+      trainer: trainer.toObject(),
+      trainerId: trainer._id.toString(),
+      mealplans,
+      activeSessions,
+      type: "trainer",
+      layout: "trainerHome",
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+export const renderTrainerMealPlansCreate = async (req, res) => {
+  try {
+    const trainer = req.trainer;
+    const sessionIds = trainer.sessions;
+    const mealPlanIds = trainer.mealPlans;
+    const mealplans = await MealPlan.find({
+      _id: { $in: mealPlanIds },
+    }).lean();
+
+    for (const meal of mealplans) {
+      const user = await User.findOne({
+        _id: meal.assignedTo.toString(),
+      }).lean();
+      if (user) meal.assignedTo = user.userName;
+    }
+    const activeSessions = await Session.find({
+      _id: { $in: sessionIds },
+      isActive: true,
+    }).lean();
+    res.render("trainer/createMealPlan", {
+      trainer: trainer.toObject(),
+      trainerId: trainer._id.toString(),
+      mealplans,
+      activeSessions,
+      type: "trainer",
+      layout: "trainerHome",
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+export const renderTrainerMealPlansEdit = async (req, res) => {
+  try {
+    const trainer = req.trainer;
+    const sessionIds = trainer.sessions;
+    const mealPlanIds = trainer.mealPlans;
+    const mealplans = await MealPlan.find({
+      _id: { $in: mealPlanIds },
+    }).lean();
+
+    for (const meal of mealplans) {
+      const user = await User.findOne({
+        _id: meal.assignedTo.toString(),
+      }).lean();
+      if (user) meal.assignedTo = user.userName;
+    }
+    const activeSessions = await Session.find({
+      _id: { $in: sessionIds },
+      isActive: true,
+    }).lean();
+    res.render("trainer/createMealPlan", {
       trainer: trainer.toObject(),
       trainerId: trainer._id.toString(),
       mealplans,
@@ -89,6 +162,7 @@ export const renderTrainerDashboard = async (req, res) => {
         activeSessionsCount: activeSessions.length,
         totalRegisteredUsersCount,
         totalMealPlans: mealPlans.length,
+        totalFollowers: 0,
       },
       sessionsByWeekdayAndSlot,
       weekdays,
@@ -111,12 +185,17 @@ export const renderTrainerSessionUsers = async (req, res) => {
     if (!session) {
       return res.status(404).json({ errors: ["Session not found"] });
     }
+    const weekdays = session.sessionSlots.map((slot) => slot.weekday);
+
     const userIds = session.registeredUsers.map((user) => user.userId);
     const users = await User.find({ _id: { $in: userIds } }).lean();
     res.render("trainer/trainerSessionUsers", {
-      trainerName: trainer.trainerName,
+      trainer: trainer.toObject(),
       trainerId: trainer._id.toString(),
-      sessionName: session.name,
+      session,
+      startDate: session.startDate.toLocaleDateString(),
+      endDate: session.endDate.toLocaleDateString(),
+      weekdays,
       users,
       type: "trainer",
       layout: "trainerHome",

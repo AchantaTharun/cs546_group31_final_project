@@ -1,0 +1,48 @@
+<link rel="stylesheet" href="/public/css/trainerMealPlans.css" />
+
+<div class="container">
+  <br />
+  <div class="text-center mb-5">
+    <a href="/trainer/mealplans/create" class="btn btn-primary">Create New Meal
+      Plan</a>
+
+  </div>
+  <div class="text-center mb-5">
+
+    <h3>Existing Meal Plans</h3>
+
+  </div>
+
+  {{#each mealplans}}
+    <div class="card mb-3">
+      <div class="card-body">
+        <div class="d-flex flex-column flex-lg-row">
+          <span class="avatar avatar-text rounded-3 me-4 mb-2"><i
+              class="icon-food icon-2x"
+            ></i></span>
+          <div class="row flex-fill">
+            <div class="col-sm-5">
+              <h4 class="h5">{{this.title}}</h4>
+              <small>{{this.description}}</small><br />
+              <div>
+                <medium>Assigned To: {{this.assignedTo}}</medium></div>
+            </div>
+            <div class="col-sm-4 py-2">
+              {{#each this.meals}}
+                <span class="badge bg-secondary">{{this.name}}</span>
+                <br />
+                <small>{{this.description}}</small><br />
+              {{/each}}
+            </div>
+            <div class="col-sm-3 text-lg-end">
+              <a href="#" class="btn btn-primary stretched-link">Edit</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  {{/each}}
+
+</div>
+
+<script src="/public/js/trainer/trainerCreateMealPlan.js"></script>
