@@ -673,6 +673,8 @@ router
   .post(restrict,upload.single('imageInput'),async(req,res)=>{
     //Initially img value is going to be empty.
     //Therefore we need to fill it first, before we start with the validation part
+    let img=undefined;
+    try{
     const url = await generateUploadURL();
     await fetch(url,{
               method:"PUT",
@@ -681,7 +683,12 @@ router
               },
               body: req.file.buffer
             });
-    let img = url.split('?')[0];
+    img = url.split('?')[0];
+    }catch(e)
+    {
+      return res.status(400).render('admin/createEvent',{title:"CREATE EVENT",error:"Image Upload Error"});
+    }
+
     let {title,description,contactEmail,streetAddress,city,state,zipCode,maxCapacity,priceOfAdmission,eventDate,startTime,endTime,totalNumberOfAttendees}= req.body;
     try
     {
@@ -744,7 +751,7 @@ router
       adminEvent = await adminController.createEvent(img,title,description,contactEmail,streetAddress,city,state,zipCode,maxCapacity,priceOfAdmission,eventDate,startTime,endTime,totalNumberOfAttendees);
     }catch(e)
     {
-      return res.status(400).render('admin/createEvent',{title:"CREATE EVENT",error:"Event Creation Couldn't be completed"});
+      return res.status(400).render('admin/createEvent',{title:"CREATE EVENT",error:"The Event Couldn't be created"});
     }
     if(!adminEvent)
     {
