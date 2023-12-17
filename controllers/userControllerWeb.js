@@ -326,15 +326,22 @@ export const getTrainerProfilePage = async (req, res) => {
       });
     }
     const userName = req.params.userName;
-    const trainer = await Trainer.findOne({ trainerName: userName }).lean();
+    let trainer = await Trainer.findOne({ trainerName: userName })
+      .populate("sessions")
+      .lean();
     if (!trainer) {
       return res.status(404).json({
         status: "fail",
         message: "No trainer found with that ID",
       });
     }
+    trainer.followers.users.forEach((follower) => {
+      if (follower.toString() === req.user._id.toString()) {
+        trainer["isFollowing"] = true;
+      }
+    });
     return res.render("user/trainerProfile", {
-      layout: "userProfile.layout.handlebars",
+      layout: "profilePage.layout.handlebars",
       trainer,
     });
   } catch (err) {
@@ -465,5 +472,39 @@ export const unFollowUser = async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const getTrainerFollowersPage = async (req, res) => {
+  try {
+    const user = req.user;
+    const trainerName = req.params.trainerName;
+    console.log(trainerName);
+    const trainer = await Trainer.findOne({ trainerName: trainerName })
+      .populate("followers.users")
+      .populate("followers.gyms")
+      .populate("followers.trainers")
+      .lean();
+    if (!trainer) {
+      return res.status(404).json({
+        status: "fail",
+        message: "No trainer found with that ID",
+      });
+    }
+    let followers = trainer.followers;
+    let followingUsers = followers.users;
+    let followingGyms = followers.gyms;
+    let followingTrainers = followers.trainers;
+    console.log(followers.users);
+    return res.render("user/trainerProfile", {
+      layout: "profilePage.layout.handlebars",
+      hasFollowers: true,
+      followingUsers,
+      followingGyms,
+      followingTrainers,
+      trainer,
+    });
+  } catch (err) {
+    console.log(err.message);
   }
 };

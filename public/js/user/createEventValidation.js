@@ -1,22 +1,13 @@
-let checkString = (i) => 
+
+
+let checkString = (i, val) => 
 {
-    if(typeof i !=='string') throw "Input is not of the string data type";
+    if(typeof i !=='string') throw `${val} input is not of the string data type`;
     i = i.trim();
     if(i==="") throw "Empty Strings are not considered to be valid Input";
     return i;
 }
 
-let dateCheck = (dateString) => {
-    if(typeof dateString !=='string') return false;
-    const parsedDate = new Date(dateString);
-    return !isNaN(parsedDate) && dateString.trim().length > 0;
-}
-
-let isEarlierInSameDay = (date1, date2) => {
-    return date1.getFullYear() === date2.getFullYear() &&
-    date1.getMonth() === date2.getMonth() &&
-    date1.getDate() === date2.getDate();
-}
 
 let checkState = (state) =>{
     if(typeof state !=='string') throw "State parameter is not of string datatype";
@@ -41,13 +32,14 @@ let validate = (email) => {
     return (result!==null);
 }
 
+let errorDiv = document.getElementById("event-errors");
 const eventForm = document.getElementById("create-event");
 if(eventForm){
         eventForm.addEventListener('submit', (event) => {
         event.preventDefault();
         let title = document.getElementById('title');
         title = title.value;
-        let imageInput = document.getElementById('imageInput');
+        // let imageInput = document.getElementById('imageInput');
         let description = document.getElementById('description');
         description = description.value;
         let contactEmail = document.getElementById('contactEmail');
@@ -68,11 +60,14 @@ if(eventForm){
         eventDate = eventDate.value;
         let startTime = document.getElementById('startTime');
         startTime = startTime.value;
-        let totalNumberOfAttendees = document.getElementById('totalNumberOfAttendees');
-        totalNumberOfAttendees = totalNumberOfAttendees.value;
         let endTime = document.getElementById('endTime');
         endTime = endTime.value;
-        let error = document.getElementById('error');
+
+        eventDate = new Date(`${eventDate}T${startTime}`);
+        startTime = new Date(`${eventDate}T${startTime}`);
+        endTime = new Date(`${eventDate}T${endTime}`);
+
+        
         let missingFields = "";
     
         if(!title)
@@ -81,10 +76,7 @@ if(eventForm){
             missingFields+=" |TITLE| ";
             
         }
-        if(imageInput.files.length <= 0)
-        {
-            missingFields+=" |IMAGE FILE| ";
-        }
+        
         if(!description)
         {
 
@@ -96,6 +88,11 @@ if(eventForm){
  
             missingFields+=" |contactEmail| ";
             
+        }
+         
+        if(!streetAddress)
+        {
+            missingFields+=" |street address| ";
         }
         if(!city)
         {
@@ -141,54 +138,47 @@ if(eventForm){
         }
         if(missingFields!=="")
         {
-            error.innerHTML = `These fileds are missing : ${missingFields}`;
+            errorDiv.hidden = false;
+            errorDiv.innerHTML = `These fileds are missing : ${missingFields}`;
             return false;
         }
 
+        let errors = [];
         try
         {
-            title = checkString(title);
-            description = checkString(description);
-            if(typeof contactEmail !=='string') throw "Email has to be a string";
+            title = checkString(title,"Title");
+            description = checkString(description, "Description");
+            if(typeof contactEmail !=='string') errors.push( "Email has to be a string");
             contactEmail = contactEmail.trim();
-            if(!validate(contactEmail)) throw "The Email provided is not valid";
-            streetAddress = checkString(streetAddress);
-            city = checkString(city);
+            if(!validate(contactEmail)) errors.push( "The Email provided is not valid");
+            streetAddress = checkString(streetAddress, "Street Address");
+            city = checkString(city, "City");
             state = checkState(state);  //Remember that you still have to add these two functions.
             zipCode = checkZip(zipCode);
 
-            if((parseInt(maxCapacity)-parseFloat(maxCapacity))!==0) throw "Max Capcity invalid";
+            if((parseInt(maxCapacity)-parseFloat(maxCapacity))!==0) errors.push( "Max Capcity invalid");
             maxCapacity = parseInt(maxCapacity);
-            if(isNaN(priceOfAdmission)) throw "Price is Invalid";
+            if(isNaN(priceOfAdmission)) errors.push( "Price is Invalid");
             priceOfAdmission = parseFloat(priceOfAdmission);
-            if(typeof maxCapacity!=='number' || maxCapacity<=0 || !Number.isInteger(maxCapacity)) throw "Max capacity value is invalid";
-            if(typeof priceOfAdmission!=='number' || priceOfAdmission < 0) throw "Price of Admission has an invalid value";
-            // if(!help.isDate(eventDate)) throw "THe event date value is not proper";
+            if(typeof maxCapacity!=='number' || maxCapacity<=0 || !Number.isInteger(maxCapacity)) errors.push( "Max capacity value is invalid");
+            if(typeof priceOfAdmission!=='number' || priceOfAdmission < 0) errors.push( "Price of Admission has an invalid value");
 
-            eventDate = checkString(eventDate);
-            if(!dateCheck(eventDate)) throw "Event Date couldn't be parsed";
-
-            startTime = checkString(startTime);
-
-            if(!dateCheck(startTime)) throw "Start time couldn't be parsed";
-            endTime = checkString(endTime);
-
-            if(!dateCheck(endTime)) throw "End time couldn't be parsed";
-            
-            if(!isEarlierInSameDay(new Date(startTime),new Date(endTime))) throw "Start time and End time should be on the same day";
-            if(!isEarlierInSameDay(new Date(startTime),new Date(eventDate))) throw "Event Date and Start time should be on the same day";
-            if((new Date()) > (new Date(eventDate))) throw "You cannot have an event date and time in the past";
-            if((new Date(eventDate)) > (new Date(startTime))) throw "You cannot have an event Start date and time in the past";
-            if((new Date(startTime)) >= (new Date(endTime))) throw "You cannot have an event date and time in the past";
         
-            if(parseInt(totalNumberOfAttendees) > parseInt(maxCapacity)) throw "Number of attendees are invalid";
-
+            if(errors.length > 0)
+ {
+  const errorsList = errors
+      .map((error) => `<li>${error}</li>`)
+      .join('');
+    errorDiv.hidden = false;
+    errorDiv.innerHTML = `<p>Please correct the errors:</p><ul>${errorsList}</ul>`;
+ }
         }catch(e)
-        {
-            error.innerHTML = e;
+        {   
+          errorDiv.hidden = false;
+            errorDiv.innerHTML = e;
             return false;
         }
-        postForm.submit();
+        eventForm.submit();
         return true;
     });
 }

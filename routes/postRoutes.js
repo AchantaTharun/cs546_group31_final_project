@@ -19,10 +19,10 @@ router
 
 router
   .route("/:id/comments")
-  .post(authController.protectRoute, postsController.addComment)
+  .post(authController.protectRoute, postsController.addComment);
 
 router
   .route("/get/myPosts")
-  .get(authController.protectRoute,postsController.getPostByEntity)
+  .get(authController.protectRoute, postsController.getPostByEntity);
 
 export default router;

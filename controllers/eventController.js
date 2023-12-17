@@ -37,14 +37,24 @@ export const createEvent = async (req, res) => {
       maxCapacity,
       priceOfAdmission,
       comments,
-      user,
       eventDate,
       startTime,
       endTime,
       publicEvent,
       attendees,
-      totalNumberOfAttendees,
+      loggedInUserId
     } = req.body;
+
+
+    console.log("logged in useer id: ",loggedInUserId)
+    if(!loggedInUserId) return res.status(400).json({ status: "fail", errors: ["Invalid User"] });
+
+    const totalNumberOfAttendees = 0;
+    
+    const finalEventDate = new Date(`${eventDate}T${startTime}`);
+    const finalStartTime = new Date(`${eventDate}T${startTime}`);
+    const finalEndTime = new Date(`${eventDate}T${endTime}`);
+
 
     const newEvent = new Event({
       img,
@@ -55,10 +65,10 @@ export const createEvent = async (req, res) => {
       maxCapacity,
       priceOfAdmission,
       comments,
-      user,
-      eventDate,
-      startTime,
-      endTime,
+      user: {userId:loggedInUserId},
+      eventDate: finalEventDate,
+      startTime: finalStartTime,
+      endTime: finalEndTime,
       publicEvent,
       attendees,
       totalNumberOfAttendees,
@@ -122,13 +132,14 @@ export const updateEvent = async (req, res) => {
       eventLocation,
       maxCapacity,
       priceOfAdmission,
-      comments,
-      user,
       eventDate,
       startTime,
       endTime,
-      totalNumberOfAttendees,
     } = req.body;
+
+    const finalEventDate = new Date(`${eventDate}T${startTime}`);
+    const finalStartTime = new Date(`${eventDate}T${startTime}`);
+    const finalEndTime = new Date(`${eventDate}T${endTime}`);
 
     if (!mongoose.Types.ObjectId.isValid(eventId)) {
       return res
@@ -151,12 +162,9 @@ export const updateEvent = async (req, res) => {
     event.eventLocation = eventLocation;
     event.maxCapacity = maxCapacity;
     event.priceOfAdmission = priceOfAdmission;
-    event.comments = comments;
-    event.user = user;
-    event.eventDate = eventDate;
-    event.startTime = startTime;
-    event.endTime = endTime;
-    event.totalNumberOfAttendees = totalNumberOfAttendees;
+    event.eventDate = finalEventDate;
+    event.startTime = finalStartTime;
+    event.endTime = finalEndTime;
 
     const validationErrors = event.validateSync();
     if (validationErrors) {
@@ -203,132 +211,12 @@ export const deleteEvent = async (req, res) => {
   }
 };
 
-export const addComment = async (req, res) => {
-  const { comment } = req.body;
-  const user = req.user;
-
-  try {
-    const event = await Event.findById(req.params.eventId);
-    if (!event) {
-      return res.status(404).json({
-        status: "fail",
-        errors: ["No event found with that ID"],
-      });
-    }
-
-    event.comments.push({
-      userId: user._id,
-      comment: comment,
-      createdAt: new Date(),
-    });
-
-    const validationErrors = event.validateSync();
-    if (validationErrors) {
-      const errors = Object.values(validationErrors.errors).map(
-        (error) => error.message
-      );
-      return res.status(400).json({ status: "fail", errors });
-    }
-
-    const updatedEvent = await event.save();
-
-    return res.status(200).json({
-      status: "success",
-      data: {
-        event: updatedEvent,
-      },
-    });
-  } catch (e) {
-    return res.status(500).json({
-      status: "fail",
-      errors: [e.message],
-    });
-  }
-};
-
-export const deleteComment = async (req, res) => {
-  try {
-    const eventId = req.params.eventId;
-    const commentId = req.params.commentId;
-
-    const event = await Event.findById(eventId);
-    if (!event) {
-      return res.status(404).json({
-        status: "fail",
-        errors: ["No event found with that ID"],
-      });
-    }
-
-    event.comments = event.comments.filter(
-      (comment) => comment._id.toString() !== commentId
-    );
-    await event.save();
-
-    return res.status(200).json({
-      status: "success",
-      message: "Comment deleted successfully",
-    });
-  } catch (e) {
-    return res.status(500).json({
-      status: "fail",
-      errors: [e.message],
-    });
-  }
-};
-
-export const updateComment = async (req, res) => {
-  try {
-    const eventId = req.params.eventId;
-    const commentId = req.params.commentId;
-    const { newComment } = req.body;
-
-    const event = await Event.findById(eventId);
-    if (!event) {
-      return res.status(404).json({
-        status: "fail",
-        errors: ["No event found with that ID"],
-      });
-    }
-
-    const commentIndex = event.comments.findIndex(
-      (comment) => comment._id.toString() === commentId
-    );
-    if (commentIndex === -1) {
-      return res.status(404).json({
-        status: "fail",
-        errors: ["No comment found with that ID"],
-      });
-    }
-
-    event.comments[commentIndex].comment = newComment;
-    event.comments[commentIndex].updatedAt = new Date();
-
-    const validationErrors = event.validateSync();
-    if (validationErrors) {
-      const errors = Object.values(validationErrors.errors).map(
-        (error) => error.message
-      );
-      return res.status(400).json({ status: "fail", errors });
-    }
-    await event.save();
-
-    return res.status(200).json({
-      status: "success",
-      message: "Comment updated successfully",
-    });
-  } catch (e) {
-    return res.status(500).json({
-      status: "fail",
-      errors: [e.message],
-    });
-  }
-};
-
 export const addAttendee = async (req, res) => {
   try {
     const eventId = req.params.eventId;
-    const loggedInUserId = req.user.id;
-    const event = await Event.findById(eventId);
+    const loggedInUserId = req.params.attendeeId;
+    
+    let event = await Event.findById(eventId);
 
     if (!event) {
       return res
@@ -343,10 +231,17 @@ export const addAttendee = async (req, res) => {
       });
     }
 
-    event.attendees.push(loggedInUserId);
-    const updatedEvent = await event.save();
-
-    res.status(200).json({ status: "success", data: { event: updatedEvent } });
+    if (event.totalNumberOfAttendees < event.maxCapacity) {
+      event.attendees.push(loggedInUserId);
+      event.totalNumberOfAttendees = event.totalNumberOfAttendees + 1;
+      const updatedEvent = await event.save();
+      res.status(200).json({ status: "success", data: { event: updatedEvent } });
+    }else{  
+      return res.status(400).json({
+        status: "fail",
+        errors: ["Max capacity reached for the event"],
+      });
+    }
   } catch (e) {
     res.status(500).json({ status: "fail", errors: [e.message] });
   }
@@ -374,7 +269,7 @@ export const removeAttendee = async (req, res) => {
     event.attendees = event.attendees.filter(
       (id) => id.toString() !== attendeeId
     );
-
+    event.totalNumberOfAttendees = event.totalNumberOfAttendees - 1;
     const updatedEvent = await event.save();
     res.status(200).json({ status: "success", data: { event: updatedEvent } });
   } catch (e) {
