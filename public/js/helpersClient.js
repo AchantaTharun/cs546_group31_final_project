@@ -35,3 +35,7 @@ function isValidPhone(phone) {
     /^\+?\d{1,4}[-.\s]?\(?\d{1,}\)?[-.\s]?\d{1,}[-.\s]?\d{1,}[-.\s]?\d{1,}$/;
   return phoneRegex.test(phone);
 }
+
+function closeAlert() {
+  document.getElementByID("errrDiivv").style.display = "none";
+}

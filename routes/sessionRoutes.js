@@ -69,4 +69,11 @@ router.get(
   sessionController.getSessionUsers
 );
 
+router.post(
+  "/sessions/:sessionId/rate",
+  authController.protectRoute,
+  authController.restrictTo("user"),
+  sessionController.rateSession
+);
+
 export default router;

@@ -349,6 +349,7 @@ export const trainerSignup = async (req, res) => {
     const {
       firstName,
       lastName,
+      trainerName,
       email,
       password,
       passwordConfirm,
@@ -362,7 +363,7 @@ export const trainerSignup = async (req, res) => {
     const newTrainer = new Trainer({
       firstName,
       lastName,
-      trainerName: firstName + " " + lastName,
+      trainerName,
       email,
       password,
       passwordConfirm,
@@ -374,6 +375,18 @@ export const trainerSignup = async (req, res) => {
       },
       phone,
     });
+
+    const existingTrainer = await Trainer.findOne({
+      trainerName: `${trainerName}`,
+    });
+    if (existingTrainer) {
+      return res.render("trainer/trainerSignUp", {
+        errors: ["Username already taken"],
+        hasErrors: true,
+        formData: req.body,
+      });
+    }
+
     if (password !== passwordConfirm) {
       return res.render("trainer/trainerSignUp", {
         errors: ["Password and passwordConfirm should match"],

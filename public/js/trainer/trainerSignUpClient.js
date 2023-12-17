@@ -6,6 +6,7 @@
       var forms = document.getElementsByClassName("needs-validation");
       var firstNameInput = document.getElementById("firstName");
       var lastNameInput = document.getElementById("lastName");
+      var trainerNameInput = document.getElementById("trainerName");
       var emailInput = document.getElementById("email");
       var passwordInput = document.getElementById("password");
       var passwordConfirmInput = document.getElementById("passwordConfirm");
@@ -44,6 +45,17 @@
               lastNameInput.classList.add("is-invalid");
             } else {
               lastNameInput.classList.remove("is-invalid");
+            }
+
+            if (
+              trainerNameInput.checkValidity() === false ||
+              trainerNameInput.value.trim() === "" ||
+              trainerNameInput.value.trim().length < 3 ||
+              trainerNameInput.value.trim().length > 50
+            ) {
+              trainerNameInput.classList.add("is-invalid");
+            } else {
+              trainerNameInput.classList.remove("is-invalid");
             }
 
             if (

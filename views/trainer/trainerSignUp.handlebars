@@ -30,6 +30,12 @@
       </div>
 
       <div class="col-md-4">
+        <label for="trainerName">User Name:</label>
+        <input type="text" class="form-control" id="trainerName" name="trainerName" value="{{#if hasErrors}}{{formData.trainerName}}{{/if}}" required>
+        <div class="invalid-feedback">User Name must be between 3 to 50 characters long.</div>
+      </div>
+
+      <div class="col-md-4">
         <label for="email">Email:</label>
         <input type="email" class="form-control" id="email" name="email" value="{{#if hasErrors}}{{formData.email}}{{/if}}" required>
         <div class="invalid-feedback">Please enter valid email</div>
@@ -106,4 +112,5 @@
   </form>
 </div>
 
+<script id="getCoord" src="/public/js/user/getCoord.js"></script>
  <script src="/public/js/trainer/trainerSignUpClient.js"></script>

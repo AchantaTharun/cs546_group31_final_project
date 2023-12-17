@@ -1,19 +1,26 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 const mealPlanSchema = new mongoose.Schema({
   title: {
     type: String,
     required: true,
+    minLength: [2, "Title must be at least 3 characters long"],
+    maxLength: [50, "Title Name must be less than 50 characters long"],
   },
   description: String,
   assignedTo: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
+    ref: "User",
     required: true,
   },
   assignedBy: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Trainer',
+    ref: "Trainer",
+    required: true,
+  },
+  session: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Session",
     required: true,
   },
   meals: [
@@ -24,6 +31,6 @@ const mealPlanSchema = new mongoose.Schema({
   ],
 });
 
-const MealPlan = mongoose.model('MealPlan', mealPlanSchema);
+const MealPlan = mongoose.model("MealPlan", mealPlanSchema);
 
 export default MealPlan;

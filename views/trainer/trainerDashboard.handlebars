@@ -46,6 +46,14 @@
   </div> 
 </div>  
 
+{{#if errors}}<div class="alert alert-danger mt-3">
+      <ul>
+        {{#each errors}}
+          <li>{{this}}</li>
+        {{/each}}
+      </ul>
+    </div>
+  {{else}}
 
 <div>
   <div>
@@ -87,3 +95,4 @@
     </div>
   </div>
 </div>
+{{/if}}

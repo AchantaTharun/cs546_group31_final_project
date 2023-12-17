@@ -17,9 +17,11 @@ router.get("/login", async (req, res) => {
   return res.render("trainer/trainerLogin", { layout: "main" });
 });
 
-router.get("/profile", async (req, res) => {
-  return res.render("trainer/trainerProfile", { layout: "trainerHome" });
-});
+router.get(
+  "/profile",
+  authController.protectRoute,
+  trainerController.renderTrainerProfile
+);
 
 router.get(
   "/mealplans",
@@ -34,9 +36,9 @@ router.get(
 );
 
 router.get(
-  "/mealplans/edit",
+  "/mealplans/delete/:mealplanId",
   authController.protectRoute,
-  trainerController.renderTrainerMealPlansEdit
+  trainerController.renderTrainerMealPlanDelete
 );
 
 router.post("/login", authController.trainerLogin);
