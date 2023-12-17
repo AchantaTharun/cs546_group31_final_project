@@ -107,4 +107,10 @@ router.get(
   authController.protectRoute,
   userControllerWeb.getGymProfilePage
 );
+
+router.post(
+  "/follow/:userId/:userType",
+  authController.protectRoute,
+  userControllerWeb.followUser
+);
 export default router;

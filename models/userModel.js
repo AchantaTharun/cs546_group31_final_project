@@ -179,6 +179,46 @@ const userSchema = new mongoose.Schema({
       validate: [validator.isNumeric, "Please enter a valid zip code"],
     },
   },
+  following: {
+    users: [
+      {
+        type: mongoose.Schema.ObjectId,
+        ref: "User",
+      },
+    ],
+    gyms: [
+      {
+        type: mongoose.Schema.ObjectId,
+        ref: "Gym",
+      },
+    ],
+    trainers: [
+      {
+        type: mongoose.Schema.ObjectId,
+        ref: "Trainer",
+      },
+    ],
+  },
+  followers: {
+    users: [
+      {
+        type: mongoose.Schema.ObjectId,
+        ref: "User",
+      },
+    ],
+    gyms: [
+      {
+        type: mongoose.Schema.ObjectId,
+        ref: "Gym",
+      },
+    ],
+    trainers: [
+      {
+        type: mongoose.Schema.ObjectId,
+        ref: "Trainer",
+      },
+    ],
+  },
 });
 
 userSchema.pre("save", async function (next) {

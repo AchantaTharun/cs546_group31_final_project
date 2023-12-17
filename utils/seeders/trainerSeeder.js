@@ -394,7 +394,7 @@ const trainers = [
   async function seedTrainersUSA() {
     try {
       for (const trainer of trainers) {
-        for (let i = 2; i <= 10; i++) {
+        for (let i = 2; i <= 20; i++) {
           const location = generateRandomCoordinatesUSA();
           const workoutType = [
             getRandomWorkoutType(),

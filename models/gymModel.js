@@ -87,7 +87,7 @@ const gymSchema = new mongoose.Schema({
   status: {
     type: String,
     enum: ["pending", "approved", "rejected"],
-    default: "pending",
+    default: "approved",
   },
   passwordChangedAt: {
     type: Date,
@@ -146,6 +146,53 @@ const gymSchema = new mongoose.Schema({
       },
     },
   ],
+  following: {
+    users: [
+      {
+        type: mongoose.Schema.ObjectId,
+        ref: "User",
+      },
+    ],
+    gyms: [
+      {
+        type: mongoose.Schema.ObjectId,
+        ref: "Gym",
+      },
+    ],
+    trainers: [
+      {
+        type: mongoose.Schema.ObjectId,
+        ref: "Trainer",
+      },
+    ],
+  },
+  followers: {
+    users: [
+      {
+        type: mongoose.Schema.ObjectId,
+        ref: "User",
+      },
+    ],
+    gyms: [
+      {
+        type: mongoose.Schema.ObjectId,
+        ref: "Gym",
+      },
+    ],
+    trainers: [
+      {
+        type: mongoose.Schema.ObjectId,
+        ref: "Trainer",
+      },
+    ],
+  },
+  location: {
+    type: {
+      type: String,
+      default: "Point",
+    },
+    coordinates: { type: [Number], index: "2dsphere" },
+  },
 });
 
 gymSchema.pre("save", async function (next) {

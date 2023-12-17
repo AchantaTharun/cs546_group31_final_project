@@ -1,12 +1,12 @@
 import User from "../models/userModel.js";
 import Trainer from "../models/trainerModel.js";
 import Gym from "../models/gymModel.js";
+import mongoose from "mongoose";
 
 export const getHomePage = async (req, res) => {
   try {
     const user = req.user;
-    const { lat, lng } = req.query;
-    console.log({ lat, lng });
+
     if (!user) {
       return res.status(404).json({
         status: "fail",
@@ -15,7 +15,7 @@ export const getHomePage = async (req, res) => {
     }
     const coords = user.location.coordinates;
     console.log(coords);
-    const users = await User.aggregate([
+    let users = await User.aggregate([
       {
         $geoNear: {
           near: {
@@ -25,7 +25,7 @@ export const getHomePage = async (req, res) => {
           distanceField: "distanceFromSF",
           distanceMultiplier: 0.001,
           spherical: true,
-          maxDistance: 15000,
+          maxDistance: 30000,
         },
       },
       {
@@ -35,7 +35,7 @@ export const getHomePage = async (req, res) => {
       },
     ]);
 
-    const trainers = await Trainer.aggregate([
+    let trainers = await Trainer.aggregate([
       {
         $geoNear: {
           near: {
@@ -45,7 +45,7 @@ export const getHomePage = async (req, res) => {
           distanceField: "distanceFromSF",
           distanceMultiplier: 0.001,
           spherical: true,
-          maxDistance: 15000,
+          maxDistance: 30000,
         },
       },
       {
@@ -55,7 +55,7 @@ export const getHomePage = async (req, res) => {
       },
     ]);
 
-    const gyms = await Gym.aggregate([
+    let gyms = await Gym.aggregate([
       {
         $geoNear: {
           near: {
@@ -65,7 +65,7 @@ export const getHomePage = async (req, res) => {
           distanceField: "distanceFromSF",
           distanceMultiplier: 0.001,
           spherical: true,
-          maxDistance: 15000,
+          maxDistance: 30000,
         },
       },
       {
@@ -93,6 +93,30 @@ export const getHomePage = async (req, res) => {
         message: "No user found with that ID",
       });
     }
+    users.forEach((user) => {
+      user.followers.users.forEach((follower) => {
+        if (follower.toString() === req.user._id.toString()) {
+          user.isFollowing = true;
+        }
+      });
+    });
+    console.log(trainers);
+    trainers.forEach((trainer) => {
+      trainer.followers.users.forEach((follower) => {
+        if (follower.toString() === req.user._id.toString()) {
+          trainer.isFollowing = true;
+        }
+      });
+    });
+    console.log(gyms);
+    gyms.forEach((gym) => {
+      gym.followers.users.forEach((follower) => {
+        if (follower.toString() === req.user._id.toString()) {
+          gym.isFollowing = true;
+        }
+      });
+    });
+
     return res.render("user/userHome", {
       layout: "userHome.layout.handlebars",
       users,
@@ -188,6 +212,7 @@ export const getProfilePage = async (req, res) => {
     console.log(err.message);
   }
 };
+
 export const getUserFromUserName = async (req, res) => {
   try {
     const userRequested = req.user;
@@ -199,7 +224,6 @@ export const getUserFromUserName = async (req, res) => {
     }
     const userName = req.params.userName;
     const user = await User.findOne({ userName: userName }).lean();
-    console.log(user);
     if (!user) {
       return res.status(404).json({
         status: "fail",
@@ -310,7 +334,7 @@ export const getTrainerProfilePage = async (req, res) => {
       });
     }
     return res.render("user/trainerProfile", {
-      layout: "main.handlebars",
+      layout: "userProfile.layout.handlebars",
       trainer,
     });
   } catch (err) {
@@ -337,10 +361,109 @@ export const getGymProfilePage = async (req, res) => {
       });
     }
     return res.render("user/gymProfile", {
-      layout: "main.handlebars",
+      layout: "userProfile.layout.handlebars",
       gym,
     });
   } catch (err) {
     console.log(err.message);
+  }
+};
+
+export const followUser = async (req, res) => {
+  try {
+    const { userId, userType } = req.params;
+    console.log({ userId, userType });
+    let loggedInUserId = req.user._id;
+
+    let userToUpdate;
+    let loggedInUser;
+
+    switch (userType) {
+      case "user":
+        if (req.user.isUser) {
+          userToUpdate = await User.findByIdAndUpdate(
+            userId,
+            { $addToSet: { "followers.users": loggedInUserId } },
+            { new: true }
+          );
+          loggedInUser = await User.findByIdAndUpdate(
+            loggedInUserId,
+            { $addToSet: { "following.users": userToUpdate._id } },
+            { new: true }
+          );
+        }
+        break;
+      case "trainer":
+        if (req.user.isUser) {
+          userToUpdate = await Trainer.findByIdAndUpdate(
+            userId,
+            { $addToSet: { "followers.users": loggedInUserId } },
+            { new: true }
+          );
+          loggedInUser = await User.findByIdAndUpdate(
+            loggedInUserId,
+            { $addToSet: { "following.trainers": userToUpdate._id } },
+            { new: true }
+          );
+        }
+        break;
+      case "gym":
+        if (req.user.isUser) {
+          userToUpdate = await Gym.findByIdAndUpdate(
+            userId,
+            { $addToSet: { "followers.users": loggedInUserId } },
+            { new: true }
+          );
+          loggedInUser = await User.findByIdAndUpdate(
+            loggedInUserId,
+            { $addToSet: { "following.gyms": userToUpdate._id } },
+            { new: true }
+          );
+        }
+        break;
+      default:
+        return res.status(400).json({ message: "Invalid userType" });
+    }
+
+    if (!userToUpdate) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    if (!loggedInUser) {
+      return res.status(404).json({ message: "Logged in user not found" });
+    }
+
+    res
+      .status(200)
+      .json({ message: "You are now following this user", id: userId });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const unFollowUser = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    let loggedInUserId = req.user._id;
+    const userToUnFollow = await User.findByIdAndUpdate(
+      userId,
+      { $pull: { followers: loggedInUserId } },
+      { new: true }
+    );
+    console.log(userToUnFollow);
+    if (!userToUnFollow) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    const loggedInUser = await User.findByIdAndUpdate(
+      loggedInUserId,
+      { $pull: { following: userToUnFollow._id } },
+      { new: true }
+    );
+    console.log(loggedInUser);
+    res.status(200).json({ message: "You are no longer following this user" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Internal server error" });
   }
 };

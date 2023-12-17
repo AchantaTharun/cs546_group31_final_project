@@ -214,7 +214,7 @@ export const userLogin = async (req, res) => {
       sameSite: "Strict",
     });
 
-    res.redirect(`/user/home?lng=${lng}&lat=${lat}`);
+    res.redirect(`/user/home`);
   } catch (err) {
     res.render("user/userLogin", {
       errors: [err.message],

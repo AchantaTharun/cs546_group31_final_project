@@ -356,6 +356,7 @@ const gyms = [
 (async () => {
   await Gym.deleteMany();
   await SignUpRequest.deleteMany();
+
   async function seedGymsNearMe() {
     try {
       for (const gym of gyms) {

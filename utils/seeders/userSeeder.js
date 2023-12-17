@@ -6,9 +6,8 @@ mongoose.connect("mongodb://localhost:27017/GymMate", {
 });
 function generateRandomBirthdate() {
   const randomMonth = Math.floor(Math.random() * 12) + 1;
-  const randomDay = Math.floor(Math.random() * 28) + 1; // Assuming all months have up to 28 days
-  const randomYear = Math.floor(Math.random() * (2003 - 1930 + 1)) + 1930; // Assuming range from 1930 to 2003
-
+  const randomDay = Math.floor(Math.random() * 28) + 1;
+  const randomYear = Math.floor(Math.random() * (2003 - 1930 + 1)) + 1930;
   const formattedMonth =
     randomMonth < 10 ? `0${randomMonth}` : `${randomMonth}`;
   const formattedDay = randomDay < 10 ? `0${randomDay}` : `${randomDay}`;
@@ -151,7 +150,7 @@ function generateRandomCoordinates(latitude, longitude, radiusInKm) {
     );
 
   const finalLatitude = (newLatitude * 180) / Math.PI;
-  const finalLongitude = (((newLongitude * 180) / Math.PI + 540) % 360) - 180; // Normalize longitude
+  const finalLongitude = (((newLongitude * 180) / Math.PI + 540) % 360) - 180;
 
   return { coordinates: [finalLongitude, finalLatitude] };
 }
@@ -429,10 +428,50 @@ const users = [
     }
   }
 
+  async function seedUsersUSANearPoint(num, location) {
+    try {
+      for (const user of users) {
+        const newLoc = generateRandomCoordinates(
+          location.coordinates[1],
+          location.coordinates[0],
+          10
+        );
+        let parts = user.email.split("@");
+        let newEmail =
+          parts[0] + "@example" + num + "." + parts[1].split(".")[1];
+        const favoriteWorkout = getRandomWorkoutType();
+        const newUser = new User({
+          firstName: user.firstName,
+          lastName: user.lastName,
+          userName: "1" + user.userName + num,
+          email: "1" + newEmail,
+          password: "1" + user.password + num,
+          passwordConfirm: "1" + user.password + num,
+          location: newLoc,
+          favoriteWorkout,
+          gender: getRandomGender(),
+          height: generateRandomHeight(),
+          weight: generateRandomWeight(),
+          hUnit: generateRandomHeightUnit(),
+          wUnit: generateRandomWeightUnit(),
+          address: generateRandomAddress(),
+          phone: generateRandomPhoneNumber(),
+          dateOfBirth: generateRandomBirthdate(),
+          bio: user.bio,
+        });
+
+        await newUser.save();
+      }
+
+      // console.log("User seeded successfully!");
+    } catch (err) {
+      console.error("Error seeding users:", err);
+    }
+  }
   async function seedUsersUSA() {
     try {
       for (const user of users) {
-        for (let i = 2; i <= 10; i++) {
+        for (let i = 2; i <= 30; i++) {
           const location = generateRandomCoordinatesUSA();
           const favoriteWorkout = getRandomWorkoutType();
           const newUser = new User({
@@ -456,6 +495,7 @@ const users = [
           });
 
           await newUser.save();
+          // await seedUsersUSANearPoint(i, location);
         }
       }
 

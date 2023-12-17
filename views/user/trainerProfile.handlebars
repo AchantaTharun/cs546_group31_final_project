@@ -1,44 +1,38 @@
-<div class="container mt-5">
-    <a class="mt-5" href="/user/home"> <button class="btn btn-primary">go back</button></a>
-    <div class="card">
-        <h5 class="card-header">{{trainer.userName}}</h5>
-        <div class="card-body">
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="firstName">First Name:</label>
-                        <input type="text" class="form-control" id="firstName" value="{{trainer.firstName}}" readonly>
+<div>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div id="content" class="content content-full-width">
+                    <div class="profile">
+                        <div class="profile-header">
+                            <div class="profile-header-cover"></div>
+                            <div class="profile-header-content">
+                                <div class="profile-header-img">
+                                    <img src="https://bootdey.com/img/Content/avatar/avatar3.png" alt="">
+                                </div>
+                                <div class="profile-header-info">
+                                    <h4 class="m-t-10 m-b-5">{{trainer.trainerName}}</h4>
+                                    <p class="m-b-10">{{trainer.firstName}} {{trainer.lastName}}</p>
+                                    <p>{{trainer.bio}}</p>
+                                </div>
+                                <a href="/follow" class="btn btn-sm btn-info mb-2">follow</a>
+                            </div>
+                            <ul class="profile-header-tab nav nav-tabs">
+                                <li class="nav-item"><a href="#posts" class="nav-link">POSTS</a></li>
+                                <li class="nav-item"><a href="#events" class="nav-link">EVENTS</a></li>
+                                <li class="nav-item"><a href="#followers" class="nav-link">FOLLOWERS</a></li>
+                                <li class="nav-item"><a href="#following" class="nav-link active">FOLLOWING</a></li>
+                            </ul>
+
+
+
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="lastName">Last Name:</label>
-                        <input type="text" class="form-control" id="lastName" value="{{trainer.lastName}}" readonly>
-                    </div>
-                    <div class="form-group">
-                        <label for="username">Username:</label>
-                        <input type="text" class="form-control" id="username" value="{{trainer.trainerName}}" readonly>
-                    </div>
-                    <div class="form-group">
-                        <label for="email">Email:</label>
-                        <input type="email" class="form-control" id="email" value="{{trainer.email}}" readonly>
-                    </div>
-                    <div class="form-group">
-                        <label for="dateOfBirth">Date of Birth:</label>
-                        <input type="text" class="form-control" id="dateOfBirth" value="{{trainer.dateOfBirth}}"
-                            readonly>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="bio">Bio:</label>
-                        <textarea class="form-control" id="bio" rows="5" readonly>{{trainer.bio}}</textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="address">Address:</label>
-                        <textarea class="form-control" id="address" rows="3" readonly value="">
-                        "{{trainer.address.city}}, {{trainer.address.state}}"
-                        "{{trainer.address.country}}"
-                        
-                        </textarea>
+                    <div class="profile-content">
+                        <div id="posts" class="tab-content">Posts content</div>
+                        <div id="events" class="tab-content">Events content</div>
+                        <div id="followers" class="tab-content">Followers content</div>
+                        <div id="following" class="tab-content active">Following content</div>
                     </div>
                 </div>
             </div>
