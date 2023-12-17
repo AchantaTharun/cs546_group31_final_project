@@ -40,7 +40,7 @@ body {
   }
   
   .window {
-    width: 370px; /* Adjusted width to make it slightly shorter */
+    width: 450px; 
     height: 400px;
     overflow: auto;
     border: 2px solid #ccc;

@@ -190,7 +190,7 @@ const eventSchema = new mongoose.Schema({
     type: Date,
   },
   startTime: {
-    type: String,
+    type: Date,
     required: [true, "Please enter the startTime"],
     trim: true,
     validate: [
@@ -209,7 +209,7 @@ const eventSchema = new mongoose.Schema({
     ],
   },
   endTime: {
-    type: String,
+    type: Date,
     required: [true, "Please enter the endTime"],
     trim: true,
     validate: [
@@ -243,7 +243,6 @@ const eventSchema = new mongoose.Schema({
   attendees: [
     {
       type: mongoose.Schema.ObjectId,
-      ref: "User" || "Trainer" || "Gym",
     },
   ],
 });
