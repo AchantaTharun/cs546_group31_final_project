@@ -1,0 +1,73 @@
+<link rel="stylesheet" href="/public/css/trainerMealPlans.css" />
+
+<div class="createMealPlanContainer">
+  <h1>Edit Meal Plan</h1>
+
+  <form id="createMealForm" class="container mt-3">
+    <div class="row g-3">
+      <div class="col-md-3">
+        <label for="title" class="form-label">Title:</label>
+        <input
+          type="text"
+          class="form-control"
+          id="title"
+          name="title"
+          required
+        />
+      </div>
+
+      <div class="col-md-3">
+        <label for="session" class="form-label">Select Session:</label>
+        <select
+          id="session"
+          name="session"
+          class="form-select"
+          required
+          onchange="loadAssignToOptions(this.value)"
+        >
+          <option value="">-</option>
+          {{#each activeSessions}}
+            <option value="{{_id}}">{{name}}</option>
+          {{/each}}
+        </select>
+      </div>
+      <div class="col-md-3">
+        <label for="assignedTo" class="form-label">Assign To:</label>
+        <select id="assignedTo" name="assignedTo" class="form-select" required>
+          <!-- Options will be dynamically added here through JavaScript -->
+        </select>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <label for="description" class="form-label">Description:</label>
+      <textarea
+        id="description"
+        name="description"
+        class="form-control"
+        rows="4"
+        required
+      ></textarea>
+    </div>
+    <div>
+      <label for="meals" class="form-label">Meals:</label>
+
+      <div id="mealsContainer" class="row g-3"></div>
+    </div>
+    <br />
+    <button type="button" id="addMealSlot" class="btn btn-primary btn-sm">Add
+      Meal Section</button>
+    <br />
+    <br />
+    <div class="add-meal-error" id="form-error-style" hidden></div>
+    <div class="buttons">
+      <button
+        id="createMeal"
+        value="Create Meal Plan"
+        class="btn btn-success"
+        onclick="createMealPlan('{{trainerId}}')"
+      >Edit</button>
+    </div>
+  </form>
+</div>
+
+<script src="/public/js/trainer/trainerCreateMealPlan.js"></script>

@@ -104,7 +104,7 @@ export const protectRoute = async (req, res, next) => {
     //   message: err.message,
     // });
 
-    return res.redirect("/user/login");
+    return res.redirect("/");
   }
 };
 
@@ -123,7 +123,7 @@ export const restrictTo = (role) => {
       }
 
       if (!req.cookies.jwt) {
-        return res.redirect("/login");
+        return res.redirect("/");
       }
 
       token = req.cookies.jwt;

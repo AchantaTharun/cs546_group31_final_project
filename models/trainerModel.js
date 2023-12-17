@@ -116,6 +116,12 @@ const trainerSchema = new mongoose.Schema({
       ref: "Session",
     },
   ],
+  mealPlans: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "MealPlan",
+    },
+  ],
   //   businessLicense: {
   //     type: String,
   //     required: [true, "Please upload your business license"],
