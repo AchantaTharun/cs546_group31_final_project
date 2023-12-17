@@ -1,0 +1,104 @@
+{{#if message}}
+  <div id="message" class="alert alert-success">
+    {{message}}
+  </div>
+{{/if}}
+
+
+{{#if errors.length}}
+<div class="alert alert-danger" id="form-error-style">
+<ul>
+    {{#each errors}}
+    <li>
+        {{this}}
+    </li>
+    {{/each}}
+</ul>
+</div>
+{{/if}}
+
+<form class="row g-3" action="/user/events/update/{{event._id}}" method="POST" id="create-event" novalidate>
+
+<div class="alert alert-danger" id="event-errors" hidden></div>
+    <!-- Title -->
+    <div class="col-md-6">
+        <label for="title" class="form-label">Title</label>
+        <input type="text" class="form-control" id="title" name="title" value="{{event.title}}">
+    </div>
+    <!-- Image -->
+    <div class="col-md-6">
+        <label for="img" class="form-label"></label>
+        <input type="text" class="form-control" id="img" name="img" value="{{event.img}}" hidden>
+    </div>
+    <!-- Description -->
+    <div class="col-12">
+        <label for="description" class="form-label">Description</label>
+        <textarea class="form-control" id="description" name="description">{{event.description}}</textarea>
+    </div>
+    <!-- Contact Email -->
+    <div class="col-12">
+        <label for="contactEmail" class="form-label">Email</label>
+        <input type="email" class="form-control" id="contactEmail" name="contactEmail" value="{{event.contactEmail}}">
+    </div>
+    <!-- Event Location Fields -->
+    <div class="col-12">
+        <label for="streetAddress" class="form-label">Street Address</label>
+        <input type="text" class="form-control" id="streetAddress" name="eventLocation[streetAddress]" value="{{event.eventLocation.streetAddress}}">
+    </div>
+    <div class="col-md-6">
+        <label for="city" class="form-label">City</label>
+        <input type="text" class="form-control" id="city" name="eventLocation[city]" value="{{event.eventLocation.city}}">
+    </div>
+    <div class="col-md-4">
+    <label for="state" class="form-label">State</label>
+    <select id="state" class="form-select" name="eventLocation[state]">
+        {{#each states as |stateOption|}}
+            <option value="{{stateOption.abbreviation}}" {{#if (ifEquals stateOption.abbreviation ../event.eventLocation.state)}}selected{{/if}}>{{stateOption.name}}</option>
+        {{/each}}
+    </select>
+</div>
+
+    <div class="col-md-2">
+        <label for="zipCode" class="form-label">Zip Code</label>
+        <input type="text" class="form-control" id="zipCode" name="eventLocation[zipCode]" value="{{event.eventLocation.zipCode}}">
+    </div>
+    <!-- Max Capacity -->
+    <div class="col-md-6">
+        <label for="maxCapacity" class="form-label">Capacity</label>
+        <input type="number" class="form-control" id="maxCapacity" name="maxCapacity" value="{{event.maxCapacity}}" min="0">
+    </div>
+    <!-- Price of Admission -->
+    <div class="col-md-6">
+        <label for="priceOfAdmission" class="form-label">Price of Admission</label>
+        <input type="number" class="form-control" id="priceOfAdmission" name="priceOfAdmission" value="{{event.priceOfAdmission}}" min="0">
+    </div>
+    <!-- Event Date -->
+    <div class="col-md-6">
+        <label for="eventDate" class="form-label">Date</label>
+        <input type="date" class="form-control" id="eventDate" name="eventDate" value="{{event.eventDate}}">
+    </div>
+    <!-- Start Time -->
+    <div class="col-md-6">
+        <label for="startTime" class="form-label">Start Time</label>
+        <input type="time" class="form-control" id="startTime" name="startTime" value="{{event.startTime}}">
+    </div>
+    <!-- End Time -->
+    <div class="col-md-6">
+        <label for="endTime" class="form-label">End Time</label>
+        <input type="time" class="form-control" id="endTime" name="endTime" value="{{event.endTime}}">
+    </div>
+    <!-- Public Event Option -->
+    <div class="col-12">
+        <label for="publicEvent" class="form-label">Event Type</label>
+        <select id="publicEvent" class="form-select" name="publicEvent">
+            <option value="true" {{#if event.publicEvent}}selected{{/if}}>Public Event</option>
+            <option value="false" {{#unless event.publicEvent}}selected{{/unless}}>Private Event</option>
+        </select>
+    </div>
+    <!-- Submit Button -->
+    <div class="col-12">
+        <button type="submit" class="btn btn-primary">Update Event</button>
+        <a href="/user/events" class="btn btn-secondary">Cancel</a>
+    </div>
+</form>
+ 

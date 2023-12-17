@@ -1,1 +1,40 @@
-<H1>Events Page In Development</H1>
+
+{{#if message}}
+  <div id="message" class="alert alert-success">
+    <button type="button" onclick="window.location.href='/trainer/events'">&times;</button>
+    {{message}}
+  </div>
+{{/if}}
+
+<div class="container">
+    <button type="button" class="btn btn-success" data-mdb-ripple-init>
+        <a href="/trainer/events/createEvent">+ Create Event</a>
+    </button>
+<br>
+<br>
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        {{#each events}}
+            <div class="col">
+                <a href="/trainer/events/details/{{this._id}}">
+                <div class="card h-100">
+                    <!--  TODO: replace the src with your event image source -->
+                    <img src="https://mdbcdn.b-cdn.net/img/new/standard/city/044.webp" class="card-img-top" alt="{{this.title}}"/>
+
+                    <div class="card-body">
+                        <h5 class="card-title">{{this.title}}</h5>
+                        <p class="card-text">
+                            {{this.description}}
+                        </p>
+                    </div>
+                        <div class="card-footer">
+                        <small class="text-muted">On {{this.eventDate}}</small>
+                    </div>
+                </div>
+                </a>
+            </div>
+        {{/each}}
+    </div>
+</div>
+
+
+
