@@ -231,10 +231,17 @@ export const addAttendee = async (req, res) => {
       });
     }
 
-    event.attendees.push(loggedInUserId);
-    const updatedEvent = await event.save();
-
-    res.status(200).json({ status: "success", data: { event: updatedEvent } });
+    if (event.totalNumberOfAttendees < event.maxCapacity) {
+      event.attendees.push(loggedInUserId);
+      event.totalNumberOfAttendees = event.totalNumberOfAttendees + 1;
+      const updatedEvent = await event.save();
+      res.status(200).json({ status: "success", data: { event: updatedEvent } });
+    }else{  
+      return res.status(400).json({
+        status: "fail",
+        errors: ["Max capacity reached for the event"],
+      });
+    }
   } catch (e) {
     res.status(500).json({ status: "fail", errors: [e.message] });
   }
@@ -262,7 +269,7 @@ export const removeAttendee = async (req, res) => {
     event.attendees = event.attendees.filter(
       (id) => id.toString() !== attendeeId
     );
-
+    event.totalNumberOfAttendees = event.totalNumberOfAttendees - 1;
     const updatedEvent = await event.save();
     res.status(200).json({ status: "success", data: { event: updatedEvent } });
   } catch (e) {
