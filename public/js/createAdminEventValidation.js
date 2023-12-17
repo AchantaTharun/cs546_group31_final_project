@@ -14,7 +14,7 @@ create_event.addEventListener("submit",async event =>{
     // try{
     //     //Creating a url for a secure connection to the S3 bucket
     //     const {url} = await fetch("/admin/s3Url").then(res=>res.json())
-    //     console.log(url);
+    //     //console.log(url);
     
     //     //In the case if the URL is empty...
     //     if(!url)
@@ -36,7 +36,7 @@ create_event.addEventListener("submit",async event =>{
     //     const imageUrl = url.split('?')[0];
     //     image.value = imageUrl;
     //     // create_event.submit();  //The Image link from the S3 bucket will be stored in the img field in the eventModel.
-    //     console.log(url);
+    //     //console.log(url);
 
     // } catch(e)
     // {

@@ -380,7 +380,7 @@ const trainers = [
         await newTrainer.save();
       }
 
-      console.log("Trainers seeded successfully!");
+      //console.log("Trainers seeded successfully!");
     } catch (err) {
       console.error("Error seeding Trainers:", err);
     }
@@ -414,7 +414,7 @@ const trainers = [
           await newTrainer.save();
         }
       }
-      console.log("Trainers seeded successfully!");
+      //console.log("Trainers seeded successfully!");
     } catch (err) {
       console.error("Error seeding Trainers:", err);
     }

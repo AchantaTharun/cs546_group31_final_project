@@ -30,7 +30,6 @@ const postSchema = new mongoose.Schema({
       {
         userId: {
           type: mongoose.Schema.ObjectId,
-          ref: "Trainer",
         },
         comment: {
           type: String,
@@ -50,8 +49,7 @@ const postSchema = new mongoose.Schema({
     gyms: [
       {
         userId: {
-          type: mongoose.Schema.ObjectId,
-          ref: "Gym",
+          type: mongoose.Schema.ObjectId
         },
         comment: {
           type: String,
@@ -72,7 +70,6 @@ const postSchema = new mongoose.Schema({
       {
         userId: {
           type: mongoose.Schema.ObjectId,
-          ref: "User",
         },
         comment: {
           type: String,
@@ -90,10 +87,19 @@ const postSchema = new mongoose.Schema({
       },
     ],
   },
-  user: {
-    userId: String,
-    userType: String,
+
+  //These two were added by me so as to differentiate the post streams
+  makerId:{
+    type: String,
+    required: [true, "The maker ID was not provided."],
+    trim: true,
   },
+  makerType:{
+    type: String,
+    required: [true, "The maker type was not provided."],
+    trim: true,
+    enum: ['user','trainer','gym']
+  }
 });
 
 const Post = mongoose.model("Post", postSchema);

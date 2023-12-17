@@ -29,7 +29,7 @@ app.use(mongoSanitizer());
 
 //The first middleware, so that the file uploads doesn't runs into conflicts with the other routes.
 // app.get('/admin/s3Url',async (req,res)=>{
-//   console.log("Gonna get the URL for the file upload rn");
+//   //console.log("Gonna get the URL for the file upload rn");
 //   const url = await generateUploadURL();
 //   res.send({url})
 // })

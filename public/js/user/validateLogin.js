@@ -59,7 +59,7 @@ document.addEventListener("DOMContentLoaded", function () {
         submitBtn.toggleAttribute("hidden");
 
         alert("Error getting location, try again ");
-        console.log(error);
+        //console.log(error);
       });
   });
 });

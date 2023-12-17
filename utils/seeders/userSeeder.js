@@ -282,7 +282,7 @@ const users = [
         await newUser.save();
       }
 
-      console.log("Users seeded successfully!");
+      //console.log("Users seeded successfully!");
     } catch (err) {
       console.error("Error seeding users:", err);
     }
@@ -309,7 +309,7 @@ const users = [
         }
       }
 
-      console.log("Users seeded successfully!");
+      //console.log("Users seeded successfully!");
     } catch (err) {
       console.error("Error seeding users:", err);
     }

@@ -6,7 +6,7 @@ const lat = JSON.parse(localStorage.getItem("lat"));
 let users;
 const map = document.getElementById("map");
 if (map) {
-  console.log(map.getAttribute("data"));
+  //console.log(map.getAttribute("data"));
 }
 window.onload = async () => {
   try {
@@ -27,7 +27,7 @@ window.onload = async () => {
         zoom: 10, // starting zoom
       });
       users = res.data.data.users;
-      console.log(users);
+      //console.log(users);
       users.forEach((user) => {
         const popupContent = `
     <div class="popup-content ">
@@ -94,6 +94,6 @@ window.onload = async () => {
         .addTo(map);
     }
   } catch (err) {
-    console.log(err);
+    //console.log(err);
   }
 };
