@@ -19,18 +19,6 @@ router
   .delete(authController.protectRoute, eventController.deleteEvent);
 
 router
-  .post('/:eventId/comments',
-    authController.protectRoute, eventController.addComment);
-
-router
-  .delete('/:eventId/comments/:commentId',
-    authController.protectRoute, eventController.deleteComment);
-
-router
-  .patch('/:eventId/comments/:commentId',
-    authController.protectRoute, eventController.updateComment);
-
-router
   .post('/:eventId/:attendeeId',
     authController.protectRoute, eventController.addAttendee)
   .delete('/:eventId/:attendeeId/remove',
