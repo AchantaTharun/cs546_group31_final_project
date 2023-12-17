@@ -211,133 +211,13 @@ export const deleteEvent = async (req, res) => {
   }
 };
 
-export const addComment = async (req, res) => {
-  const { comment } = req.body;
-  const user = req.user;
-
-  try {
-    const event = await Event.findById(req.params.eventId);
-    if (!event) {
-      return res.status(404).json({
-        status: "fail",
-        errors: ["No event found with that ID"],
-      });
-    }
-
-    event.comments.push({
-      userId: user._id,
-      comment: comment,
-      createdAt: new Date(),
-    });
-
-    const validationErrors = event.validateSync();
-    if (validationErrors) {
-      const errors = Object.values(validationErrors.errors).map(
-        (error) => error.message
-      );
-      return res.status(400).json({ status: "fail", errors });
-    }
-
-    const updatedEvent = await event.save();
-
-    return res.status(200).json({
-      status: "success",
-      data: {
-        event: updatedEvent,
-      },
-    });
-  } catch (e) {
-    return res.status(500).json({
-      status: "fail",
-      errors: [e.message],
-    });
-  }
-};
-
-export const deleteComment = async (req, res) => {
-  try {
-    const eventId = req.params.eventId;
-    const commentId = req.params.commentId;
-
-    const event = await Event.findById(eventId);
-    if (!event) {
-      return res.status(404).json({
-        status: "fail",
-        errors: ["No event found with that ID"],
-      });
-    }
-
-    event.comments = event.comments.filter(
-      (comment) => comment._id.toString() !== commentId
-    );
-    await event.save();
-
-    return res.status(200).json({
-      status: "success",
-      message: "Comment deleted successfully",
-    });
-  } catch (e) {
-    return res.status(500).json({
-      status: "fail",
-      errors: [e.message],
-    });
-  }
-};
-
-export const updateComment = async (req, res) => {
-  try {
-    const eventId = req.params.eventId;
-    const commentId = req.params.commentId;
-    const { newComment } = req.body;
-
-    const event = await Event.findById(eventId);
-    if (!event) {
-      return res.status(404).json({
-        status: "fail",
-        errors: ["No event found with that ID"],
-      });
-    }
-
-    const commentIndex = event.comments.findIndex(
-      (comment) => comment._id.toString() === commentId
-    );
-    if (commentIndex === -1) {
-      return res.status(404).json({
-        status: "fail",
-        errors: ["No comment found with that ID"],
-      });
-    }
-
-    event.comments[commentIndex].comment = newComment;
-    event.comments[commentIndex].updatedAt = new Date();
-
-    const validationErrors = event.validateSync();
-    if (validationErrors) {
-      const errors = Object.values(validationErrors.errors).map(
-        (error) => error.message
-      );
-      return res.status(400).json({ status: "fail", errors });
-    }
-    await event.save();
-
-    return res.status(200).json({
-      status: "success",
-      message: "Comment updated successfully",
-    });
-  } catch (e) {
-    return res.status(500).json({
-      status: "fail",
-      errors: [e.message],
-    });
-  }
-};
-
 export const addAttendee = async (req, res) => {
   try {
     const eventId = req.params.eventId;
     const loggedInUserId = req.params.attendeeId;
-    const event = await Event.findById(eventId);
     
+    let event = await Event.findById(eventId);
+
     if (!event) {
       return res
         .status(404)
