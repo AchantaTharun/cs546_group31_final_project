@@ -22,7 +22,7 @@ export const makeAdmin = async (firstAdmin) => {
     useUnifiedTopology: true,
   });
   const admin = await Admin.create(firstAdmin); //Mongoose will automatically validate the data itself.
-  console.log("Admin created successfully", admin);
+  //console.log("Admin created successfully", admin);
   mongoose.disconnect();
 };
 
@@ -47,12 +47,12 @@ export const sendEmail = (sendto,decision,reason) =>
     subject: `Status Change For your account`,
     text: `Your Account has been ${decision} | The reason is : ${reason}`
 }
-// console.log(process.env.MAILUSER);
-// console.log(process.env.MAILPASSWORD);
+// //console.log(process.env.MAILUSER);
+// //console.log(process.env.MAILPASSWORD);
 
   try{
     transporter.sendMail(mailOptions);
-    console.log("The Mail Was Sent");
+    //console.log("The Mail Was Sent");
   } catch(e)
   {
     throw "Problem in Sending the Email";
@@ -97,7 +97,7 @@ export const passwordChange = async (emailAddress, oldPassword, newPassword,conf
   //Everything Validated
 
   const adminUser = await Admin.findOne({ email:emailAddress })
-  // console.log("Initial Instance",adminUser);
+  // //console.log("Initial Instance",adminUser);
   if (
       !adminUser ||
       !(await adminUser.isPasswordCorrect(oldPassword, adminUser.password))
@@ -165,7 +165,7 @@ export const statusChange = async (status,id,type,reason) => {
       }};
 
       const results = await RejectedRequest.create(rejectedRequestObject); 
-      // console.log("Rejected Request Object created and saved successfully", results);
+      // //console.log("Rejected Request Object created and saved successfully", results);
     }
 
     //send an email, using the nodemailer module
@@ -186,7 +186,7 @@ export const statusChange = async (status,id,type,reason) => {
       if (!removeObject) {
         throw `The ${type} data could not be deleted`;
       }
-      console.log("The main object was deleted");
+      //console.log("The main object was deleted");
 
     }
     

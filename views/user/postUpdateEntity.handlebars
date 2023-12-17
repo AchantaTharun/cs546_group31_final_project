@@ -1,0 +1,44 @@
+<h4 class="mb-4"><a href="/user/get/myPosts"> |-- BACK TO MY POSTS</a></h4>
+<hr>
+
+{{#if hasData}}
+
+        <h4>IMAGE :</h4>                                          
+        <img src="{{post.img}}" name="imageInput" id="imageInput">
+<form action="/user/update/post" method="POST" id="entity-update" novalidate>
+    <br>
+    <label for="title">
+        POST TITLE :                                                 
+        <input type="text" name="title" id="title" value="{{post.title}}" >
+    </label>
+    <br>
+    
+    <label for="description">
+         DESCRIPTION:                                                 
+        <input type="text" name="description" value="{{post.description}}" id="description">
+    </label>
+    <br>
+    <label for="id">
+        <input name="id" id="id" value="{{post._id}}" readonly hidden>
+    </label>
+    <br>
+    <label for="titleOld">
+        <input name="titleOld" id="titleOld" value="{{post.title}}" readonly hidden>
+    </label>
+    <br>
+    <label for="descriptionOld">
+        <input name="descriptionOld" id="descriptionOld" value="{{post.description}}" readonly hidden>
+    </label>
+    <br>
+    <label for="imageSrc">                                           
+        <input value="{{post.img}}" name="imageSrc" id="imageSrc" readonly hidden>
+    <button type="submit">UPDATE POST</button>
+</form>
+{{/if}}
+
+
+<p id="error">{{error}}</p>
+
+<hr>
+
+<script src="/public/js/user/validatePostUpdate.js"> </script>

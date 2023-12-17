@@ -242,7 +242,6 @@ const eventSchema = new mongoose.Schema({
   attendees: [
     {
       type: mongoose.Schema.ObjectId,
-      ref: "User" || "Trainer" || "Gym",
     },
   ],
 },{

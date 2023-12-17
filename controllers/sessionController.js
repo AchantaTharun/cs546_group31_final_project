@@ -1,6 +1,7 @@
-import Trainer from '../models/trainerModel.js';
-import Session from '../models/sessionModel.js';
-import mongoose from 'mongoose';
+import Trainer from "../models/trainerModel.js";
+import Session from "../models/sessionModel.js";
+import User from "../models/userModel.js";
+import mongoose from "mongoose";
 
 export const createSession = async (req, res) => {
   try {
@@ -34,16 +35,38 @@ export const createSession = async (req, res) => {
       const errors = Object.values(validationErrors.errors).map(
         (error) => error.message
       );
-      console.log(errors);
+      //console.log(errors);
       return res.status(400).json({ errors });
     }
 
     const currentDate = new Date();
+    currentDate.setUTCHours(0, 0, 0, 0);
 
-    if (new Date(startDate) < currentDate || new Date(endDate) < currentDate) {
+    const formattedStartDate = new Date(
+      Date.UTC(
+        parseInt(startDate.substring(0, 4), 10),
+        parseInt(startDate.substring(5, 7), 10) - 1,
+        parseInt(startDate.substring(8, 10), 10),
+        0,
+        0,
+        0
+      )
+    );
+    const formattedEndDate = new Date(
+      Date.UTC(
+        parseInt(startDate.substring(0, 4), 10),
+        parseInt(startDate.substring(5, 7), 10) - 1,
+        parseInt(startDate.substring(8, 10), 10),
+        0,
+        0,
+        0
+      )
+    );
+
+    if (formattedStartDate < currentDate || formattedEndDate < currentDate) {
       return res.status(400).json({
         errors: [
-          'Start date and end date should be equal to or after the current date',
+          "Start date and end date should be equal to or after the current date",
         ],
       });
     }
@@ -56,10 +79,10 @@ export const createSession = async (req, res) => {
           endDate: { $gte: startDate },
         },
         {
-          'sessionSlots.weekday': {
+          "sessionSlots.weekday": {
             $in: sessionSlots.map((slot) => slot.weekday),
           },
-          'sessionSlots.timeSlot': {
+          "sessionSlots.timeSlot": {
             $in: sessionSlots.map((slot) => slot.timeSlot),
           },
         },
@@ -72,7 +95,7 @@ export const createSession = async (req, res) => {
     ) {
       return res.status(400).json({
         errors: [
-          'There is already an active session with conflicting time slots and weekdays',
+          "There is already an active session with conflicting time slots and weekdays",
         ],
       });
     }
@@ -82,10 +105,10 @@ export const createSession = async (req, res) => {
     trainer.sessions.push(savedSession._id);
     await trainer.save();
 
-    res.status(201).json({ message: 'Session created successfully' });
+    res.status(201).json({ message: "Session created successfully" });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ errors: ['Internal Server Error'] });
+    res.status(500).json({ errors: ["Internal Server Error"] });
   }
 };
 
@@ -106,13 +129,13 @@ export const updateSession = async (req, res) => {
     const trainer = req.trainer;
 
     if (!mongoose.Types.ObjectId.isValid(sessionId)) {
-      return res.status(400).json({ errors: ['Invalid session ID'] });
+      return res.status(400).json({ errors: ["Invalid session ID"] });
     }
 
     const session = await Session.findById(sessionId);
 
     if (!session) {
-      return res.status(404).json({ errors: ['Session not found'] });
+      return res.status(404).json({ errors: ["Session not found"] });
     }
 
     session.name = sessionName;
@@ -138,7 +161,7 @@ export const updateSession = async (req, res) => {
     if (new Date(startDate) < currentDate || new Date(endDate) < currentDate) {
       return res.status(400).json({
         errors: [
-          'Start date and end date should be equal to or after the current date',
+          "Start date and end date should be equal to or after the current date",
         ],
       });
     }
@@ -151,10 +174,10 @@ export const updateSession = async (req, res) => {
           endDate: { $gte: startDate },
         },
         {
-          'sessionSlots.weekday': {
+          "sessionSlots.weekday": {
             $in: sessionSlots.map((slot) => slot.weekday),
           },
-          'sessionSlots.timeSlot': {
+          "sessionSlots.timeSlot": {
             $in: sessionSlots.map((slot) => slot.timeSlot),
           },
         },
@@ -167,7 +190,7 @@ export const updateSession = async (req, res) => {
     ) {
       return res.status(400).json({
         errors: [
-          'There is already an active session with conflicting time slots and weekdays',
+          "There is already an active session with conflicting time slots and weekdays",
         ],
       });
     }
@@ -175,12 +198,12 @@ export const updateSession = async (req, res) => {
     const updatedSession = await session.save();
 
     res.status(200).json({
-      message: 'Session updated successfully',
+      message: "Session updated successfully",
       session: updatedSession,
     });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ errors: ['Internal Server Error'] });
+    res.status(500).json({ errors: ["Internal Server Error"] });
   }
 };
 
@@ -192,13 +215,32 @@ export const getSessionDetails = async (req, res) => {
     }).lean();
 
     if (!session) {
-      return res.status(404).json({ errors: ['Session Not Found'] });
+      return res.status(404).json({ errors: ["Session Not Found"] });
     }
 
     res.status(200).json({ session });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ errors: ['Internal Server Error'] });
+    res.status(500).json({ errors: ["Internal Server Error"] });
+  }
+};
+
+export const getSessionUsers = async (req, res) => {
+  try {
+    const sessionId = req.params.sessionId;
+    const session = await Session.findOne({
+      _id: new mongoose.Types.ObjectId(sessionId),
+    }).lean();
+
+    if (!session) {
+      return res.status(404).json({ errors: ["Session Not Found"] });
+    }
+    const userIds = session.registeredUsers.map((user) => user.userId);
+    const users = await User.find({ _id: { $in: userIds } });
+    res.status(200).json({ users });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ errors: ["Internal Server Error"] });
   }
 };
 
@@ -215,7 +257,7 @@ export const getActiveSessions = async (req, res) => {
     res.status(200).json({ activeSessions });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ errors: ['Internal Server Error'] });
+    res.status(500).json({ errors: ["Internal Server Error"] });
   }
 };
 
@@ -232,7 +274,7 @@ export const getInactiveSessions = async (req, res) => {
     res.status(200).json({ inactiveSessions });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ errors: ['Internal Server Error'] });
+    res.status(500).json({ errors: ["Internal Server Error"] });
   }
 };
 
@@ -244,13 +286,13 @@ export const registerForSession = async (req, res) => {
     const session = await Session.findById(sessionId);
 
     if (!session) {
-      return res.status(404).json({ errors: ['Session not found'] });
+      return res.status(404).json({ errors: ["Session not found"] });
     }
 
     if (!session.isActive) {
       return res
         .status(400)
-        .json({ errors: ['Session is not active anymore'] });
+        .json({ errors: ["Session is not active anymore"] });
     }
 
     const trainer = await Trainer.findOne({
@@ -262,7 +304,7 @@ export const registerForSession = async (req, res) => {
     if (!trainer) {
       return res
         .status(404)
-        .json({ errors: ['Trainer not found for the session'] });
+        .json({ errors: ["Trainer not found for the session"] });
     }
 
     const userId = new mongoose.Types.ObjectId(user._id);
@@ -270,11 +312,11 @@ export const registerForSession = async (req, res) => {
     if (session.registeredUsers.some((u) => u.userId.equals(userId))) {
       return res
         .status(400)
-        .json({ errors: ['User already registered for this session'] });
+        .json({ errors: ["User already registered for this session"] });
     }
 
     const conflictingSessions = await Session.find({
-      'registeredUsers.userId': userId,
+      "registeredUsers.userId": userId,
       isActive: true,
       $and: [
         {
@@ -282,10 +324,10 @@ export const registerForSession = async (req, res) => {
           endDate: { $gte: session.startDate },
         },
         {
-          'sessionSlots.weekday': {
+          "sessionSlots.weekday": {
             $in: session.sessionSlots.map((slot) => slot.weekday),
           },
-          'sessionSlots.timeSlot': {
+          "sessionSlots.timeSlot": {
             $in: session.sessionSlots.map((slot) => slot.timeSlot),
           },
         },
@@ -295,22 +337,22 @@ export const registerForSession = async (req, res) => {
     if (conflictingSessions.length > 0) {
       return res.status(400).json({
         errors: [
-          'User already registered for a conflicting session during the same time period.',
+          "User already registered for a conflicting session during the same time period.",
         ],
       });
     }
 
     if (session.registeredUsers.length >= session.capacity) {
-      return res.status(400).json({ errors: ['Session is already full'] });
+      return res.status(400).json({ errors: ["Session is already full"] });
     }
 
     session.registeredUsers.push({ userId });
     await session.save();
 
-    res.status(200).json({ message: 'User registered for the session' });
+    res.status(200).json({ message: "User registered for the session" });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ errors: ['Internal Server Error'] });
+    res.status(500).json({ errors: ["Internal Server Error"] });
   }
 };
 
@@ -322,13 +364,13 @@ export const unregisterFromSession = async (req, res) => {
     const session = await Session.findById(sessionId);
 
     if (!session) {
-      return res.status(404).json({ errors: ['Session not found'] });
+      return res.status(404).json({ errors: ["Session not found"] });
     }
 
     if (!session.isActive) {
       return res
         .status(400)
-        .json({ errors: ['Session is not active anymore'] });
+        .json({ errors: ["Session is not active anymore"] });
     }
 
     const userRegistrationIndex = session.registeredUsers.findIndex((u) =>
@@ -337,7 +379,7 @@ export const unregisterFromSession = async (req, res) => {
 
     if (userRegistrationIndex === -1) {
       return res.status(400).json({
-        errors: ['User is not registered for this session'],
+        errors: ["User is not registered for this session"],
       });
     }
 
@@ -345,10 +387,10 @@ export const unregisterFromSession = async (req, res) => {
 
     await session.save();
 
-    res.status(200).json({ message: 'User unregistered from the session' });
+    res.status(200).json({ message: "User unregistered from the session" });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ errors: ['Internal Server Error'] });
+    res.status(500).json({ errors: ["Internal Server Error"] });
   }
 };
 
@@ -362,18 +404,18 @@ export const unregisterUserFromSessionByTrainer = async (req, res) => {
     ) {
       return res
         .status(400)
-        .json({ errors: ['You are not the owner of the session'] });
+        .json({ errors: ["You are not the owner of the session"] });
     }
     const session = await Session.findById(sessionId);
 
     if (!session) {
-      return res.status(404).json({ errors: ['Session not found'] });
+      return res.status(404).json({ errors: ["Session not found"] });
     }
 
     if (!session.isActive) {
       return res
         .status(400)
-        .json({ errors: ['Session is not active anymore'] });
+        .json({ errors: ["Session is not active anymore"] });
     }
 
     const userRegistrationIndex = session.registeredUsers.findIndex((u) =>
@@ -382,7 +424,7 @@ export const unregisterUserFromSessionByTrainer = async (req, res) => {
 
     if (userRegistrationIndex === -1) {
       return res.status(400).json({
-        errors: ['User is not registered for this session'],
+        errors: ["User is not registered for this session"],
       });
     }
 
@@ -390,10 +432,10 @@ export const unregisterUserFromSessionByTrainer = async (req, res) => {
 
     await session.save();
 
-    res.status(200).json({ message: 'User unregistered from the session' });
+    res.status(200).json({ message: "User unregistered from the session" });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ errors: ['Internal Server Error'] });
+    res.status(500).json({ errors: ["Internal Server Error"] });
   }
 };
 
@@ -404,13 +446,13 @@ export const toggleSessionActivation = async (req, res) => {
     const trainer = req.trainer;
 
     if (!mongoose.Types.ObjectId.isValid(sessionId)) {
-      return res.status(400).json({ errors: ['Invalid session ID'] });
+      return res.status(400).json({ errors: ["Invalid session ID"] });
     }
 
     const session = await Session.findById(sessionId);
 
     if (!session) {
-      return res.status(404).json({ errors: ['Session not found'] });
+      return res.status(404).json({ errors: ["Session not found"] });
     }
 
     if (
@@ -418,7 +460,7 @@ export const toggleSessionActivation = async (req, res) => {
     ) {
       return res
         .status(400)
-        .json({ errors: ['You are not the owner of this session'] });
+        .json({ errors: ["You are not the owner of this session"] });
     }
 
     if (!session.isActive) {
@@ -430,7 +472,7 @@ export const toggleSessionActivation = async (req, res) => {
       ) {
         return res.status(400).json({
           errors: [
-            'Start date and end date should be equal to or after the current date',
+            "Start date and end date should be equal to or after the current date",
           ],
         });
       }
@@ -443,10 +485,10 @@ export const toggleSessionActivation = async (req, res) => {
             endDate: { $gte: session.startDate },
           },
           {
-            'sessionSlots.weekday': {
+            "sessionSlots.weekday": {
               $in: session.sessionSlots.map((slot) => slot.weekday),
             },
-            'sessionSlots.timeSlot': {
+            "sessionSlots.timeSlot": {
               $in: session.sessionSlots.map((slot) => slot.timeSlot),
             },
           },
@@ -459,7 +501,7 @@ export const toggleSessionActivation = async (req, res) => {
       ) {
         return res.status(400).json({
           errors: [
-            'There is already an active session with conflicting time slots and weekdays',
+            "There is already an active session with conflicting time slots and weekdays",
           ],
         });
       }
@@ -471,12 +513,12 @@ export const toggleSessionActivation = async (req, res) => {
 
     res.status(200).json({
       message: `Session ${
-        updatedSession.isActive ? 'activated' : 'deactivated'
+        updatedSession.isActive ? "activated" : "deactivated"
       } successfully`,
       session: updatedSession,
     });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ errors: ['Internal Server Error'] });
+    res.status(500).json({ errors: ["Internal Server Error"] });
   }
 };

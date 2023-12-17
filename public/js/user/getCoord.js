@@ -26,6 +26,6 @@ async function setLocation() {
     localStorage.setItem("lat", location.lat);
     localStorage.setItem("lng", location.lng);
   } catch (error) {
-    console.log(error);
+    //console.log(error);
   }
 }

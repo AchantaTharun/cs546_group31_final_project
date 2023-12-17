@@ -1,15 +1,17 @@
 <div class="container mt-4">
-    <h1 class="mb-4">TV Show Posts</h1>
 
+    <h1 class="mb-4"><a href="/user/create/newPosts">CREATE NEW POST</a></h1>
+    
     {{#each posts}}
         <div class="card mb-3">
-            <img src="{{this.img}}" class="card-img-top" alt="Post Image">
             <div class="card-body">
+                <a href="/user/post/{{this._id}}" class="text-white">
                 <h5 class="card-title">{{this.title}}</h5>
                 <p class="card-text">{{this.description}}</p>
-                <p class="card-text"><small class="text-muted">Posted on: {{this.createdAt}}</small></p>
+                </a>
             </div>
         </div>
     {{/each}}
+
 
 </div>

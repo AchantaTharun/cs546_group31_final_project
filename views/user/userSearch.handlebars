@@ -1,0 +1,50 @@
+<div class="container mt-4 ">
+
+    <h1>GymMates</h1>
+    <div class="row">
+        {{#if users.length}}
+            <div>
+                <button class="btn btn-primary m-3"><a href="/user/home" class="text-white">
+                        Go Back</a></button>
+            </div>
+            <div>
+                <h2 class="m-3">Search Results...</h2>
+                {{#each users}}
+                    <div class="col-md-6 mb-4 col-lg-4">
+                        <div class="card user-card">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center">
+                                    <img src="/public/imgs/pp.png" alt="{{this.userName}}'s Profile Picture"
+                                        class="profile-picture">
+                                    <div class="ml-3">
+                                        <h5 class="card-title mb-0">{{this.userName}}</h5>
+                                        <p class="card-text text-muted">{{this.firstName}} {{this.lastName}}</p>
+                                        <p class="card-text text-muted">{{this.email}}</p>
+                                    </div>
+                                </div>
+                                <hr>
+
+                                <div class="d-flex justify-content-between">
+                                    <button class="btn btn-primary"><a href="/user/{{this.userName}}"
+                                            class="text-white">View
+                                            Profile</a></button>
+                                    <button class="btn btn-secondary">Follow</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {{/each}}
+        {{else}}
+            <div>
+                <div>
+                    <button class="btn btn-primary m-3"><a href="/user/home" class="text-white">
+                            Go Back</a></button>
+                </div>
+                <h2 class="m-5">No Results found</h2>
+            </div>
+        {{/if}}
+    </div>
+</div>
+
+
+</div>

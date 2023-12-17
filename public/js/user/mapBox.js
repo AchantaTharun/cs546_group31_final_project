@@ -6,7 +6,7 @@ const lat = JSON.parse(localStorage.getItem("lat"));
 let users;
 const map = document.getElementById("map");
 if (map) {
-  console.log(map.getAttribute("data"));
+  //console.log(map.getAttribute("data"));
 }
 window.onload = async () => {
   try {
@@ -18,6 +18,14 @@ window.onload = async () => {
         lat,
       },
     });
+    // const resTrainer = await axios({
+    //   method: "GET",
+    //   url: `/api/v1/trainer/fromCoord`,
+    //   params: {
+    //     lng,
+    //     lat,
+    //   },
+    // });
 
     if (res.data.status === "success") {
       const map = new mapboxgl.Map({
@@ -27,9 +35,9 @@ window.onload = async () => {
         zoom: 10, // starting zoom
       });
       users = res.data.data.users;
-      console.log(users);
+      //// trainers = resTrainer.data.data.trainers;
       users.forEach((user) => {
-        const popupContent = `
+        const popupContentUsers = `
     <div class="popup-content ">
     <div class="user-card-mapBox">
         <div class="card-body-mapBox ">
@@ -50,10 +58,11 @@ window.onload = async () => {
 </div>
 
 `;
+
         const popup = new mapboxgl.Popup({
           offset: 50,
           closeButton: true,
-        }).setHTML(popupContent);
+        }).setHTML(popupContentUsers);
 
         new mapboxgl.Marker({
           color: "#185ED7",
@@ -62,25 +71,11 @@ window.onload = async () => {
           .setPopup(popup)
           .addTo(map);
       });
+
       const popupContent = `
-          <div class="popup-content ">
-    <div class="user-card-mapBox">
-        <div class="card-body-mapBox ">
-            <div class="profile-picture-mapBox">
-                <img src="/public/imgs/pp.png" alt="{user.userName}'s Profile Picture">
-            </div>
-            <div class="user-details m-2">
-                <h5 class="card-title-mapBox m-1">{user.userName}</h5>
-                <p class="card-text m-1">{user.firstName} {user.lastName}</p>
-                <p class="card-text m-1">{user.email}</p>
-            </div>
-            <hr>
-            <div class="profile-button">
-                <button class="btn btn-primary-mapBox"><a href="/user/profile" class="text-white">Your Profile</a></button>
-            </div>
-        </div>
+    <div class="popup-content ">
+    <h5 class="card-title-mapBox m-1">You</h5>
     </div>
-</div>
 `;
       const popup = new mapboxgl.Popup({
         offset: 50,
@@ -93,7 +88,43 @@ window.onload = async () => {
         .setPopup(popup)
         .addTo(map);
     }
+    //     if (resTrainer.data.status === "success") {
+    //       trainers.forEach((trainer) => {
+    //         const popupContent = `
+    //     <div class="popup-content ">
+    //     <div class="trainer-card-mapBox">
+    //         <div class="card-body-mapBox ">
+    //             <div class="profile-picture-mapBox">
+    //                 <img src="/public/imgs/pp.png" alt="${trainer.userName}'s Profile Picture">
+    //             </div>
+    //             <div class="trainer-details m-2">
+    //                 <h5 class="card-title-mapBox m-1">${trainer.userName}</h5>
+    //                 <p class="card-text m-1">${trainer.firstName} ${user.lastName}</p>
+    //                 <p class="card-text m-1">${trainer.email}</p>
+    //             </div>
+    //             <hr>
+    //             <div class="profile-button">
+    //                 <button class="btn btn-primary-mapBox"><a href="/user/${trainer.userName}" class="text-white">View Profile</a></button>
+    //             </div>
+    //         </div>
+    //     </div>
+    // </div>
+
+    // `;
+    //       });
+    //       const popup = new mapboxgl.Popup({
+    //         offset: 50,
+    //         closeButton: true,
+    //       }).setHTML(popupContent);
+
+    //       new mapboxgl.Marker({
+    //         color: "#198753",
+    //       })
+    //         .setLngLat(trainer.location.coordinates)
+    //         .setPopup(popup)
+    //         .addTo(map);
+    //     }
   } catch (err) {
-    console.log(err);
+    //console.log(err);
   }
 };

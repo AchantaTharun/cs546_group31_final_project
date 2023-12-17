@@ -19,8 +19,10 @@ router
 
 router
   .route("/:id/comments")
-  .post(authController.protectRoute, postsController.addComment)
-  .delete(authController.protectRoute, postsController.deleteComment)
-  .patch(authController.protectRoute, postsController.updateComment);
+  .post(authController.protectRoute, postsController.addComment);
+
+router
+  .route("/get/myPosts")
+  .get(authController.protectRoute, postsController.getPostByEntity);
 
 export default router;

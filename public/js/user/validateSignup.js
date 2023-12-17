@@ -9,10 +9,20 @@ document.addEventListener("DOMContentLoaded", function () {
     const email = document.getElementById("email").value;
     const password = document.getElementById("password").value;
     const passwordConfirm = document.getElementById("passwordConfirm").value;
+    const userName = document.getElementById("userName").value;
+    const favoriteWorkout = document.getElementById("favoriteWorkout").value;
     if (document.querySelector(".error-message")) {
       document.querySelector(".error-message").remove();
     }
-    if (!firstName || !lastName || !email || !password || !passwordConfirm) {
+    if (
+      !firstName ||
+      !lastName ||
+      !email ||
+      !password ||
+      !passwordConfirm ||
+      !userName ||
+      !favoriteWorkout
+    ) {
       errors.push("Please fill out all fields");
     }
     if (email.search(/@/) < 0) {
@@ -36,7 +46,28 @@ document.addEventListener("DOMContentLoaded", function () {
     if (lastName.length > 20) {
       errors.push("Last name must be less than 20 characters");
     }
-
+    if (userName.length < 2) {
+      errors.push("User name must be at least 2 characters");
+    }
+    if (userName.length > 20) {
+      errors.push("User name must be less than 20 characters");
+    }
+    if (userName.search(/[0-9]/) < 0) {
+      errors.push("User name must contain at least one number");
+    }
+    if (userName.search(/[a-z]/i) < 0) {
+      errors.push("User name must contain at least one letter");
+    }
+    if (
+      favoriteWorkout !== "cardio" &&
+      favoriteWorkout !== "strength" &&
+      favoriteWorkout !== "flexibility" &&
+      favoriteWorkout !== "sport" &&
+      favoriteWorkout !== "crossFit" &&
+      favoriteWorkout !== "bodyWeight"
+    ) {
+      errors.push("Please select a valid workout type");
+    }
     if (password !== passwordConfirm) {
       errors.push("Passwords do not match");
     }

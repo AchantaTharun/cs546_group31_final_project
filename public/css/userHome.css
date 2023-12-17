@@ -48,6 +48,7 @@ a:hover {
 #map {
     width: 100%;
     height: 400px;
+
 }
 
 .popup-content {
@@ -103,3 +104,8 @@ a:hover {
 .btn-primary-mapBox:hover {
     background-color: #0056b3;
 }
+
+img{
+    height: 200px;
+    width: 250px;
+  }

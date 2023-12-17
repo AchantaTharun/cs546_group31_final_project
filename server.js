@@ -10,10 +10,10 @@ import app from "./app.js";
       }
     );
     if (connection) {
-      console.log("Connected to DB");
+      //console.log("Connected to DB");
     }
   } catch (e) {
-    console.log(e);
+    //console.log(e);
   }
 })();
 app.listen(3000, () => console.log("Server started at port : 3000"));

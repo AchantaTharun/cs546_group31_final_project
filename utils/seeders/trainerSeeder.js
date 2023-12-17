@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import Trainer from "../../models/trainerModel.js";
+import SignUpRequest from "../../models/signUpRequestModel.js";
 mongoose.connect("mongodb://localhost:27017/GymMate", {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -352,7 +353,7 @@ const trainers = [
 
 (async () => {
   await Trainer.deleteMany();
-
+  await SignUpRequest.deleteMany();
   async function seedTrainersNearMe() {
     try {
       for (const trainer of trainers) {
@@ -378,9 +379,13 @@ const trainers = [
         });
 
         await newTrainer.save();
+        await SignUpRequest.create({
+          requestType: "trainer",
+          requestedBy: newTrainer._id,
+        });
       }
 
-      console.log("Trainers seeded successfully!");
+      //console.log("Trainers seeded successfully!");
     } catch (err) {
       console.error("Error seeding Trainers:", err);
     }
@@ -389,7 +394,7 @@ const trainers = [
   async function seedTrainersUSA() {
     try {
       for (const trainer of trainers) {
-        for (let i = 2; i <= 10; i++) {
+        for (let i = 2; i <= 20; i++) {
           const location = generateRandomCoordinatesUSA();
           const workoutType = [
             getRandomWorkoutType(),
@@ -412,9 +417,13 @@ const trainers = [
           });
 
           await newTrainer.save();
+          await SignUpRequest.create({
+            requestType: "trainer",
+            requestedBy: newTrainer._id,
+          });
         }
       }
-      console.log("Trainers seeded successfully!");
+      //console.log("Trainers seeded successfully!");
     } catch (err) {
       console.error("Error seeding Trainers:", err);
     }

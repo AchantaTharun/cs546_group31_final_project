@@ -23,6 +23,24 @@ router.get("/profile", async (req, res) => {
   return res.render("trainer/trainerProfile", { layout: "trainerHome" });
 });
 
+router.get(
+  "/mealplans",
+  authController.protectRoute,
+  trainerController.renderTrainerMealPlans
+);
+
+router.get(
+  "/mealplans/create",
+  authController.protectRoute,
+  trainerController.renderTrainerMealPlansCreate
+);
+
+router.get(
+  "/mealplans/edit",
+  authController.protectRoute,
+  trainerController.renderTrainerMealPlansEdit
+);
+
 router.post("/login", authController.trainerLogin);
 
 router.get(
@@ -46,7 +64,7 @@ router.get("/gyms", authController.protectRoute, async (req, res) => {
 });
 
 router.get("/events", authController.protectRoute, async (req, res) => {
-  const user = req.trainer;
+const user = req.trainer;
   try {
     const response = await axios.get("http://localhost:3000/api/v1/events/", {
       headers: { Cookie: `jwt=${req.cookies.jwt}` }
@@ -89,6 +107,15 @@ router.get("/events", authController.protectRoute, async (req, res) => {
       message: "An error occurred while fetching events."
     });
   }
+});
+
+router.get("/posts", authController.protectRoute, async (req, res) => {
+  const trainer = req.trainer;
+  return res.render("trainer/trainerPosts", {
+    trainer: trainer.toObject(),
+    type: "trainer",
+    layout: "trainerHome",
+  });
 });
 
 router.get("/events/createEvent",

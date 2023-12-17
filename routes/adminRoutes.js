@@ -433,7 +433,7 @@ router
     {
       return res.status(404).render('admin/gymEntity',{title:"GYM DATA",hasData:false,error:e});
     }
-    // console.log("\nDeleted Object is:",object);
+    // //console.log("\nDeleted Object is:",object);
     return res.redirect('/api/v1/admin/manage');
   })
 
@@ -491,7 +491,7 @@ router
     {
       return res.status(404).render('admin/trainerEntity',{title:"TRAINER DATA",hasData:false,error:e});
     }
-    // console.log("\nDeleted Object is:",object);
+    // //console.log("\nDeleted Object is:",object);
     return res.redirect('/api/v1/admin/manage');
   })
 
@@ -544,7 +544,7 @@ router
     {
       return res.status(404).render('admin/userEntity',{title:"USER DATA",hasData:false,error:e});
     }
-    // console.log("\nDeleted Object is:",object);
+    // //console.log("\nDeleted Object is:",object);
     return res.redirect('/api/v1/admin/manage');
   })
 
@@ -602,7 +602,7 @@ router
     {
       return res.status(404).render('admin/eventEntity',{title:"EVENT DATA",hasData:false,error:e});
     }
-    //console.log("\nDeleted Object is:",object);
+    ////console.log("\nDeleted Object is:",object);
     return res.redirect('/api/v1/admin/manage');
   })
   
@@ -655,7 +655,7 @@ router
     {
       return res.status(404).render('admin/postEntity',{title:"POST DATA",hasData:false,error:e});
     }
-    //console.log("\nDeleted Object is:",object);
+    ////console.log("\nDeleted Object is:",object);
     return res.redirect('/api/v1/admin/manage');
   })
 
@@ -673,6 +673,8 @@ router
   .post(restrict,upload.single('imageInput'),async(req,res)=>{
     //Initially img value is going to be empty.
     //Therefore we need to fill it first, before we start with the validation part
+    let img=undefined;
+    try{
     const url = await generateUploadURL();
     await fetch(url,{
               method:"PUT",
@@ -681,7 +683,12 @@ router
               },
               body: req.file.buffer
             });
-    let img = url.split('?')[0];
+    img = url.split('?')[0];
+    }catch(e)
+    {
+      return res.status(400).render('admin/createEvent',{title:"CREATE EVENT",error:"Image Upload Error"});
+    }
+
     let {title,description,contactEmail,streetAddress,city,state,zipCode,maxCapacity,priceOfAdmission,eventDate,startTime,endTime,totalNumberOfAttendees}= req.body;
     try
     {
@@ -744,13 +751,13 @@ router
       adminEvent = await adminController.createEvent(img,title,description,contactEmail,streetAddress,city,state,zipCode,maxCapacity,priceOfAdmission,eventDate,startTime,endTime,totalNumberOfAttendees);
     }catch(e)
     {
-      return res.status(400).render('admin/createEvent',{title:"CREATE EVENT",error:"Event Creation Couldn't be completed"});
+      return res.status(400).render('admin/createEvent',{title:"CREATE EVENT",error:"The Event Couldn't be created"});
     }
     if(!adminEvent)
     {
       return res.status(500).render('admin/createEvent',{title:"CREATE EVENT",error:"Internal Server error"});
     } 
-    //console.log(adminEvent);
+    ////console.log(adminEvent);
     res.redirect("/api/v1/admin/homepage");
 
   })

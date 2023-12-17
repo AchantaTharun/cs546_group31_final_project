@@ -1,23 +1,26 @@
-<form class="row g-3" method="post">
+<form class="row g-3" id="editForm" action="/user/profile/edit" method="post">
     <div class="mx-auto p-2 m-3">
         <img class="profile" src="https://bootdey.com/img/Content/avatar/avatar3.png" alt="">
     </div>
     <h3>Personal Information:</h3>
     <div class="col-md-12">
         <label for="bio" class="form-label">Bio</label>
-        <input type="text" class="form-control" id="bio">
+        <input type="text" class="form-control" id="bio" name="bio" value="{{#if user.bio}}{{user.bio}}{{/if}}">
     </div>
-    <div class="col-md-6">
+    <div class=" col-md-6">
         <label for="firstName" class="form-label">First Name</label>
-        <input type="text" class="form-control" id="firstName">
+        <input type="text" class="form-control" id="firstName" name="firstName"
+            value="{{#if user.firstName}} {{user.firstName}} {{/if}}">
     </div>
     <div class="col-md-6">
         <label for="lastName" class="form-label">Last Name</label>
-        <input type="text" class="form-control" id="lastName">
+        <input type="text" class="form-control" id="lastName" name="lastName"
+            value="{{#if user.lastName}} {{user.lastName}} {{/if}}">
     </div>
     <div class="col-md-6">
         <label for="email" class="form-label">Email</label>
-        <input type="email" class="form-control" id="email">
+        <input type="email" class="form-control" name="email" id="email"
+            value="{{#if user.email}} {{user.email}} {{/if}}">
     </div>
     <div class="col-md-1">
         <label for="dialingCode" class="form-label">Dialing Code</label>
@@ -27,13 +30,15 @@
 
     </div>
     <div class="col-md-5">
-        <label for="phoneNumber" class="form-label">Phone</label>
-
-        <input type="text" class="form-control" id="phoneNumber">
+        <label for="phone" class="form-label">Phone</label>
+        <input type="text" name="phone" class="form-control" id="phone"
+            value="{{#if user.phone}} {{user.phone}} {{/if}}">
     </div>
+
     <div class="col-md-6">
         <label for="dateOfBirth" class="form-label">Date Of Birth</label>
-        <input type="text" class="form-control" id="dateOfBirth" placeholder="MM/DD/YYYY">
+        <input type="text" class="form-control" id="dateOfBirth" placeholder="MM/DD/YYYY" name="dateOfBirth"
+            value="{{#if user.dateOfBirth}}{{user.dateOfBirth}}{{/if}}">
     </div>
 
     <div class="col-md-12">
@@ -41,136 +46,165 @@
             <legend class="col-form-label col-sm-2 pt-0">Gender</legend>
             <div class="col-sm-10">
                 <div class="form-check">
-                    <input class="form-check-input" type="radio" name="gridRadios" id="male" value="option1" checked>
+                    <input class="form-check-input gridRadios" type="radio" name="gender" id="male" value="male" {{#eq
+                        user.gender "male" }} checked {{/eq}}>
                     <label class="form-check-label" for="male">
-                        Male </label>
+                        Male
+                    </label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input" type="radio" name="gridRadios" id="female" value="option2">
+                    <input class="form-check-input gridRadios" type="radio" name="gender" id="female" value="female"
+                        {{#eq user.gender "female" }} checked {{/eq}}>
                     <label class="form-check-label" for="female">
-                        Female </label>
+                        Female
+                    </label>
                 </div>
                 <div class="form-check disabled">
-                    <input class="form-check-input" type="radio" name="gridRadios" id="other" value="option3">
+                    <input class="form-check-input gridRadios" type="radio" name="gender" id="other" value="other" {{#eq
+                        user.gender "other" }} checked {{/eq}}>
                     <label class="form-check-label" for="other">
-                        Other </label>
+                        Other
+                    </label>
                 </div>
             </div>
         </fieldset>
     </div>
+
     <div class="col-md-3">
         <label for="height" class="form-label">Height</label>
-        <input type="text" class="form-control" id="height">
+        <input type="text" name="height" class="form-control" id="height"
+            value="{{#if user.height}} {{user.height}} {{/if}}">
     </div>
     <div class="col-md-3">
         <label for="hUnit" class="form-label">hUnit</label>
-        <select id="hUnit" class="form-select">
-            <option selected disabled>Choose...</option>
-            <option value="ft">Ft</option>
-            <option value="m">meters</option>
+        <select id="hUnit" name="hUnit" class="form-select">
+            <option disabled>Choose...</option>
+            <option value="ft" {{#eq user.hUnit "ft" }} selected {{/eq}}>Ft</option>
+            <option value="m" {{#eq user.hUnit "m" }} selected {{/eq}}>m</option>
         </select>
-
     </div>
+
     <div class="col-md-3">
         <label for="weight" class="form-label">Weight</label>
-        <input type="text" class="form-control" id="weight">
+        <input type="text" name="weight" class="form-control" id="weight"
+            value="{{#if user.weight}} {{user.weight}} {{/if}}">
     </div>
     <div class="col-md-3">
         <label for="wUnit" class="form-label">wUnit</label>
-        <select id="wUnit" class="form-select">
+        <select id="wUnit" name="wUnit" class="form-select">
             <option selected disabled>Choose...</option>
-            <option value="lb">lb</option>
-            <option value="kg">kg</option>
+            <option value="lb" {{#eq user.wUnit "lb" }}selected {{/eq}}>lb</option>
+            <option value="kg" {{#eq user.wUnit "kg" }}selected {{/eq}}>kg</option>
         </select>
 
     </div>
     <div class="col-md-6">
         <label for="favoriteWorkout" class="form-label">Favorite Workout</label>
-        <select id="favoriteWorkout" class="form-select">
-            <option selected disabled>Choose...</option>
-            <option value="Cardio">Cardio</option>
-            <option value="Strength">Strength</option>
-            <option value="Flexibility">Flexibility</option>
-            <option value="Sports">Sports</option>
-            <option value="CrossFit">CrossFit</option>
-            <option value="Body Weight">Body Weight</option>
-
+        <select id="favoriteWorkout" name="favoriteWorkout" class="form-select">
+            <option disabled>Choose...</option>
+            <option value="cardio" {{#eq user.favoriteWorkout "cardio" }} selected {{/eq}}>Cardio</option>
+            <option value="strength" {{#eq user.favoriteWorkout "strength" }} selected {{/eq}}>Strength</option>
+            <option value="flexibility" {{#eq user.favoriteWorkout "flexibility" }} selected {{/eq}}>Flexibility
+            </option>
+            <option value="sports" {{#eq user.favoriteWorkout "sports" }} selected {{/eq}}>Sports</option>
+            <option value="crossFit" {{#eq user.favoriteWorkout "crossFit" }} selected {{/eq}}>CrossFit</option>
+            <option value="bodyWeight" {{#eq user.favoriteWorkout "bodyWeight" }} selected {{/eq}}>Body Weight
+            </option>
         </select>
     </div>
+
+
+
     <h3 class="mt-5">Address:</h3>
     <div class="col-12">
         <label for="street" class="form-label">Street</label>
-        <input type="text" class="form-control" id="street" placeholder="1234 Main St">
+        <input type="text" name="street" class="form-control" id="street" placeholder="1234 Main St"
+            value="{{#if user.address.street}}{{user.address.street}}{{/if}}">
     </div>
     <div class="col-12">
-        <label for="apartment" class="form-label">Apartment or Suit</label>
-        <input type="text" class="form-control" id="apartment" placeholder="Apartment, studio, or floor">
+        <label for="apartment" class="form-label">Apartment or Suite</label>
+        <input type="text" name="apartment" class="form-control" id="apartment"
+            placeholder="Apartment, studio, or floor"
+            value="{{#if user.address.apartment}}{{user.address.apartment}}{{/if}}">
     </div>
     <div class="col-md-6">
         <label for="city" class="form-label">City</label>
-        <input type="text" class="form-control" id="city">
+        <input type="text" name="city" class="form-control" id="city"
+            value="{{#if user.address.city}}{{user.address.city}}{{/if}}">
     </div>
+
     <div class="col-md-4">
         <label for="state" class="form-label">State</label>
-        <select id="state" class="form-select">
+        <select id="state" name="state" class="form-select">
             <option selected disabled>Choose...</option>
-            <option value="AL">Alabama</option>
-            <option value="AK">Alaska</option>
-            <option value="AZ">Arizona</option>
-            <option value="AR">Arkansas</option>
-            <option value="CA">California</option>
-            <option value="CO">Colorado</option>
-            <option value="CT">Connecticut</option>
-            <option value="DE">Delaware</option>
-            <option value="FL">Florida</option>
-            <option value="GA">Georgia</option>
-            <option value="HI">Hawaii</option>
-            <option value="ID">Idaho</option>
-            <option value="IL">Illinois</option>
-            <option value="IN">Indiana</option>
-            <option value="IA">Iowa</option>
-            <option value="KS">Kansas</option>
-            <option value="KY">Kentucky</option>
-            <option value="LA">Louisiana</option>
-            <option value="ME">Maine</option>
-            <option value="MD">Maryland</option>
-            <option value="MA">Massachusetts</option>
-            <option value="MI">Michigan</option>
-            <option value="MN">Minnesota</option>
-            <option value="MS">Mississippi</option>
-            <option value="MO">Missouri</option>
-            <option value="MT">Montana</option>
-            <option value="NE">Nebraska</option>
-            <option value="NV">Nevada</option>
-            <option value="NH">New Hampshire</option>
-            <option value="NJ">New Jersey</option>
-            <option value="NM">New Mexico</option>
-            <option value="NY">New York</option>
-            <option value="NC">North Carolina</option>
-            <option value="ND">North Dakota</option>
-            <option value="OH">Ohio</option>
-            <option value="OK">Oklahoma</option>
-            <option value="OR">Oregon</option>
-            <option value="PA">Pennsylvania</option>
-            <option value="RI">Rhode Island</option>
-            <option value="SC">South Carolina</option>
-            <option value="SD">South Dakota</option>
-            <option value="TN">Tennessee</option>
-            <option value="TX">Texas</option>
-            <option value="UT">Utah</option>
-            <option value="VT">Vermont</option>
-            <option value="VA">Virginia</option>
-            <option value="WA">Washington</option>
-            <option value="WV">West Virginia</option>
-            <option value="WI">Wisconsin</option>
-            <option value="WY">Wyoming</option>
+            <option value="AL" {{#eq user.address.state "AL" }} selected {{/eq}}>Alabama</option>
+            <option value="AK" {{#eq user.address.state "AK" }} selected {{/eq}}>Alaska</option>
+            <option value="AZ" {{#eq user.address.state "AZ" }} selected {{/eq}}>Arizona</option>
+            <option value="AR" {{#eq user.address.state "AR" }} selected {{/eq}}>Arkansas</option>
+            <option value="CA" {{#eq user.address.state "CA" }} selected {{/eq}}>California</option>
+            <option value="CO" {{#eq user.address.state "CO" }} selected {{/eq}}>Colorado</option>
+            <option value="CT" {{#eq user.address.state "CT" }} selected {{/eq}}>Connecticut</option>
+            <option value="DE" {{#eq user.address.state "DE" }} selected {{/eq}}>Delaware</option>
+            <option value="FL" {{#eq user.address.state "FL" }} selected {{/eq}}>Florida</option>
+            <option value="GA" {{#eq user.address.state "GA" }} selected {{/eq}}>Georgia</option>
+            <option value="HI" {{#eq user.address.state "HI" }} selected {{/eq}}>Hawaii</option>
+            <option value="ID" {{#eq user.address.state "ID" }} selected {{/eq}}>Idaho</option>
+            <option value="IL" {{#eq user.address.state "IL" }} selected {{/eq}}>Illinois</option>
+            <option value="IN" {{#eq user.address.state "IN" }} selected {{/eq}}>Indiana</option>
+            <option value="IA" {{#eq user.address.state "IA" }} selected {{/eq}}>Iowa</option>
+            <option value="KS" {{#eq user.address.state "KS" }} selected {{/eq}}>Kansas</option>
+            <option value="KY" {{#eq user.address.state "KY" }} selected {{/eq}}>Kentucky</option>
+            <option value="LA" {{#eq user.address.state "LA" }} selected {{/eq}}>Louisiana</option>
+            <option value="ME" {{#eq user.address.state "ME" }} selected {{/eq}}>Maine</option>
+            <option value="MD" {{#eq user.address.state "MD" }} selected {{/eq}}>Maryland</option>
+            <option value="MA" {{#eq user.address.state "MA" }} selected {{/eq}}>Massachusetts</option>
+            <option value="MI" {{#eq user.address.state "MI" }} selected {{/eq}}>Michigan</option>
+            <option value="MN" {{#eq user.address.state "MN" }} selected {{/eq}}>Minnesota</option>
+            <option value="MS" {{#eq user.address.state "MS" }} selected {{/eq}}>Mississippi</option>
+            <option value="MO" {{#eq user.address.state "MO" }} selected {{/eq}}>Missouri</option>
+            <option value="MT" {{#eq user.address.state "MT" }} selected {{/eq}}>Montana</option>
+            <option value="NE" {{#eq user.address.state "NE" }} selected {{/eq}}>Nebraska</option>
+            <option value="NV" {{#eq user.address.state "NV" }} selected {{/eq}}>Nevada</option>
+            <option value="NH" {{#eq user.address.state "NH" }} selected {{/eq}}>New Hampshire</option>
+            <option value="NJ" {{#eq user.address.state "NJ" }} selected {{/eq}}>New Jersey</option>
+            <option value="NM" {{#eq user.address.state "NM" }} selected {{/eq}}>New Mexico</option>
+            <option value="NY" {{#eq user.address.state "NY" }} selected {{/eq}}>New York</option>
+            <option value="NC" {{#eq user.address.state "NC" }} selected {{/eq}}>North Carolina</option>
+            <option value="ND" {{#eq user.address.state "ND" }} selected {{/eq}}>North Dakota</option>
+            <option value="OH" {{#eq user.address.state "OH" }} selected {{/eq}}>Ohio</option>
+            <option value="OK" {{#eq user.address.state "OK" }} selected {{/eq}}>Oklahoma</option>
+            <option value="OR" {{#eq user.address.state "OR" }} selected {{/eq}}>Oregon</option>
+            <option value="PA" {{#eq user.address.state "PA" }} selected {{/eq}}>Pennsylvania</option>
+            <option value="RI" {{#eq user.address.state "RI" }} selected {{/eq}}>Rhode Island</option>
+            <option value="SC" {{#eq user.address.state "SC" }} selected {{/eq}}>South Carolina</option>
+            <option value="SD" {{#eq user.address.state "SD" }} selected {{/eq}}>South Dakota</option>
+            <option value="TN" {{#eq user.address.state "TN" }} selected {{/eq}}>Tennessee</option>
+            <option value="TX" {{#eq user.address.state "TX" }} selected {{/eq}}>Texas</option>
+            <option value="UT" {{#eq user.address.state "UT" }} selected {{/eq}}>Utah</option>
+            <option value="VT" {{#eq user.address.state "VT" }} selected {{/eq}}>Vermont</option>
+            <option value="VA" {{#eq user.address.state "VA" }} selected {{/eq}}>Virginia</option>
+            <option value="WA" {{#eq user.address.state "WA" }} selected {{/eq}}>Washington</option>
+            <option value="WV" {{#eq user.address.state "WV" }} selected {{/eq}}>West Virginia</option>
+            <option value="WI" {{#eq user.address.state "WI" }} selected {{/eq}}>Wisconsin</option>
+            <option value="WY" {{#eq user.address.state "WY" }} selected {{/eq}}>Wyoming</option>
 
         </select>
     </div>
     <div class="col-md-2">
         <label for="zip" class="form-label">Zip</label>
-        <input type="text" class="form-control" id="zip">
+        <input type="text" name="zip" class="form-control" id="zip"
+            value="{{#if user.address.zip}} {{user.address.zip}} {{/if}}">
     </div>
+    <div class="container mt-5 alert alert-danger d-none" id="errorList"></div>
+    {{#if error}}
+        <div class="container mt-5 alert alert-danger" id="errorList">
+            <ul>
+                {{#each error}}
+                    <li>{{this}}</li>
+                {{/each}}
+            </ul>
+        </div>
+    {{/if}}
     <div class="col-12">
         <button type="submit" class="btn btn-primary">Submit</button>
     </div>

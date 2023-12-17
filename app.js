@@ -8,6 +8,7 @@ import { dirname } from "path";
 import cookieParser from "cookie-parser";
 import configRoutesFunction from "./routes/index.js";
 import hpp from "hpp";
+import { generateUploadURL } from "./utils/s3.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -29,7 +30,7 @@ app.use(mongoSanitizer());
 
 //The first middleware, so that the file uploads doesn't runs into conflicts with the other routes.
 // app.get('/admin/s3Url',async (req,res)=>{
-//   console.log("Gonna get the URL for the file upload rn");
+//   //console.log("Gonna get the URL for the file upload rn");
 //   const url = await generateUploadURL();
 //   res.send({url})
 // })
@@ -86,6 +87,9 @@ app.engine(
       },
       ifNotEquals: function (arg1, arg2) {
         return arg1 !== arg2 ? true : false;
+      },
+      eq: function (arg1, arg2, options) {
+        return arg1 === arg2 ? options.fn(this) : options.inverse(this);
       },
     },
   })

@@ -64,7 +64,7 @@ async function seedDB() {
         });
 
         await newPost.save();
-        console.log(`Created post for ${character} in ${show.toUpperCase()}`);
+        //console.log(`Created post for ${character} in ${show.toUpperCase()}`);
       }
     }
     mongoose.connection.close();

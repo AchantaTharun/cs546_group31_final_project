@@ -22,6 +22,9 @@
         <label for="lastName">Last Name:</label>
         <input type="text" id="lastName" name="lastName" required>
 
+        <label for="userName">User Name:</label>
+        <input type="text" id="userName" name="userName" required>
+
         <label for="email">Email:</label>
         <input type="email" id="email" name="email" required>
 
@@ -31,6 +34,16 @@
         <label for="passwordConfirm">Confirm Password:</label>
         <input type="password" id="passwordConfirm" name="passwordConfirm" required>
 
+        <label for="favoriteWorkout" class="form-label">Favorite Workout</label>
+        <select id="favoriteWorkout" class="form-select mt-4 mb-4" required>
+            <option disabled>Choose...</option>
+            <option selected value="cardio">Cardio</option>
+            <option value="strength">Strength</option>
+            <option value="flexibility">Flexibility</option>
+            <option value="sports">Sports</option>
+            <option value="crossFit">CrossFit</option>
+            <option value="bodyWeight">Body Weight</option>
+        </select>
         <input type="submit" id="submit-btn" value="Sign Up">
         <div class="d-grid gap-2">
             <button class="btn btn-primary col " id="loading" type="button" hidden disabled>
