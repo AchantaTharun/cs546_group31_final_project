@@ -74,7 +74,7 @@ const trainerSchema = new mongoose.Schema({
   status: {
     type: String,
     enum: ["pending", "approved", "rejected"],
-    default: "pending",
+    default: "approved",
   },
   reason: {
     type: String,
@@ -126,6 +126,46 @@ const trainerSchema = new mongoose.Schema({
   //     type: String,
   //     required: [true, "Please upload your business license"],
   //   },
+  following: {
+    users: [
+      {
+        type: mongoose.Schema.ObjectId,
+        ref: "User",
+      },
+    ],
+    gyms: [
+      {
+        type: mongoose.Schema.ObjectId,
+        ref: "Gym",
+      },
+    ],
+    trainers: [
+      {
+        type: mongoose.Schema.ObjectId,
+        ref: "Trainer",
+      },
+    ],
+  },
+  followers: {
+    users: [
+      {
+        type: mongoose.Schema.ObjectId,
+        ref: "User",
+      },
+    ],
+    gyms: [
+      {
+        type: mongoose.Schema.ObjectId,
+        ref: "Gym",
+      },
+    ],
+    trainers: [
+      {
+        type: mongoose.Schema.ObjectId,
+        ref: "Trainer",
+      },
+    ],
+  },
 });
 
 trainerSchema.pre("save", async function (next) {

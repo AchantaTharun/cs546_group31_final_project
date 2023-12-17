@@ -1,8 +1,9 @@
 import mongoose from "mongoose";
 import validator from "validator";
 import bcrypt from "bcryptjs";
+import Post from "../models/postModel.js";
+import * as Helpers from "../Helpers.js";
 
-// Not Complete
 const userSchema = new mongoose.Schema({
   firstName: {
     type: String,
@@ -45,6 +46,17 @@ const userSchema = new mongoose.Schema({
     unique: true,
     validate: [validator.isEmail, "Please enter a valid email"],
   },
+  phone: {
+    type: String,
+    required: [true, "Please enter your phone number"],
+    trim: true,
+    unique: true,
+    validate: [
+      validator.isMobilePhone,
+      "Please enter a valid phone number",
+      "en-US",
+    ],
+  },
   createdAt: {
     type: Date,
     default: Date.now,
@@ -84,43 +96,129 @@ const userSchema = new mongoose.Schema({
   },
   favoriteWorkout: {
     type: String,
+    default: "cardio",
     enum: [
       "cardio",
       "strength",
       "flexibility",
       "sports",
       "crossFit",
-      "body Weight",
+      "bodyWeight",
     ],
     required: [true, "Please enter your favorite workout"],
     trim: true,
   },
+  bio: {
+    type: String,
+    trim: true,
+    minLength: [10, "Bio must be at least 10 characters long"],
+    maxLength: [200, "Bio must be less than 200 characters long"],
+  },
+  dateOfBirth: {
+    type: String,
+    trim: true,
+    validate: {
+      validator: Helpers.isValidDOB,
+      message: "Please enter a valid date of birth",
+    },
+  },
+  gender: {
+    type: String,
+    enum: ["male", "female", "other"],
+  },
+  height: {
+    type: String,
+    trim: true,
+    validate: [validator.isNumeric, "Please enter a valid height"],
+  },
+  weight: {
+    type: String,
+    trim: true,
+    validate: [validator.isNumeric, "Please enter a valid weight"],
+  },
+  hUnit: {
+    type: String,
+    enum: ["ft", "m"],
+  },
+  wUnit: {
+    type: String,
+    enum: ["lb", "kg"],
+  },
   address: {
     street: {
       type: String,
-      required: [true, "Please enter your street address"],
       trim: true,
+      minLength: [3, "Street must be at least 3 characters long"],
+      maxLength: [50, "Street must be less than 50 characters long"],
+    },
+    apartment: {
+      type: String,
+      trim: true,
+      minLength: [3, "Apartment must be at least 3 characters long"],
+      maxLength: [50, "Apartment must be less than 50 characters long"],
     },
     city: {
       type: String,
-      required: [true, "Please enter your city"],
       trim: true,
+      minLength: [3, "City must be at least 3 characters long"],
+      maxLength: [50, "City must be less than 50 characters long"],
     },
     state: {
       type: String,
-      required: [true, "Please enter your state"],
       trim: true,
+      uppercase: true,
+      length: [2, "State must be 2 characters long"],
+      validate: {
+        validator: Helpers.checkState,
+        message: "Please enter a valid state",
+      },
     },
-    zipCode: {
+    zip: {
       type: String,
-      required: [true, "Please enter your zip code"],
       trim: true,
+      length: [5, "Zip must be 5 characters long"],
+      validate: [validator.isNumeric, "Please enter a valid zip code"],
     },
-    country: {
-      type: String,
-      required: [true, "Please enter your country"],
-      trim: true,
-    },
+  },
+  following: {
+    users: [
+      {
+        type: mongoose.Schema.ObjectId,
+        ref: "User",
+      },
+    ],
+    gyms: [
+      {
+        type: mongoose.Schema.ObjectId,
+        ref: "Gym",
+      },
+    ],
+    trainers: [
+      {
+        type: mongoose.Schema.ObjectId,
+        ref: "Trainer",
+      },
+    ],
+  },
+  followers: {
+    users: [
+      {
+        type: mongoose.Schema.ObjectId,
+        ref: "User",
+      },
+    ],
+    gyms: [
+      {
+        type: mongoose.Schema.ObjectId,
+        ref: "Gym",
+      },
+    ],
+    trainers: [
+      {
+        type: mongoose.Schema.ObjectId,
+        ref: "Trainer",
+      },
+    ],
   },
 });
 
@@ -128,7 +226,6 @@ userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return next();
   this.password = await bcrypt.hash(this.password, 12);
 
-  // removing passwordConfirm field because we don't need to persist it
   this.passwordConfirm = undefined;
   next();
 });

@@ -67,7 +67,7 @@ async function seedDB() {
         });
 
         await newEvent.save();
-        console.log(`Created event for ${character} in ${show.toUpperCase()}`);
+        //console.log(`Created event for ${character} in ${show.toUpperCase()}`);
       }
     }
     mongoose.connection.close();

@@ -5,8 +5,12 @@ import { Router } from "express";
 
 const router = Router();
 
-router.get("/fromCoord", userController.getFromCoord);
-router.get("/search", userController.search);
-router.get("/:userName", userController.getUser);
-router.get("/", userController.getAllUsers);
+router.get(
+  "/fromCoord",
+  authController.protectRoute,
+  userController.getFromCoord
+);
+router.get("/search", authController.protectRoute, userController.search);
+router.get("/:userName", authController.protectRoute, userController.getUser);
+router.get("/", authController.protectRoute, userController.getAllUsers);
 export default router;

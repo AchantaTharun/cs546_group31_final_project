@@ -44,7 +44,7 @@ export const protectRoute = async (req, res, next) => {
 
     switch (decoded.role) {
       case "user":
-        const user = await User.findById(decoded.id);
+        const user = await User.findById(decoded.id).lean();
         if (!user) {
           return res.redirect("/");
         }
@@ -54,7 +54,7 @@ export const protectRoute = async (req, res, next) => {
         ) {
           return res.redirect("/");
         }
-        req.user = user;
+        req.user = Object.assign(user);
         break;
       case "admin":
         const admin = await Admin.findById(decoded.id);
@@ -157,9 +157,10 @@ export const userSignup = async (req, res) => {
       passwordConfirm,
       latitude,
       longitude,
+      userName,
     } = req.body;
     const location = {
-      coordinates: [latitude, longitude],
+      coordinates: [longitude, latitude],
     };
     const newUser = await User.create({
       firstName,
@@ -168,6 +169,7 @@ export const userSignup = async (req, res) => {
       password,
       passwordConfirm,
       location,
+      userName,
     });
     if (!newUser) {
       throw new Error("User not created");
@@ -191,7 +193,9 @@ export const userSignup = async (req, res) => {
 
 export const userLogin = async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { email, password, latitude, longitude } = req.body;
+    const lng = longitude;
+    const lat = latitude;
 
     if (!email || !password) {
       throw new Error("Please provide email and password");
@@ -210,7 +214,7 @@ export const userLogin = async (req, res) => {
       sameSite: "Strict",
     });
 
-    res.redirect("/user/home");
+    res.redirect(`/user/home`);
   } catch (err) {
     res.render("user/userLogin", {
       errors: [err.message],

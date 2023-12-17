@@ -1,10 +1,13 @@
 import mongoose from "mongoose";
 import Trainer from "../../models/trainerModel.js";
 import SignUpRequest from "../../models/signUpRequestModel.js";
+import Gym from "../../models/gymModel.js";
+
 mongoose.connect("mongodb://localhost:27017/GymMate", {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
+
 function getRandomWorkoutType() {
   const workoutTypes = [
     "cardio",
@@ -164,187 +167,186 @@ function generateRandomCoordinatesUSA() {
   return { coordinates: [longitude, latitude] };
 }
 
-const trainers = [
+const gyms = [
   {
-    firstName: "Walter",
-    lastName: "White",
-    trainerName: "Heisenberg",
+    ownerFName: "Walter",
+    ownerLName: "White",
     email: "walter@example.com",
     password: "walterpassword",
     passwordConfirm: "walterpassword",
   },
   {
-    firstName: "Tony",
-    lastName: "Soprano",
-    trainerName: "tonysoprano",
+    ownerFName: "Tony",
+    ownerLName: "Soprano",
+
     email: "tony@example.com",
     password: "tonypassword",
     passwordConfirm: "tonypassword",
   },
   {
-    firstName: "Tyrion",
-    lastName: "Lannister",
-    trainerName: "impinainteasy",
+    ownerFName: "Tyrion",
+    ownerLName: "Lannister",
+
     email: "tyrion@example.com",
     password: "tyrionpassword",
     passwordConfirm: "tyrionpassword",
   },
   {
-    firstName: "Jesse",
-    lastName: "Pinkman",
-    trainerName: "yomrwhite",
+    ownerFName: "Jesse",
+    ownerLName: "Pinkman",
+
     email: "jesse@example.com",
     password: "jessepassword",
     passwordConfirm: "jessepassword",
   },
   {
-    firstName: "Rick",
-    lastName: "Sanchez",
-    trainerName: "rickc137",
+    ownerFName: "Rick",
+    ownerLName: "Sanchez",
+
     email: "rick@example.com",
     password: "rickpassword",
     passwordConfirm: "rickpassword",
   },
   {
-    firstName: "Al",
-    lastName: "Swearengen",
-    trainerName: "deadwoodboss",
+    ownerFName: "Alcc",
+    ownerLName: "Swearengen",
+
     email: "al@example.com",
     password: "alpassword",
     passwordConfirm: "alpassword",
   },
   {
-    firstName: "Carmela",
-    lastName: "Soprano",
-    trainerName: "carm",
+    ownerFName: "Carmela",
+    ownerLName: "Soprano",
+
     email: "carmela@example.com",
     password: "carmelapassword",
     passwordConfirm: "carmelapassword",
   },
   {
-    firstName: "Jon",
-    lastName: "Snow",
-    trainerName: "lordcommander",
+    ownerFName: "Jon",
+    ownerLName: "Snow",
+
     email: "jon@example.com",
     password: "jonpassword",
     passwordConfirm: "jonpassword",
   },
   {
-    firstName: "Skyler",
-    lastName: "White",
-    trainerName: "skysky",
+    ownerFName: "Skyler",
+    ownerLName: "White",
+
     email: "skyler@example.com",
     password: "skylpassword",
     passwordConfirm: "skylpassword",
   },
   {
-    firstName: "Morty",
-    lastName: "Smith",
-    trainerName: "mortyadventures",
+    ownerFName: "Morty",
+    ownerLName: "Smith",
+
     email: "morty@example.com",
     password: "mortypassword",
     passwordConfirm: "mortypassword",
   },
   {
-    firstName: "Saul",
-    lastName: "Goodman",
-    trainerName: "bettercallsaul",
+    ownerFName: "Saul",
+    ownerLName: "Goodman",
+
     email: "saul@example.com",
     password: "saulpassword",
     passwordConfirm: "saulpassword",
   },
   {
-    firstName: "Anthony",
-    lastName: "SopranoJr",
-    trainerName: "ajsoprano",
+    ownerFName: "Anthony",
+    ownerLName: "SopranoJr",
+
     email: "aj@example.com",
     password: "ajpassword",
     passwordConfirm: "ajpassword",
   },
   {
-    firstName: "Tyrion",
-    lastName: "Soprano",
-    trainerName: "tyrionjr",
+    ownerFName: "Tyrion",
+    ownerLName: "Soprano",
+
     email: "tyrionjr@example.com",
     password: "tyrionpassword",
     passwordConfirm: "tyrionpassword",
   },
   {
-    firstName: "Daenerys",
-    lastName: "Targaryen",
-    trainerName: "motherofdragons",
+    ownerFName: "Daenerys",
+    ownerLName: "Targaryen",
+
     email: "daenerys@example.com",
     password: "daeneryspassword",
     passwordConfirm: "daeneryspassword",
   },
   {
-    firstName: "Hank",
-    lastName: "Schrader",
-    trainerName: "minerals",
+    ownerFName: "Hank",
+    ownerLName: "Schrader",
+
     email: "hank@example.com",
     password: "hankpassword",
     passwordConfirm: "hankpassword",
   },
   {
-    firstName: "Beth",
-    lastName: "Smith",
-    trainerName: "spacevet",
+    ownerFName: "Beth",
+    ownerLName: "Smith",
+
     email: "beth@example.com",
     password: "bethpassword",
     passwordConfirm: "bethpassword",
   },
   {
-    firstName: "Seth",
-    lastName: "Bullock",
-    trainerName: "marshalbullock",
+    ownerFName: "Seth",
+    ownerLName: "Bullock",
+
     email: "seth@example.com",
     password: "sethpassword",
     passwordConfirm: "sethpassword",
   },
   {
-    firstName: "Paulie",
-    lastName: "Gualtieri",
-    trainerName: "paulieWalnuts",
+    ownerFName: "Paulie",
+    ownerLName: "Gualtieri",
+
     email: "paulie@example.com",
     password: "pauliepassword",
     passwordConfirm: "pauliepassword",
   },
   {
-    firstName: "Arya",
-    lastName: "Stark",
-    trainerName: "needleBearer",
+    ownerFName: "Arya",
+    ownerLName: "Stark",
+
     email: "arya@example.com",
     password: "aryapassword",
     passwordConfirm: "aryapassword",
   },
   {
-    firstName: "Gus",
-    lastName: "Fring",
-    trainerName: "lospolloshermanos",
+    ownerFName: "Gus",
+    ownerLName: "Fring",
+
     email: "gus@example.com",
     password: "guspassword",
     passwordConfirm: "guspassword",
   },
   {
-    firstName: "Summer",
-    lastName: "Smith",
-    trainerName: "summersmith",
+    ownerFName: "Summer",
+    ownerLName: "Smith",
+
     email: "summer@example.com",
     password: "summerpassword",
     passwordConfirm: "summerpassword",
   },
   {
-    firstName: "Calamity",
-    lastName: "Jane",
-    trainerName: "wildwestjane",
+    ownerFName: "Calamity",
+    ownerLName: "Jane",
+
     email: "calamity@example.com",
     password: "calamitypassword",
     passwordConfirm: "calamitypassword",
   },
   {
-    firstName: "Junior",
-    lastName: "Soprano",
-    trainerName: "juniorsoprano",
+    ownerFName: "Junior",
+    ownerLName: "Soprano",
+
     email: "junior@example.com",
     password: "juniorpassword",
     passwordConfirm: "juniorpassword",
@@ -352,11 +354,12 @@ const trainers = [
 ];
 
 (async () => {
-  await Trainer.deleteMany();
+  await Gym.deleteMany();
   await SignUpRequest.deleteMany();
-  async function seedTrainersNearMe() {
+
+  async function seedGymsNearMe() {
     try {
-      for (const trainer of trainers) {
+      for (const gym of gyms) {
         const location = generateRandomCoordinates(40.790767, -74.0401098, 10);
         const workoutType = [
           getRandomWorkoutType(),
@@ -365,36 +368,37 @@ const trainers = [
         ];
         const phone = generateRandomPhoneNumber();
         const address = generateRandomAddress();
-        const newTrainer = new Trainer({
-          firstName: trainer.firstName,
-          lastName: trainer.lastName,
-          trainerName: "1" + trainer.trainerName + "Trainer",
-          email: "1" + trainer.email + "Trainer",
-          password: "1" + trainer.password + "Trainer",
-          passwordConfirm: "1" + trainer.password + "Trainer",
+        const newgym = new Gym({
+          ownerFName: gym.ownerFName,
+          ownerLName: gym.ownerLName,
+          gymName: "1" + gym.ownerLName + "Gym",
+
+          email: "1" + gym.email + "Gym",
+          password: "1" + gym.password + "Gym",
+          passwordConfirm: "1" + gym.password + "Gym",
           location: location,
           workoutType,
           address,
           phone,
         });
 
-        await newTrainer.save();
+        await newgym.save();
         await SignUpRequest.create({
-          requestType: "trainer",
-          requestedBy: newTrainer._id,
+          requestType: "gym",
+          requestedBy: newgym._id,
         });
       }
 
-      //console.log("Trainers seeded successfully!");
+      console.log("Gyms seeded successfully!");
     } catch (err) {
       console.error("Error seeding Trainers:", err);
     }
   }
 
-  async function seedTrainersUSA() {
+  async function seedGymsUSA() {
     try {
-      for (const trainer of trainers) {
-        for (let i = 2; i <= 20; i++) {
+      for (const gym of gyms) {
+        for (let i = 2; i <= 10; i++) {
           const location = generateRandomCoordinatesUSA();
           const workoutType = [
             getRandomWorkoutType(),
@@ -403,33 +407,33 @@ const trainers = [
           ];
           const phone = generateRandomPhoneNumber();
           const address = generateRandomAddress();
-          const newTrainer = new Trainer({
-            firstName: trainer.firstName,
-            lastName: trainer.lastName,
-            trainerName: `${i}` + trainer.trainerName + "Trainer",
-            email: `${i}` + trainer.email + "Trainer",
-            password: `${i}` + trainer.password + "Trainer",
-            passwordConfirm: `${i}` + trainer.password + "Trainer",
+          const newgym = new Gym({
+            ownerFName: gym.ownerFName,
+            ownerLName: gym.ownerLName,
+            gymName: `${i}` + gym.ownerLName + "Gym",
+            email: `${i}` + gym.email + "gym",
+            password: `${i}` + gym.password + "gym",
+            passwordConfirm: `${i}` + gym.password + "gym",
             location: location,
             workoutType,
             address,
             phone,
           });
 
-          await newTrainer.save();
+          await newgym.save();
           await SignUpRequest.create({
-            requestType: "trainer",
-            requestedBy: newTrainer._id,
+            requestType: "gym",
+            requestedBy: newgym._id,
           });
         }
       }
-      //console.log("Trainers seeded successfully!");
+      console.log("Gyms seeded successfully!");
     } catch (err) {
-      console.error("Error seeding Trainers:", err);
+      console.error("Error seeding Gyms:", err);
     }
   }
 
-  await seedTrainersNearMe();
-  await seedTrainersUSA();
+  await seedGymsNearMe();
+  await seedGymsUSA();
   mongoose.connection.close();
 })();
