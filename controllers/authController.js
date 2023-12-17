@@ -35,13 +35,11 @@ export const protectRoute = async (req, res, next) => {
     if (!req.cookies.jwt) {
       return res.redirect("/");
     }
-
     token = req.cookies.jwt;
     if (!token) {
       return res.redirect("/");
     }
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
     switch (decoded.role) {
       case "user":
         const user = await User.findById(decoded.id).lean();
@@ -96,14 +94,12 @@ export const protectRoute = async (req, res, next) => {
         req.trainer = trainer;
         break;
     }
-
     next();
   } catch (err) {
     // res.status(400).json({
     //   status: 'fail',
     //   message: err.message,
     // });
-
     return res.redirect("/");
   }
 };

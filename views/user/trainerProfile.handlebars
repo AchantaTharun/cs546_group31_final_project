@@ -1,41 +1,54 @@
-<div>
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12">
-                <div id="content" class="content content-full-width">
-                    <div class="profile">
-                        <div class="profile-header">
-                            <div class="profile-header-cover"></div>
-                            <div class="profile-header-content">
-                                <div class="profile-header-img">
-                                    <img src="https://bootdey.com/img/Content/avatar/avatar3.png" alt="">
-                                </div>
-                                <div class="profile-header-info">
-                                    <h4 class="m-t-10 m-b-5">{{trainer.trainerName}}</h4>
-                                    <p class="m-b-10">{{trainer.firstName}} {{trainer.lastName}}</p>
-                                    <p>{{trainer.bio}}</p>
-                                </div>
-                                <a href="/follow" class="btn btn-sm btn-info mb-2">follow</a>
-                            </div>
-                            <ul class="profile-header-tab nav nav-tabs">
-                                <li class="nav-item"><a href="#posts" class="nav-link">POSTS</a></li>
-                                <li class="nav-item"><a href="#events" class="nav-link">EVENTS</a></li>
-                                <li class="nav-item"><a href="#followers" class="nav-link">FOLLOWERS</a></li>
-                                <li class="nav-item"><a href="#following" class="nav-link active">FOLLOWING</a></li>
-                            </ul>
-
-
-
+<div class="container">
+    {{#if hasFollowers}}
+        {{#each followingUsers}}
+            <div class="card mb-3" style="max-width: 540px;">
+                <div class="row g-0">
+                    <div class="col-md-4">
+                        <img src="https://bootdey.com/img/Content/avatar/avatar3.png" alt="..." class="img-fluid">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h5 class="card-title">{{this.userName}}</h5>
+                            <p class="card-text">{{this.firstName}}</p>
+                            <a href="/user/trainerProfile/{{this}}/posts" class="btn btn-primary">View Profile</a>
                         </div>
                     </div>
-                    <div class="profile-content">
-                        <div id="posts" class="tab-content">Posts content</div>
-                        <div id="events" class="tab-content">Events content</div>
-                        <div id="followers" class="tab-content">Followers content</div>
-                        <div id="following" class="tab-content active">Following content</div>
+                </div>
+        {{/each}}
+        {{#each followingTrainers}}
+            <div class="card mb-3" style="max-width: 540px;">
+                <div class="row g-0">
+                    <div class="col-md-4">
+                        <img src="https://bootdey.com/img/Content/avatar/avatar3.png" alt="..." class="img-fluid">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h5 class="card-title">{{this.trainerName}}</h5>
+                            <p class="card-text">This is a wider card with supporting text below as a natural lead-in to
+                                additional content.</p>
+                            <a href="/user/trainerProfile/{{this}}/posts" class="btn btn-primary">View Profile</a>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div>
-    </div>
+        {{/each}}
+        {{#each followingGyms}}
+            <div class="card mb-3" style="max-width: 540px;">
+                <div class="row g-0">
+                    <div class="col-md-4">
+                        <img src="https://bootdey.com/img/Content/avatar/avatar3.png" alt="..." class="img-fluid">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h5 class="card-title">{{this.gymName}}</h5>
+                            <p class="card-text">This is a wider card with supporting text below as a natural lead-in to
+                                additional content.</p>
+                            <a href="/user/trainerProfile/{{this}}/posts" class="btn btn-primary">View Profile</a>
+                        </div>
+                    </div>
+                </div>
+        {{/each}}
+    {{else}}
+        <h1>No Followers</h1>
+    {{/if}}
+
 </div>

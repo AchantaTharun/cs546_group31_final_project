@@ -1,27 +1,25 @@
-document.addEventListener("DOMContentLoaded", function () {
-  const tabContents = document.querySelectorAll(".tab-content");
-  tabContents.forEach(function (content) {
-    if (!content.classList.contains("active")) {
-      content.style.display = "none";
-    }
-  });
+const currentPath = window.location.pathname;
 
-  const navLinks = document.querySelectorAll(".nav-link");
-  navLinks.forEach(function (link) {
-    link.addEventListener("click", function (e) {
-      e.preventDefault();
-      const target = this.getAttribute("href").substring(1);
+const postsDiv = document.getElementById("posts");
+const eventsDiv = document.getElementById("events");
+const followersDiv = document.getElementById("followers");
+const followingDiv = document.getElementById("following");
 
-      tabContents.forEach(function (content) {
-        content.style.display = "none";
-      });
+function showActiveDiv() {
+  postsDiv.style.display = "none";
+  eventsDiv.style.display = "none";
+  followersDiv.style.display = "none";
+  followingDiv.style.display = "none";
 
-      document.getElementById(target).style.display = "block";
+  if (currentPath === "/posts") {
+    postsDiv.style.display = "block";
+  } else if (currentPath === "/events") {
+    eventsDiv.style.display = "block";
+  } else if (currentPath === "/followers") {
+    followersDiv.style.display = "block";
+  } else if (currentPath === "/following") {
+    followingDiv.style.display = "block";
+  }
+}
 
-      navLinks.forEach(function (nav) {
-        nav.classList.remove("active");
-      });
-      this.classList.add("active");
-    });
-  });
-});
+showActiveDiv();

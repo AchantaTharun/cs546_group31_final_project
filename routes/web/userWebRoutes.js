@@ -76,12 +76,6 @@ router.get(
   userControllerWeb.search
 );
 
-router.get(
-  "/:userName",
-  authController.protectRoute,
-  userControllerWeb.getUserFromUserName
-);
-
 router.get("/events", authController.protectRoute, async (req, res) => {
   const user = req.user;
   try {
@@ -100,9 +94,11 @@ router.get("/events", authController.protectRoute, async (req, res) => {
 router.get("/posts", authController.protectRoute, async (req, res) => {
   const user = req.user;
   let posts = [];
+  console.log("first");
   try {
     const response = await axios.get("http://localhost:3000/api/v1/posts", {
-      headers: req.headers,
+      data: req.body,
+      headers: { Cookie: `jwt=${req.cookies.jwt}` },
     }); //This had to be added.
     posts = response.data.data.posts;
     // console.log(response.data.data.posts);
@@ -142,6 +138,11 @@ router.get(
   authController.protectRoute,
   userControllerWeb.getProfilePage
 );
+router.get(
+  "/trainerProfile/:trainerName/followers",
+  authController.protectRoute,
+  userControllerWeb.getTrainerFollowersPage
+);
 
 router.get(
   "/trainerProfile/:userName",
@@ -160,7 +161,9 @@ router.post(
   authController.protectRoute,
   userControllerWeb.followUser
 );
-
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 router.get("/post/:id", authController.protectRoute, async (req, res) => {
   let id = req.params.id;
   try {
@@ -217,6 +220,7 @@ router.post(
       //Initially img value is going to be empty.
       //Therefore we need to fill it first, before we start with the validation part
       const url = await generateUploadURL();
+      console.log({ url });
       await fetch(url, {
         method: "PUT",
         headers: {
@@ -224,7 +228,9 @@ router.post(
         },
         body: req.file.buffer,
       });
+      console.log("first");
       img = url.split("?")[0];
+      console.log({ img });
       /////////////////////////////////////////////////////////////////////////////////////////////////////////////
     } catch (e) {
       return res.status(400).render("user/userCreatePost", {
@@ -602,5 +608,9 @@ router.post("/delete/post", authController.protectRoute, async (req, res) => {
     return res.redirect("/user/get/myPosts");
   }
 });
-
+router.get(
+  "/:userName",
+  authController.protectRoute,
+  userControllerWeb.getUserFromUserName
+);
 export default router;

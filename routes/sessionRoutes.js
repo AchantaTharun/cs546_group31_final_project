@@ -17,6 +17,7 @@ router.put(
   authController.protectRoute,
   sessionController.updateSession
 );
+
 router.get(
   "/:sessionId",
   authController.protectRoute,
@@ -35,6 +36,7 @@ router.get(
   authController.protectRoute,
   sessionController.getInactiveSessions
 );
+
 router.post(
   "/:sessionId/register",
   authController.protectRoute,
