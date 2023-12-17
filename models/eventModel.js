@@ -171,7 +171,6 @@ const eventSchema = new mongoose.Schema({
     },
   },
   eventDate: {
-    //It has to be taken from date time local
     type: Date,
     required: [true, "Please enter the eventDate"],
     trim: true,
