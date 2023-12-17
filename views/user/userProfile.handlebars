@@ -1,60 +1,127 @@
-{{!-- <div>
-    <nav class="navbar bg-body-tertiary">
-        <div class="container-fluid">
-            <a class="navbar-brand m-2" href="/user/home">GymMate</a>
-            <div class="d-flex flex-row-reverse">
-                <form class=" m-2" role="search" action="/user/profile" method="get">
-                    <button class="btn btn-success" type="submit">Profile</button>
-                </form>
-
-                <form class=" m-2" role="search" action="/user/logout" method="get">
-                    <button class="btn btn-danger" type="submit">Logout</button>
-                </form>
+<div class="container">
+    {{#if hasFollowers}}
+        <div class="container">
+            <div class="card mb-3" style="max-width: 540px;">
+                {{#each followerUsers}}
+                    <div class="row g-0">
+                        <div class="col-md-4">
+                            <img src="https://bootdey.com/img/Content/avatar/avatar3.png" alt="..." class="img-fluid">
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <h5 class="card-title">{{this.userName}}</h5>
+                                <p class="card-text">{{this.firstName}} {{this.lastName}}</p>
+                                <p>{{this.bio}}</p>
+                            </div>
+                        </div>
+                {{/each}}
+            </div>
+            <div class="card mb-3" style="max-width: 540px;">
+                {{#each followerTrainers}}
+                    <div class="row g-0">
+                        <div class="col-md-4">
+                            <img src="https://bootdey.com/img/Content/avatar/avatar3.png" alt="..." class="img-fluid">
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <h5 class="card-title">{{this.trainerName}}</h5>
+                                <p class="card-text">{{this.firstName}} {{this.lastName}}</p>
+                                <p>{{this.bio}}</p>
+                            </div>
+                        </div>
+                {{/each}}
+            </div>
+            <div class="card mb-3" style="max-width: 540px;">
+                {{#each followerGyms}}
+                    <div class="row g-0">
+                        <div class="col-md-4">
+                            <img src="https://bootdey.com/img/Content/avatar/avatar3.png" alt="..." class="img-fluid">
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <h5 class="card-title">{{this.gymName}}</h5>
+                                <p class="card-text">{{this.address.city}}, {{this.address.state}}</p>
+                                <p>{{this.bio}}</p>
+                            </div>
+                        </div>
+                {{/each}}
             </div>
         </div>
-    </nav>
-
-
-
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12">
-                <div id="content" class="content content-full-width">
-                    <div class="profile">
-                        <div class="profile-header">
-                            <div class="profile-header-cover"></div>
-                            <div class="profile-header-content">
-                                <div class="profile-header-img">
-                                    <img src="https://bootdey.com/img/Content/avatar/avatar3.png" alt="">
-                                </div>
-                                <div class="profile-header-info">
-                                    <h4 class="m-t-10 m-b-5">{{user.userName}}</h4>
-                                    <p class="m-b-10">{{user.firstName}}</p>
-                                    <a href="/user/profile/edit" class="btn btn-sm btn-info mb-2">Edit Profile</a>
-                                </div>
-                            </div>
-                            <ul class="profile-header-tab nav nav-tabs">
-                                <li class="nav-item"><a href="/user/get/myPosts" class="nav-link_">POSTS</a></li>
-
-                                <li class="nav-item"><a
-                                        href="https://www.bootdey.com/snippets/view/bs4-profile-with-timeline-posts"
-                                        target="__blank" class="nav-link_">POSTS</a></li>
-                                <li class="nav-item"><a href="https://www.bootdey.com/snippets/view/bs4-profile-about"
-                                        target="__blank" class="nav-link_">EVENTS</a></li>
-
-                                <li class="nav-item"><a href="https://www.bootdey.com/snippets/view/profile-videos"
-                                        target="__blank" class="nav-link_">FOLLOWERS</a></li>
-                                <li class="nav-item"><a
-                                        href="https://www.bootdey.com/snippets/view/bs4-profile-friend-list"
-                                        target="__blank" class="nav-link_ active show">FOLLOWING</a></li>
-                            </ul>
+    {{/if}}
+    {{#if hasFollowing}}
+        <div class="container">
+            <div class="card mb-3" style="max-width: 540px;">
+                {{#each followingUsers}}
+                    <div class="row g-0">
+                        <div class="col-md-4">
+                            <img src="https://bootdey.com/img/Content/avatar/avatar3.png" alt="..." class="img-fluid">
                         </div>
-                    </div>
-                    <div class="profile-content">
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <h5 class="card-title">{{this.userName}}</h5>
+                                <p class="card-text">{{this.firstName}} {{this.lastName}}</p>
+                                <p>{{this.bio}}</p>
+                            </div>
+                        </div>
+                {{/each}}
+            </div>
+            <div class="card mb-3" style="max-width: 540px;">
+                {{#each followingTrainers}}
+                    <div class="row g-0">
+                        <div class="col-md-4">
+                            <img src="https://bootdey.com/img/Content/avatar/avatar3.png" alt="..." class="img-fluid">
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <h5 class="card-title">{{this.trainerName}}</h5>
+                                <p class="card-text">{{this.firstName}} {{this.lastName}}</p>
+                                <p>{{this.bio}}</p>
+                            </div>
+                        </div>
+                {{/each}}
+            </div>
+            <div class="card mb-3" style="max-width: 540px;">
+                {{#each followingGyms}}
+                    <div class="row g-0">
+                        <div class="col-md-4">
+                            <img src="https://bootdey.com/img/Content/avatar/avatar3.png" alt="..." class="img-fluid">
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <h5 class="card-title">{{this.gymName}}</h5>
+                                <p class="card-text">{{this.address.city}}, {{this.address.state}}</p>
+                                <p>{{this.bio}}</p>
+                            </div>
+                        </div>
+                {{/each}}
+            </div>
+        </div>
+    {{/if}}
 
+    {{#if hasSessions}}
+        {{#each sessions}}
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Session: {{ this.name }}</h5>
+                    <p class="card-text">
+                        Place: {{ this.place }}<br>
+                        Capacity: {{ this.capacity }}<br>
+                        Workout Type: {{ this.workoutType }}<br>
+                        Start Date: {{ this.startDate }}<br>
+                        End Date: {{ this.endDate }}
+                    </p>
+                    <p class="card-text">
+                        Session Slots:<br>
+                        {{#each this.sessionSlots}}
+                            {{ this.weekday }}: {{ this.timeSlot }}<br>
+                        {{/each}}
+                    </p>
+                    <div class="btn-group" role="group" aria-label="Session Buttons">
+                        <button type="button" class="btn btn-danger remove-btn"
+                            data-sessionid="{{this._id}}">Remove</button>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-</div> --}}
+        {{/each}}
+    {{/if}}
+</div>

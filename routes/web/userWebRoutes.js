@@ -117,7 +117,7 @@ router.get("/posts", authController.protectRoute, async (req, res) => {
   }
 });
 
-// profile routes
+// my profile routes
 router
   .route("/profile/edit")
   .get(authController.protectRoute, userControllerWeb.getEditProfile)
@@ -132,12 +132,55 @@ router.get(
     });
   }
 );
+router.get(
+  "/profile/followers",
+  authController.protectRoute,
+  userControllerWeb.getMYFollowersPage
+);
 
+router.get(
+  "/profile/following",
+  authController.protectRoute,
+  userControllerWeb.getMYFollowingPage
+);
+
+router.get(
+  "/profile/sessions",
+  authController.protectRoute,
+  userControllerWeb.getMYSessionsPage
+);
 router.get(
   "/profile/:userName",
   authController.protectRoute,
   userControllerWeb.getProfilePage
 );
+
+// user profiles  routes
+router.get(
+  "/userProfile/:userName/followers",
+  authController.protectRoute,
+  userControllerWeb.getUserFollowersPage
+);
+
+router.get(
+  "/userProfile/:userName/following",
+  authController.protectRoute,
+  userControllerWeb.getUserFollowingPage
+);
+
+router.get(
+  "/userProfile/:userName/posts",
+  authController.protectRoute,
+  userControllerWeb.getUserPostsPage
+);
+
+// router.get(
+//   "/userProfile/:userName/events",
+//   authController.protectRoute,
+//   userControllerWeb.getUserEventsPage
+// );
+
+// trainer profiles routes
 router.get(
   "/trainerProfile/:trainerName/followers",
   authController.protectRoute,
@@ -145,9 +188,39 @@ router.get(
 );
 
 router.get(
+  "/trainerProfile/:trainerName/sessions",
+  authController.protectRoute,
+  userControllerWeb.getTrainerSessionsPage
+);
+router.get(
+  "/trainerProfile/:trainerName/following",
+  authController.protectRoute,
+  userControllerWeb.getTrainerFollowingPage
+);
+
+// router.get(
+//   "/trainerProfile/:trainerName/events",
+//   authController.protectRoute,
+//   userControllerWeb.getTrainerEventsPage
+// );
+
+router.get(
+  "/trainerProfile/:trainerName/posts",
+  authController.protectRoute,
+  userControllerWeb.getTrainersPostsPage
+);
+router.get(
   "/trainerProfile/:userName",
   authController.protectRoute,
   userControllerWeb.getTrainerProfilePage
+);
+
+// gym profiles routes
+
+router.get(
+  "/gymProfile/:id/followers",
+  authController.protectRoute,
+  userControllerWeb.getGymFollowersPage
 );
 
 router.get(

@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Trainer Home</title>
+        <title>{{gym.gymName}}</title>
         <link rel="stylesheet" href="/public/css/userProfile.css " />
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
             integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
@@ -16,6 +16,20 @@
     </head>
 
     <body>
+        <nav class="navbar bg-body-tertiary">
+            <div class="container-fluid">
+                <a class="navbar-brand m-2" href="/user/home">GymMate</a>
+                <div class="d-flex flex-row-reverse">
+                    <form class=" m-2" role="search" action="/user/profile/followers" method="get">
+                        <button class="btn btn-success" type="submit">{{user.userName}}</button>
+                    </form>
+
+                    <form class=" m-2" role="search" action="/logout" method="get">
+                        <button class="btn btn-danger" type="submit">Logout</button>
+                    </form>
+                </div>
+            </div>
+        </nav>
         <div class="container mt-5">
             <div class="container mt-5">
                 <div class="row">
@@ -29,28 +43,24 @@
                                             <img src="https://bootdey.com/img/Content/avatar/avatar3.png" alt="" />
                                         </div>
                                         <div class="profile-header-info">
-                                            <h4 class="m-t-10 m-b-5">{{trainer.trainerName}}</h4>
-                                            <p class="m-b-10">Trainer</p>
-                                            <a href="/trainer/profile" class="btn btn-sm btn-info mb-2">Profile</a>
+                                            <h4 class="m-t-10 m-b-5">{{gym.gymName}}</h4>
+                                            {{!-- <h5 class="m-t-10 m-b-5">{{user.firstName}} {{user.lastName}}</h5> --}}
+                                            {{!-- <p class="m-b-10">{{user.bio}}</p> --}}
+                                            {{!-- <a href="/trainer/profile" class="btn btn-sm btn-info mb-2">Profile</a> --}}
                                         </div>
                                     </div>
                                     <ul class="profile-header-tab nav nav-tabs">
-                                        <li class="nav-item"><a
-                                                href="/user/trainerProfile/{{trainer.trainerName}}/posts"
+                                        {{!-- <li class="nav-item"><a href="/user/userProfile/{{user.userName}}/posts"
                                                 class="nav-link_ active show">POSTS</a></li>
-                                        <li class="nav-item"><a
-                                                href="/user/trainerProfile/{{trainer.trainerName}}/events"
-                                                class="nav-link_">EVENTS</a></li>
-                                        <li class="nav-item"><a
-                                                href="/user/trainerProfile/{{trainer.trainerName}}/followers"
+                                        <li class="nav-item"><a href="/user/userProfile/{{user.userName}}/events"
+                                                class="nav-link_">EVENTS</a></li> --}}
+                                        <li class="nav-item"><a href="/user/gymProfile/{{gym._id}}/followers"
                                                 class="nav-link_">FOLLOWERS</a></li>
                                         </li>
-                                        <li class="nav-item"><a
-                                                href="/user/trainerProfile/{{trainer.trainerName}}/following">FOLLOWING</a>
-                                        </li>
-                                        <li class="nav-item"><a
-                                                href="/user/trainerProfile/{{trainer.trainerName}}/sessions">SESSIONS</a>
-                                        </li>
+                                        {{!-- <li class="nav-item"><a
+                                                href="/user/userProfile/{{user.userName}}/following">FOLLOWING</a>
+                                        </li> --}}
+
                                     </ul>
                                 </div>
                             </div>

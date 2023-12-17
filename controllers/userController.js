@@ -36,7 +36,7 @@ export const getUser = async (req, res) => {
       });
     }
     res.render("user/userPage", {
-      layout: "profilePage.layout.handlebars",
+      layout: "userProfilePage.layout.handlebars",
       user,
     });
   } catch (e) {

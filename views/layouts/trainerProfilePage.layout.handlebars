@@ -16,6 +16,20 @@
     </head>
 
     <body>
+        <nav class="navbar bg-body-tertiary">
+            <div class="container-fluid">
+                <a class="navbar-brand m-2" href="/user/home">GymMate</a>
+                <div class="d-flex flex-row-reverse">
+                    <form class=" m-2" role="search" action="/user/profile/followers" method="get">
+                        <button class="btn btn-success" type="submit">Your Profile</button>
+                    </form>
+
+                    <form class=" m-2" role="search" action="/logout" method="get">
+                        <button class="btn btn-danger" type="submit">Logout</button>
+                    </form>
+                </div>
+            </div>
+        </nav>
         <div class="container mt-5">
             <div class="container mt-5">
                 <div class="row">

@@ -51,7 +51,7 @@ window.onload = async () => {
             </div>
             <hr>
             <div class="profile-button">
-                <button class="btn btn-primary-mapBox"><a href="/user/${user.userName}" class="text-white">View Profile</a></button>
+                <button class="btn btn-primary-mapBox"><a href="/user/userProfile/${user.userName}/followers" class="text-white">View Profile</a></button>
             </div>
         </div>
     </div>
