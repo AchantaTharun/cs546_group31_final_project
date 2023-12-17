@@ -37,15 +37,24 @@ export const createEvent = async (req, res) => {
       maxCapacity,
       priceOfAdmission,
       comments,
-      user,
       eventDate,
       startTime,
       endTime,
       publicEvent,
       attendees,
+      loggedInUserId
     } = req.body;
 
+
+    console.log("logged in useer id: ",loggedInUserId)
+    if(!loggedInUserId) return res.status(400).json({ status: "fail", errors: ["Invalid User"] });
+
     const totalNumberOfAttendees = 0;
+    
+    const finalEventDate = new Date(`${eventDate}T${startTime}`);
+    const finalStartTime = new Date(`${eventDate}T${startTime}`);
+    const finalEndTime = new Date(`${eventDate}T${endTime}`);
+
 
     const newEvent = new Event({
       img,
@@ -56,10 +65,10 @@ export const createEvent = async (req, res) => {
       maxCapacity,
       priceOfAdmission,
       comments,
-      user,
-      eventDate,
-      startTime,
-      endTime,
+      user: {userId:loggedInUserId},
+      eventDate: finalEventDate,
+      startTime: finalStartTime,
+      endTime: finalEndTime,
       publicEvent,
       attendees,
       totalNumberOfAttendees,
@@ -123,13 +132,14 @@ export const updateEvent = async (req, res) => {
       eventLocation,
       maxCapacity,
       priceOfAdmission,
-      comments,
-      user,
       eventDate,
       startTime,
       endTime,
-      totalNumberOfAttendees,
     } = req.body;
+
+    const finalEventDate = new Date(`${eventDate}T${startTime}`);
+    const finalStartTime = new Date(`${eventDate}T${startTime}`);
+    const finalEndTime = new Date(`${eventDate}T${endTime}`);
 
     if (!mongoose.Types.ObjectId.isValid(eventId)) {
       return res
@@ -152,12 +162,9 @@ export const updateEvent = async (req, res) => {
     event.eventLocation = eventLocation;
     event.maxCapacity = maxCapacity;
     event.priceOfAdmission = priceOfAdmission;
-    event.comments = comments;
-    event.user = user;
-    event.eventDate = eventDate;
-    event.startTime = startTime;
-    event.endTime = endTime;
-    event.totalNumberOfAttendees = totalNumberOfAttendees;
+    event.eventDate = finalEventDate;
+    event.startTime = finalStartTime;
+    event.endTime = finalEndTime;
 
     const validationErrors = event.validateSync();
     if (validationErrors) {
