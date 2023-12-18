@@ -1,1 +1,17 @@
-<H1>Posts Page In Development</H1>
+<div class="container mt-4">
+
+    <h1 class="mb-4"><a href="/trainer/create/newPosts">CREATE NEW POST</a></h1>
+    
+    {{#each posts}}
+        <div class="card mb-3">
+            <div class="card-body">
+                <a href="/trainer/post/{{this._id}}" class="text-white">
+                <h5 class="card-title">{{this.title}}</h5>
+                <p class="card-text">{{this.description}}</p>
+                </a>
+            </div>
+        </div>
+    {{/each}}
+
+
+</div>
