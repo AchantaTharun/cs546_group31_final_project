@@ -29,7 +29,7 @@ router.post(
 
 router.get("/profile", authController.protectRoute, async (req, res) => {
 	const gym = req.gym;
-	// console.log(gym);
+
 	return res.render("gym/gymProfile", {
 		layout: "gymProfile.layout.handlebars",
 		gym,
