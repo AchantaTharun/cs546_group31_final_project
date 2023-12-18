@@ -35,6 +35,7 @@
     "express-handlebars": "^7.1.2",
     "express-mongo-sanitize": "^2.2.0",
     "express-rate-limit": "^7.1.4",
+    "express-xss-sanitizer": "^1.1.6",
     "handlebars": "^4.7.8",
     "hpp": "^0.2.3",
     "jsonwebtoken": "^9.0.2",

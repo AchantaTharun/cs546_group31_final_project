@@ -1,5 +1,5 @@
 <div class="container mt-4 ">
-    <form class="row g-3 mb-4" action="/user/home/search" method="get">
+    <form class="row g-3 mb-4" id="search-form" action="/user/home/search" method="get">
         <div class="col-md-2">
             <label for="selectUser" class="form-label">Select User</label>
             <select id="selectUser" name="selectUser" class="form-select">
@@ -18,22 +18,69 @@
                 <option value="flexibility">Flexibility</option>
                 <option value="sports">Sports</option>
                 <option value="crossFit">CrossFit</option>
-                <option value="body Weight">Body Weight</option>
-            </select>
-        </div>
-        <div class="col-md-2">
-            <label for="searchType" class="form-label">Search Type</label>
-            <select id="searchType" name="searchType" class="form-select">
-                <option selected disabled>Choose...</option>
-                <option value="Location">Location</option>
-                <option value="Names">Names</option>
+                <option value="bodyWeight">Body Weight</option>
             </select>
         </div>
 
-        <div class="col-md-5">
-            <label for="search" class="form-label">Search</label>
-            <input type="text" name="search" class="form-control" id="search" placeholder="Search">
+        <div class="col-md-4">
+            <label for="state" class="form-label">State</label>
+            <select id="state" name="state" class="form-select">
+                <option selected disabled>Choose...</option>
+
+                <option value="AL" {{#eq user.address.state "AL" }} selected {{/eq}}>Alabama</option>
+                <option value="AK" {{#eq user.address.state "AK" }} selected {{/eq}}>Alaska</option>
+                <option value="AZ" {{#eq user.address.state "AZ" }} selected {{/eq}}>Arizona</option>
+                <option value="AR" {{#eq user.address.state "AR" }} selected {{/eq}}>Arkansas</option>
+                <option value="CA" {{#eq user.address.state "CA" }} selected {{/eq}}>California</option>
+                <option value="CO" {{#eq user.address.state "CO" }} selected {{/eq}}>Colorado</option>
+                <option value="CT" {{#eq user.address.state "CT" }} selected {{/eq}}>Connecticut</option>
+                <option value="DE" {{#eq user.address.state "DE" }} selected {{/eq}}>Delaware</option>
+                <option value="FL" {{#eq user.address.state "FL" }} selected {{/eq}}>Florida</option>
+                <option value="GA" {{#eq user.address.state "GA" }} selected {{/eq}}>Georgia</option>
+                <option value="HI" {{#eq user.address.state "HI" }} selected {{/eq}}>Hawaii</option>
+                <option value="ID" {{#eq user.address.state "ID" }} selected {{/eq}}>Idaho</option>
+                <option value="IL" {{#eq user.address.state "IL" }} selected {{/eq}}>Illinois</option>
+                <option value="IN" {{#eq user.address.state "IN" }} selected {{/eq}}>Indiana</option>
+                <option value="IA" {{#eq user.address.state "IA" }} selected {{/eq}}>Iowa</option>
+                <option value="KS" {{#eq user.address.state "KS" }} selected {{/eq}}>Kansas</option>
+                <option value="KY" {{#eq user.address.state "KY" }} selected {{/eq}}>Kentucky</option>
+                <option value="LA" {{#eq user.address.state "LA" }} selected {{/eq}}>Louisiana</option>
+                <option value="ME" {{#eq user.address.state "ME" }} selected {{/eq}}>Maine</option>
+                <option value="MD" {{#eq user.address.state "MD" }} selected {{/eq}}>Maryland</option>
+                <option value="MA" {{#eq user.address.state "MA" }} selected {{/eq}}>Massachusetts</option>
+                <option value="MI" {{#eq user.address.state "MI" }} selected {{/eq}}>Michigan</option>
+                <option value="MN" {{#eq user.address.state "MN" }} selected {{/eq}}>Minnesota</option>
+                <option value="MS" {{#eq user.address.state "MS" }} selected {{/eq}}>Mississippi</option>
+                <option value="MO" {{#eq user.address.state "MO" }} selected {{/eq}}>Missouri</option>
+                <option value="MT" {{#eq user.address.state "MT" }} selected {{/eq}}>Montana</option>
+                <option value="NE" {{#eq user.address.state "NE" }} selected {{/eq}}>Nebraska</option>
+                <option value="NV" {{#eq user.address.state "NV" }} selected {{/eq}}>Nevada</option>
+                <option value="NH" {{#eq user.address.state "NH" }} selected {{/eq}}>New Hampshire</option>
+                <option value="NJ" {{#eq user.address.state "NJ" }} selected {{/eq}}>New Jersey</option>
+                <option value="NM" {{#eq user.address.state "NM" }} selected {{/eq}}>New Mexico</option>
+                <option value="NY" {{#eq user.address.state "NY" }} selected {{/eq}}>New York</option>
+                <option value="NC" {{#eq user.address.state "NC" }} selected {{/eq}}>North Carolina</option>
+                <option value="ND" {{#eq user.address.state "ND" }} selected {{/eq}}>North Dakota</option>
+                <option value="OH" {{#eq user.address.state "OH" }} selected {{/eq}}>Ohio</option>
+                <option value="OK" {{#eq user.address.state "OK" }} selected {{/eq}}>Oklahoma</option>
+                <option value="OR" {{#eq user.address.state "OR" }} selected {{/eq}}>Oregon</option>
+                <option value="PA" {{#eq user.address.state "PA" }} selected {{/eq}}>Pennsylvania</option>
+                <option value="RI" {{#eq user.address.state "RI" }} selected {{/eq}}>Rhode Island</option>
+                <option value="SC" {{#eq user.address.state "SC" }} selected {{/eq}}>South Carolina</option>
+                <option value="SD" {{#eq user.address.state "SD" }} selected {{/eq}}>South Dakota</option>
+                <option value="TN" {{#eq user.address.state "TN" }} selected {{/eq}}>Tennessee</option>
+                <option value="TX" {{#eq user.address.state "TX" }} selected {{/eq}}>Texas</option>
+                <option value="UT" {{#eq user.address.state "UT" }} selected {{/eq}}>Utah</option>
+                <option value="VT" {{#eq user.address.state "VT" }} selected {{/eq}}>Vermont</option>
+                <option value="VA" {{#eq user.address.state "VA" }} selected {{/eq}}>Virginia</option>
+                <option value="WA" {{#eq user.address.state "WA" }} selected {{/eq}}>Washington</option>
+                <option value="WV" {{#eq user.address.state "WV" }} selected {{/eq}}>West Virginia</option>
+                <option value="WI" {{#eq user.address.state "WI" }} selected {{/eq}}>Wisconsin</option>
+                <option value="WY" {{#eq user.address.state "WY" }} selected {{/eq}}>Wyoming</option>
+
+            </select>
         </div>
+
         <div class="col-md-1 mt-5">
             <button type="submit" class="btn btn-primary">Search</button>
         </div>
@@ -61,7 +108,7 @@
                             </div>
                             <hr>
                             <div class="d-flex justify-content-between">
-                                <button class="btn btn-primary"><a href="/user/{{this.userName}}"
+                                <button class="btn btn-primary"><a href="/user/userProfile/{{this.userName}}/followers"
                                         class="text-white">View
                                         Profile</a></button>
                                 {{#if this.isFollowing}}

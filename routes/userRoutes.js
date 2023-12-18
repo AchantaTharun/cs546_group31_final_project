@@ -11,6 +11,6 @@ router.get(
   userController.getFromCoord
 );
 router.get("/search", authController.protectRoute, userController.search);
-router.get("/:userName", authController.protectRoute, userController.getUser);
-router.get("/", authController.protectRoute, userController.getAllUsers);
+// router.get("/:userName", authController.protectRoute, userController.getUser);
+// router.get("/", authController.protectRoute, userController.getAllUsers);
 export default router;

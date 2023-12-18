@@ -9,7 +9,7 @@ import cookieParser from "cookie-parser";
 import configRoutesFunction from "./routes/index.js";
 import hpp from "hpp";
 import { generateUploadURL } from "./utils/s3.js";
-
+import { xss } from "express-xss-sanitizer";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
@@ -47,6 +47,7 @@ const staticDir = express.static(__dirname + "/public");
 app.use("/public", staticDir);
 app.use(express.urlencoded({ extended: true }));
 app.use(rewriteUnsupportedBrowserMethods);
+app.use(xss());
 app.engine(
   "handlebars",
   handlebarsEngine({

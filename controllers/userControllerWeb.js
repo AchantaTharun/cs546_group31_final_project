@@ -2,7 +2,7 @@ import User from "../models/userModel.js";
 import Trainer from "../models/trainerModel.js";
 import Gym from "../models/gymModel.js";
 import mongoose from "mongoose";
-
+import Session from "../models/sessionModel.js";
 export const getHomePage = async (req, res) => {
   try {
     const user = req.user;
@@ -132,62 +132,92 @@ export const getHomePage = async (req, res) => {
 export const search = async (req, res) => {
   try {
     const user = req.user;
+    const { selectUser, favoriteWorkout, state } = req.query;
+    console.log({ selectUser, favoriteWorkout, state });
 
-    const { selectUser, favoriteWorkout, searchType, search } = req.query;
-    console.log({ selectUser, favoriteWorkout, searchType, search });
-    let query = {};
-    let users;
-    if (searchType && search) {
-      if (searchType.toLowerCase() === "names") {
-        if (selectUser === "Trainers") {
-          query.$or = [
-            { firstName: { $regex: `^${search}`, $options: "i" } },
-            { lastName: { $regex: `^${search}`, $options: "i" } },
-            { trainerName: { $regex: `^${search}`, $options: "i" } },
-          ];
-          users = await Trainer.find(query).lean();
-        }
-        if (selectUser === "Gyms") {
-          query.$or = [{ gymName: { $regex: `^${search}`, $options: "i" } }];
-          users = await Gym.find(query).lean();
-        }
-
-        if (selectUser === "People") {
-          query.$or = [
-            { firstName: { $regex: `^${search}`, $options: "i" } },
-            { lastName: { $regex: `^${search}`, $options: "i" } },
-            { userName: { $regex: `^${search}`, $options: "i" } },
-          ];
-          users = await User.find(query).lean();
-        }
-      } else if (searchType.toLowerCase() === "location") {
-        query.$or = [
-          { "address.city": { $regex: `^${search}`, $options: "i" } },
-          { "address.state": { $regex: `^${search}`, $options: "i" } },
-          { "address.street": { $regex: `^${search}`, $options: "i" } },
-        ];
-        if (selectUser === "Trainers") {
-          users = await Trainer.find(query).lean();
-        }
-        if (selectUser === "Gyms") {
-          users = await Gym.find(query).lean();
-        }
-        if (selectUser === "People") {
-          users = await User.find(query).lean();
-        }
+    if (!selectUser) {
+      throw new Error("Please select a user type");
+    }
+    if (selectUser === "Gyms") {
+      if (!state) {
+        throw new Error("Please select a search type and enter a search term");
       }
     }
-    console.log(users);
-    if (!users) {
-      return res.render("user/userSearch", {
-        layout: "userHome.layout.handlebars",
-        users,
-        user,
+    if (selectUser !== "Gyms" && !favoriteWorkout && !state) {
+      throw new Error(
+        "Please select a favorite workout and enter a search term"
+      );
+    }
+    if (!["Trainers", "People", "Gyms"].includes(selectUser)) {
+      throw new Error("Please select a search type and enter a search term");
+    }
+
+    if (
+      selectUser !== "Gyms" &&
+      ![
+        "cardio",
+        "strength",
+        "flexibility",
+        "sports",
+        "crossFit",
+        "bodyWeight",
+      ].includes(favoriteWorkout)
+    ) {
+      throw new Error("Please select a search type and enter a search term");
+    }
+    let users;
+    let trainers;
+    let gyms;
+    let query = {};
+
+    query.$or = [{ "address.state": { $regex: `^${state}`, $options: "i" } }];
+    if (selectUser === "Trainers") {
+      query.workoutType = { $in: [favoriteWorkout] };
+      trainers = await Trainer.find(query).lean();
+    }
+    if (selectUser === "Gyms") {
+      gyms = await Gym.find(query).lean();
+    }
+    if (selectUser === "People") {
+      query.workoutType = favoriteWorkout;
+      users = await User.find(query).lean();
+    }
+
+    if (trainers) {
+      trainers.forEach((trainer) => {
+        trainer.followers.users.forEach((follower) => {
+          if (follower.toString() === req.user._id.toString()) {
+            trainer["isFollowing"] = true;
+          }
+        });
       });
     }
+
+    if (gyms) {
+      gyms.forEach((gym) => {
+        gym.followers.users.forEach((follower) => {
+          if (follower.toString() === req.user._id.toString()) {
+            gym["isFollowing"] = true;
+          }
+        });
+      });
+    }
+
+    if (users) {
+      users.forEach((user) => {
+        user.followers.users.forEach((follower) => {
+          if (follower.toString() === req.user._id.toString()) {
+            user["isFollowing"] = true;
+          }
+        });
+      });
+    }
+    console.log({ users, gyms, trainers });
     return res.render("user/userSearch", {
       layout: "userHome.layout.handlebars",
       users,
+      gyms,
+      trainers,
       user,
     });
   } catch (err) {
@@ -231,8 +261,87 @@ export const getUserFromUserName = async (req, res) => {
       });
     }
     return res.render("user/userPage", {
-      layout: "profilePage.layout.handlebars",
+      layout: "userPage.layout.handlebars",
       user,
+    });
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
+export const getTrainerSessionsPage = async (req, res) => {
+  try {
+    const user = req.user;
+    if (!user) {
+      return res.status(404).json({
+        status: "fail",
+        message: "No user found with that ID",
+      });
+    }
+    const trainerName = req.params.trainerName;
+    const trainer = await Trainer.findOne({ trainerName: trainerName })
+      .populate("sessions")
+      .lean();
+    if (!trainer) {
+      return res.status(404).json({
+        status: "fail",
+        message: "No trainer found with that ID",
+      });
+    }
+    let sessions = trainer.sessions;
+
+    sessions.forEach((session) => {
+      session.registeredUsers.forEach((user) => {
+        if (user.userId.toString() === req.user._id.toString()) {
+          session.isRegistered = true;
+        }
+      });
+    });
+    console.log(sessions);
+    return res.render("user/trainerProfile", {
+      layout: "trainerProfilePage.layout.handlebars",
+      sessions: trainer.sessions,
+      hasSessions: true,
+      trainer,
+    });
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
+export const getTrainerFollowingPage = async (req, res) => {
+  try {
+    const user = req.user;
+    if (!user) {
+      return res.status(404).json({
+        status: "fail",
+        message: "No user found with that ID",
+      });
+    }
+    const trainerName = req.params.trainerName;
+    const trainer = await Trainer.findOne({ trainerName: trainerName })
+      .populate("following.users")
+      .populate("following.gyms")
+      .populate("following.trainers")
+      .lean();
+    if (!trainer) {
+      return res.status(404).json({
+        status: "fail",
+        message: "No trainer found with that ID",
+      });
+    }
+    let following = trainer.following;
+    let followingUsers = following.users;
+    let followingGyms = following.gyms;
+    let followingTrainers = following.trainers;
+    console.log(following.users);
+    return res.render("user/trainerProfile", {
+      layout: "trainerProfilePage.layout.handlebars",
+      hasFollowing: true,
+      followingUsers,
+      followingGyms,
+      followingTrainers,
+      trainer,
     });
   } catch (err) {
     console.log(err.message);
@@ -341,7 +450,7 @@ export const getTrainerProfilePage = async (req, res) => {
       }
     });
     return res.render("user/trainerProfile", {
-      layout: "profilePage.layout.handlebars",
+      layout: "trainerProfilePage.layout.handlebars",
       trainer,
     });
   } catch (err) {
@@ -368,8 +477,42 @@ export const getGymProfilePage = async (req, res) => {
       });
     }
     return res.render("user/gymProfile", {
-      layout: "userProfile.layout.handlebars",
+      layout: "gymProfilePage.layout.handlebars",
       gym,
+      user,
+    });
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+export const getGymFollowersPage = async (req, res) => {
+  try {
+    const user = req.user;
+    const gymId = req.params.id;
+    const gym = await Gym.findById(gymId)
+      .populate("followers.users")
+      .populate("followers.gyms")
+      .populate("followers.trainers")
+      .lean();
+    if (!gym) {
+      return res.status(404).json({
+        status: "fail",
+        message: "No gym found with that ID",
+      });
+    }
+    const followers = gym.followers;
+    const followerUsers = followers.users;
+    const followerTrainers = followers.trainers;
+    const followerGyms = followers.gyms;
+    console.log({ gym });
+    return res.render("user/gymProfile", {
+      layout: "gymProfilePage.layout.handlebars",
+      hasFollowers: true,
+      followerUsers,
+      followerGyms,
+      followerTrainers,
+      gym,
+      user,
     });
   } catch (err) {
     console.log(err.message);
@@ -492,17 +635,197 @@ export const getTrainerFollowersPage = async (req, res) => {
       });
     }
     let followers = trainer.followers;
-    let followingUsers = followers.users;
-    let followingGyms = followers.gyms;
-    let followingTrainers = followers.trainers;
+    let followerUsers = followers.users;
+    let followerGyms = followers.gyms;
+    let followerTrainers = followers.trainers;
     console.log(followers.users);
     return res.render("user/trainerProfile", {
-      layout: "profilePage.layout.handlebars",
+      layout: "trainerProfilePage.layout.handlebars",
       hasFollowers: true,
+      followerUsers,
+      followerGyms,
+      followerTrainers,
+      trainer,
+    });
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
+export const getTrainersPostsPage = async (req, res) => {
+  try {
+    const user = req.user;
+    const trainerName = req.params.trainerName;
+    console.log(trainerName);
+    const trainer = await Trainer.findOne({ trainerName: trainerName })
+      .populate("posts")
+      .lean();
+    if (!trainer) {
+      return res.status(404).json({
+        status: "fail",
+        message: "No trainer found with that ID",
+      });
+    }
+    let posts = trainer.posts;
+    console.log(posts);
+    return res.render("user/trainerProfile", {
+      layout: "trainerProfilePage.layout.handlebars",
+      hasPosts: true,
+      posts,
+      trainer,
+    });
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
+export const getMYFollowersPage = async (req, res) => {
+  try {
+    const user = req.user;
+    const populatedUser = await User.findById(user._id)
+      .populate("followers.users")
+      .populate("followers.gyms")
+      .populate("followers.trainers")
+      .lean();
+
+    const followers = populatedUser.followers;
+    const followerUsers = followers.users;
+    const followerTrainers = followers.trainers;
+    const followerGyms = followers.gyms;
+    console.log({ populatedUser: req.user });
+
+    return res.render("user/userProfile", {
+      layout: "userProfile.layout.handlebars",
+      hasFollowers: true,
+      followerUsers,
+      followerGyms,
+      followerTrainers,
+      user,
+    });
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
+export const getMYFollowingPage = async (req, res) => {
+  try {
+    const user = req.user;
+    const populatedUser = await User.findById(user._id)
+      .populate("following.users")
+      .populate("following.gyms")
+      .populate("following.trainers")
+      .lean();
+
+    const following = populatedUser.following;
+    const followingUsers = following.users;
+    const followingTrainers = following.trainers;
+    const followingGyms = following.gyms;
+    console.log({ populatedUser: req.user });
+    return res.render("user/userProfile", {
+      layout: "userProfile.layout.handlebars",
+      hasFollowing: true,
       followingUsers,
       followingGyms,
       followingTrainers,
-      trainer,
+      user,
+    });
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
+export const getMYSessionsPage = async (req, res) => {
+  try {
+    const user = req.user;
+    const mySessions = await Session.find({
+      registeredUsers: { $elemMatch: { userId: user._id } },
+    }).lean();
+    console.log(mySessions);
+    return res.render("user/userProfile", {
+      layout: "userProfile.layout.handlebars",
+      hasSessions: true,
+      sessions: mySessions,
+      user,
+    });
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
+export const getUserFollowersPage = async (req, res) => {
+  const user = req.user;
+  const userName = req.params.userName;
+  console.log(userName);
+  try {
+    const populatedUser = await User.findOne({ userName: userName })
+      .populate("followers.users")
+      .populate("followers.gyms")
+      .populate("followers.trainers")
+      .lean();
+
+    const followers = populatedUser.followers;
+    const followerUsers = followers.users;
+    const followerTrainers = followers.trainers;
+    const followerGyms = followers.gyms;
+    console.log({ populatedUser: populatedUser });
+
+    return res.render("user/userPage", {
+      layout: "userPage.layout.handlebars",
+      hasFollowers: true,
+      followerUsers,
+      followerGyms,
+      followerTrainers,
+      populatedUser,
+      user,
+    });
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
+export const getUserFollowingPage = async (req, res) => {
+  const user = req.user;
+  const userName = req.params.userName;
+  try {
+    const populatedUser = await User.findOne({ userName: userName })
+      .populate("following.users")
+      .populate("following.gyms")
+      .populate("following.trainers")
+      .lean();
+    const following = populatedUser.following;
+    const followingUsers = following.users;
+    const followingTrainers = following.trainers;
+    const followingGyms = following.gyms;
+    console.log({ populatedUser: req.user });
+    return res.render("user/userPage", {
+      layout: "userPage.layout.handlebars",
+      hasFollowing: true,
+      followingUsers,
+      followingGyms,
+      followingTrainers,
+      populatedUser,
+      user,
+    });
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
+export const getUserPostsPage = async (req, res) => {
+  const user = req.user;
+  const userName = req.params.userName;
+  try {
+    const populatedUser = await User.findOne({ userName: userName })
+      .populate("posts")
+      .lean();
+    const posts = populatedUser.posts;
+
+    return res.render("user/userPage", {
+      layout: "userPage.layout.handlebars",
+      hasPosts: true,
+      posts,
+      populatedUser,
+      user,
     });
   } catch (err) {
     console.log(err.message);

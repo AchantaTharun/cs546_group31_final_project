@@ -105,7 +105,18 @@ a:hover {
     background-color: #0056b3;
 }
 
-img{
+img {
     height: 200px;
     width: 250px;
-  }
+}
+
+.error-div {
+    color: black;
+    font-size: 12px;
+    margin-top: 5px;
+    background-color: red;
+}
+
+.hidden {
+    display: none;
+}

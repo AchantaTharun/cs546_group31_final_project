@@ -16,11 +16,11 @@
             <div class="container-fluid">
                 <a class="navbar-brand m-2" href="/user/home">GymMate</a>
                 <div class="d-flex flex-row-reverse">
-                    <form class=" m-2" role="search" action="/user/profile" method="get">
-                        <button class="btn btn-success" type="submit">Profile</button>
+                    <form class=" m-2" role="search" action="/user/profile/followers" method="get">
+                        <button class="btn btn-success" type="submit">{{user.userName}}</button>
                     </form>
 
-                    <form class=" m-2" role="search" action="/user/logout" method="get">
+                    <form class=" m-2" role="search" action="/logout" method="get">
                         <button class="btn btn-danger" type="submit">Logout</button>
                     </form>
                 </div>
@@ -40,22 +40,20 @@
                                         <img src="https://bootdey.com/img/Content/avatar/avatar3.png" alt="">
                                     </div>
                                     <div class="profile-header-info">
-                                        <h4 class="m-t-10 m-b-5">Sean Ngu</h4>
-                                        <p class="m-b-10">UXUI + Frontend Developer</p>
+                                        <h4 class="m-t-10 m-b-5">{{user.userName}}</h4>
+                                        <p class="m-b-10">{{user.bio}}</p>
                                         <a href="/user/profile/edit" class="btn btn-sm btn-info mb-2">Edit Profile</a>
                                     </div>
                                 </div>
                                 <ul class="profile-header-tab nav nav-tabs">
-                                    <li class="nav-item"><a
-                                            href="https://www.bootdey.com/snippets/view/bs4-profile-with-timeline-posts"
-                                            target="__blank" class="nav-link_">POSTS</a></li>
-                                    <li class="nav-item"><a href="/user/events"
-                                            target="__blank" class="nav-link_">EVENTS</a></li>
-                                    <li class="nav-item"><a href="https://www.bootdey.com/snippets/view/profile-videos"
-                                            target="_blank" class="nav-link">FOLLOWERS</a></li>
-                                    <li class="nav-item"><a
-                                            href="https://www.bootdey.com/snippets/view/bs4-profile-friend-list"
-                                            target="_blank" class="nav-link active show">FOLLOWING</a></li>
+                                    <li class="nav-item"><a href="/user/get/myPosts" class="nav-link_">POSTS</a></li>
+                                    <li class="nav-item"><a href="/user/events" class="nav-link">EVENTS</a></li>
+                                    <li class="nav-item"><a href="/user/profile/followers"
+                                            class="nav-link">FOLLOWERS</a></li>
+                                    <li class="nav-item"><a href="/user/profile/following"
+                                            class="nav-link">FOLLOWING</a></li>
+                                    <li class="nav-item"><a href="/user/profile/sessions">SESSIONS</a>
+                                    </li>
                                 </ul>
                             </div>
                         </div>
@@ -69,7 +67,11 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
             crossorigin="anonymous"></script>
-
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        <script src="/public/js/trainer/trainerHomeClient.js"></script>
+        <script src="/public/js/helpersClient.js"></script>
+        <script src="/public/js/user/sessions.js"></script>
     </body>
 
 </html>

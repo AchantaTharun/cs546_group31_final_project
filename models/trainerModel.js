@@ -106,7 +106,7 @@ const trainerSchema = new mongoose.Schema({
       "flexibility",
       "sports",
       "crossFit",
-      "body Weight",
+      "bodyWeight",
     ],
     default: ["cardio"],
   },
