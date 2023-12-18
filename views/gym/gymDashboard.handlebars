@@ -3,62 +3,63 @@
 </div> }}
 
 <div class="container mt-4">
+	{{#if message}}
+		<h1>{{message}}</h1>
+	{{else}}
+		<form class="row g-3 mb-4" action="/gym/dashboard" method="post">
 
-	<form class="row g-3 mb-4" action="/user/home/search" method="get">
-		<div class="col-md-2">
-			<label for="selectUser" class="form-label">Select User</label>
-			<select id="selectUser" name="selectUser" class="form-select">
-				<option selected disabled>Choose...</option>
-				<option value="People">People</option>
-				<option value="Trainers">Trainers</option>
-				{{! <option value="Gyms">Gyms</option> }}
-			</select>
-		</div>
-		{{! <div class="col-md-2">
-			<label for="favoriteWorkout" class="form-label">Favorite Workout</label>
-			<select
-				id="favoriteWorkout"
-				name="favoriteWorkout"
-				class="form-select"
-			>
-				<option selected disabled>Choose...</option>
-				<option value="cardio">Cardio</option>
-				<option value="strength">Strength</option>
-				<option value="flexibility">Flexibility</option>
-				<option value="sports">Sports</option>
-				<option value="crossFit">CrossFit</option>
-				<option value="body Weight">Body Weight</option>
-			</select>
-		</div> }}
-		<div class="col-md-2">
-			<label for="searchType" class="form-label">Search Type</label>
-			<select id="searchType" name="searchType" class="form-select">
-				<option selected disabled>Choose...</option>
-				<option value="Location">Location</option>
-				<option value="Names">Names</option>
-				<option value="Emails">Emails</option>
-			</select>
-		</div>
+			<div class="col-md-2">
+				<label for="searchType" class="form-label">Search Type</label>
+				<select id="searchType" name="searchType" class="form-select">
+					<option selected disabled>Choose...</option>
+					<option value="phone">Phone</option>
+					{{! <option value="Names">Names</option> }}
+					<option value="email">Email</option>
+				</select>
+			</div>
 
-		<div class="col-md-5">
-			<label for="search" class="form-label">Search</label>
-			<input
-				type="text"
-				name="search"
-				class="form-control"
-				id="search"
-				placeholder="Search"
-			/>
-		</div>
-		<div class="col-md-1 mt-5">
-			<button type="submit" class="btn btn-primary">Search</button>
-		</div>
-	</form>
+			<div class="col-md-5">
+				<label for="search" class="form-label">Search</label>
+				<input
+					type="text"
+					name="search"
+					class="form-control"
+					id="search"
+					placeholder="Search"
+				/>
+			</div>
+			<div class="col-md-1 mt-5">
+				<button type="submit" class="btn btn-primary">Add Members</button>
+			</div>
+		</form>
+		{{error}}
+		{{#each users}}
+			<div class="nearby-user">
+				<div class="row">
+					<div class="col-md-2 col-sm-2">
+						{{! <img
+					src="https://bootdey.com/img/Content/avatar/avatar6.png"
+					alt="user"
+					class="profile-photo-lg"
+				/> }}
+					</div>
+					<div class="col-md-7 col-sm-7">
+						<h5><a href="#" class="profile-link">{{this.firstName}}
+								{{this.lastName}}</a></h5>
+						<p>{{this.email}}</p>
+						<p class="text-muted">{{this.phone}}</p>
+					</div>
+					<div class="col-md-3 col-sm-3">
+						{{! <button class="btn btn-primary pull-right">remove</button> }}
+					</div>
+				</div>
+			</div>
+		{{/each}}
+		{{! <h1>GymMates</h1>
+	<button onclick="addMemberForm()" class="btn btn-primary">Add Members</button> }}
 
-	<h1>GymMates</h1>
-	<button onclick="addMemberForm()" class="btn btn-primary">Add Members</button>
-
-	<div id="formContainer"></div>
+		<div id="formContainer"></div>
+	{{/if}}
 </div>
 <script>
 	function addMemberForm() { var formContainer =
