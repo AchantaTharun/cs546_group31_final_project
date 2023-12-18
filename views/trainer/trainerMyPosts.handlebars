@@ -1,0 +1,15 @@
+<div class="container mt-4">
+    {{#each posts}}
+        <div class="card mb-3">
+            <div class="card-body">
+                <h5 class="card-title">{{this.title}}</h5>
+                <p class="card-text">{{this.description}}</p>
+                <div class="h-flex justify-content-between">
+                            <a href="/trainer/update/post/{{this._id}}" class="text-white">UPDATE</a> 
+                            <a href="/trainer/delete/post/{{this._id}}" class="text-white">DELETE</a> 
+                        </div>
+            </div>
+        </div>
+    {{/each}}
+
+</div>
