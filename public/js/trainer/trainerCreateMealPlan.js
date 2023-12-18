@@ -9,11 +9,14 @@ function showSuccessBanner() {
 async function createMealPlan(trainerId) {
   try {
     event.preventDefault();
-    const title = document.getElementById("title").value;
+    const title = document.getElementById("title").value.trim();
     const session = document.getElementById("session").value;
     const assignedTo = document.getElementById("assignedTo").value;
-    const description = document.getElementById("description").value;
+    const description = document.getElementById("description").value.trim();
     const mealSlotsContainer = document.getElementById("mealsContainer");
+    const errorContainer = document.getElementById("errorContainer");
+    errorContainer.innerHTML = "";
+    let errors = [];
     const mealSlots = Array.from(
       mealSlotsContainer.getElementsByClassName("mealSlotGroup")
     ).map((group) => {
@@ -21,11 +24,45 @@ async function createMealPlan(trainerId) {
       const description = group.querySelector(
         '[name="mealDescription[]"]'
       ).value;
-      return { name, description };
+      if (!name.trim() || !description.trim()) {
+        errors.push("Please enter name and description of each meal section");
+      }
+      return { name: name.trim(), description: description.trim };
     });
+
+    if (!title) {
+      errors.push("Please enter title");
+    } else if (title.length < 5 || title.length > 20) {
+      errors.push("Title should be between 5 and 20 characters long");
+    }
+    if (!session) {
+      errors.push("Please select session");
+    }
+    if (!assignedTo) {
+      errors.push("Please select assign to");
+    }
+    if (!description) {
+      errors.push("Please enter description");
+    } else if (description.length < 5 || description.length > 50) {
+      errors.push("Description should be between 5 and 50 characters long");
+    }
+    if (mealSlots.length < 1) {
+      errors.push("Please enter at least one meal section");
+    }
+    if (errors.length > 0) {
+      errorContainer.innerHTML = `
+        <div class='alert alert-danger mt-3'>
+          <ul>
+            ${errors.map((error) => `<li>${error}</li>`).join("")}
+          </ul>
+        </div>
+      `;
+      return;
+    }
     const formData = {
       title,
       assignedTo,
+      session,
       assignedBy: trainerId,
       description,
       meals: mealSlots,
@@ -36,9 +73,13 @@ async function createMealPlan(trainerId) {
     alert(`Meal plan created successfully and assigned to ${assignedToName}!`);
     setTimeout(() => {
       window.location.href = "/trainer/mealplans";
-    }, 200);
+    }, 100);
   } catch (err) {
-    console.log(err);
+    errorContainer.innerHTML = `
+      <div class='alert alert-danger mt-3'>
+        <p>Error: ${err.message}</p>
+      </div>
+    `;
   }
 }
 
@@ -58,7 +99,12 @@ async function loadAssignToOptions(sessionId) {
       assignedToSelect.appendChild(option);
     });
   } catch (err) {
-    console.log(err);
+    const errorContainer = document.getElementById("errorContainer");
+    errorContainer.innerHTML = `
+      <div class='alert alert-danger mt-3'>
+        <p>Error: ${err.message}</p>
+      </div>
+    `;
   }
 }
 document.addEventListener("DOMContentLoaded", function () {

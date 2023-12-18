@@ -21,7 +21,7 @@ function isValidEmail(email) {
 
 function isValidTrainerPassword(password) {
   const passwordRegex =
-    /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,20}$/;
+    "^(?=.*[a-z])(?=.*[A-Z])(?=.*d)(?=.*[@$!%*?&])[A-Za-zd@$!%*?&]{8,}$";
   return passwordRegex.test(password);
 }
 
@@ -34,4 +34,8 @@ function isValidPhone(phone) {
   const phoneRegex =
     /^\+?\d{1,4}[-.\s]?\(?\d{1,}\)?[-.\s]?\d{1,}[-.\s]?\d{1,}[-.\s]?\d{1,}$/;
   return phoneRegex.test(phone);
+}
+
+function closeAlert() {
+  document.getElementByID("errrDiivv").style.display = "none";
 }

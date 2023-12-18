@@ -7,7 +7,7 @@
 
     <form id="createSessionForm">
   <label for="name">Session Name:</label>
-  <input type="text" id="name" name="name" >
+  <input type="text" id="name" name="name"  >
   <br>
 
   <label for="place">Session Place/Gym:</label>
@@ -44,8 +44,62 @@
       </div>
     </section>
 
+<section id="uss">
+      
+      <span class="overlay"></span>
+      <div class="modal-box">
+        <i class="fa-regular fa-circle-check"></i>
+        <h1>Edit Session</h1>
+
+    <form id="editSessionForm">
+  <label for="name">Session Name:</label>
+  <input type="text" id="name" name="name"  >
+  <br>
+
+  <label for="place">Session Place/Gym:</label>
+  <input type="text" id="place" name="place" >
+  <br>
+
+  <label for="capacity">Session Capacity:</label>
+  <input type="number" id="capacity" name="capacity" min="1" >
+  <br>
+
+  <label for="workoutType">Workout Type:</label>
+  <input type="text" id="workoutType" name="workoutType" >
+  <br>
+
+  <label for="startDate">Start Date:</label>
+  <input type="date" id="startDate" name="startDate" >
+  <br>
+
+  <label for="endDate">End Date:</label>
+  <input type="date" id="endDate" name="endDate" >
+  <br>
+
+  <label for="sessionSlots">Session Slots:</label>
+  <div id="sessionSlotsContainer">
+  </div>
+  <button type="button" id="addSessionSlot">Add Session Slot</button>
+  <br>
+  <br>
+  <div class="add-session-error" id="form-error-style" hidden></div>
+</form>
+        <div class="buttons">
+          <button  id="updateSession" value="Update Session">Update</button><button class="close-btn">Close</button>
+        </div>
+      </div>
+    </section>
+
 <div class='main-dashboard-content'>
    <div>
+    {{#if errors}}<div class="alert alert-danger mt-3">
+      <ul>
+        {{#each errors}}
+          <li>{{this}}</li>
+        {{/each}}
+      </ul>
+    </div>
+    {{else}}
       <div class="sessionlist-container">
         
         <ul class='sessionlist active-list'>
@@ -55,7 +109,7 @@
           <div class="activesession-operation-error"></div>
           {{#if activeSessions.length}}
           {{#each activeSessions}}
-            <li>
+            <li class="card">
               <div><i
                 ></i>
                 <div>
@@ -99,7 +153,7 @@
             <div class="inactivesession-operation-error" hidden></div>
             {{#if inactiveSessions.length}}
           {{#each inactiveSessions}}
-            <li>
+            <li class="card">
               <div><i
                 ></i>
                 <div>
@@ -135,6 +189,7 @@
   {{/if}}
         </ul>
       </div>
+      {{/if}}
 </div>
 
 

@@ -6,6 +6,7 @@
       var forms = document.getElementsByClassName("needs-validation");
       var firstNameInput = document.getElementById("firstName");
       var lastNameInput = document.getElementById("lastName");
+      var trainerNameInput = document.getElementById("trainerName");
       var emailInput = document.getElementById("email");
       var passwordInput = document.getElementById("password");
       var passwordConfirmInput = document.getElementById("passwordConfirm");
@@ -15,10 +16,13 @@
       var stateInput = document.getElementById("state");
       var zipInput = document.getElementById("zip");
       var phoneInput = document.getElementById("phone");
+      var backendError = document.getElementById("backendError");
+
       var validation = Array.prototype.filter.call(forms, function (form) {
         form.addEventListener(
           "submit",
           function (event) {
+            if (backendError) backendError.hidden = true;
             if (form.checkValidity() === false) {
               event.preventDefault();
               event.stopPropagation();
@@ -44,6 +48,17 @@
               lastNameInput.classList.add("is-invalid");
             } else {
               lastNameInput.classList.remove("is-invalid");
+            }
+
+            if (
+              trainerNameInput.checkValidity() === false ||
+              trainerNameInput.value.trim() === "" ||
+              trainerNameInput.value.trim().length < 3 ||
+              trainerNameInput.value.trim().length > 50
+            ) {
+              trainerNameInput.classList.add("is-invalid");
+            } else {
+              trainerNameInput.classList.remove("is-invalid");
             }
 
             if (

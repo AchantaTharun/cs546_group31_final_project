@@ -2,7 +2,14 @@
 
 <div class="createMealPlanContainer">
   <h1>Edit Meal Plan</h1>
-
+  {{#if errors}}<div class="alert alert-danger mt-3">
+      <ul>
+        {{#each errors}}
+          <li>{{this}}</li>
+        {{/each}}
+      </ul>
+    </div>
+  {{/if}}
   <form id="createMealForm" class="container mt-3">
     <div class="row g-3">
       <div class="col-md-3">
@@ -68,6 +75,7 @@
       >Edit</button>
     </div>
   </form>
+
 </div>
 
 <script src="/public/js/trainer/trainerCreateMealPlan.js"></script>

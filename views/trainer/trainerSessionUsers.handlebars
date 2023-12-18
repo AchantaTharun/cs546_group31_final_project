@@ -1,64 +1,76 @@
 <link rel="stylesheet" href="/public/css/trainerSessionUsers.css" />
 
-<div class="card mb-3">
-  <div class="card-body">
-    <div class="d-flex flex-column flex-lg-row">
-      <span class="avatar avatar-text rounded-3 me-4 mb-2"><i
-          class="icon-calendar icon-2x"
-        ></i></span>
-      <div class="row flex-fill">
-        <div class="col-sm-5">
-          <h4 class="h5">{{session.name}}</h4>
-          <small>Place : {{session.place}}</small><br />
-          <div>
-            <medium>Workout Type : {{session.workoutType}}</medium></div>
-        </div>
-        <div class="col-sm-4 py-2">
-          {{#each weekdays}}
-            <span class="badge bg-secondary">{{this}}</span>
-          {{/each}}
+{{#if errors}}<div class="alert alert-danger mt-3">
+    <ul>
+      {{#each errors}}
+        <li>{{this}}</li>
+      {{/each}}
+    </ul>
+  </div>
+{{else}}
+  <H3> Session Info:</H3>
+  <div class="card mb-3">
+    <div class="card-body">
+      <div class="d-flex flex-column flex-lg-row">
+        <span class="avatar avatar-text rounded-3 me-4 mb-2"><i
+            class="icon-calendar icon-2x"
+          ></i></span>
+        <div class="row flex-fill">
+          <div class="col-sm-5">
+            <h4 class="h5">{{session.name}}</h4>
+            <small>Place : {{session.place}}</small><br />
+            <div>
+              <medium>Workout Type : {{session.workoutType}}</medium></div>
+          </div>
+          <div class="col-sm-4 py-2">
+            {{#each weekdays}}
+              <span class="badge bg-secondary">{{this}}</span>
+            {{/each}}
+          </div>
         </div>
       </div>
     </div>
   </div>
-</div>
 
-<div class="container">
-  <div class="row">
-    <div class="col-md-8">
-      <div class="people-nearby">
-        {{#if users.length}}
-          {{#each users}}
-            <div class="nearby-user">
-              <div class="row">
-                <div class="col-md-2 col-sm-2">
-                  <img
-                    src="https://bootdey.com/img/Content/avatar/avatar7.png"
-                    alt="user"
-                    class="profile-photo-lg"
-                  />
-                </div>
-                <div class="col-md-7 col-sm-7">
-                  <h5><a
-                      href="#"
-                      class="profile-link"
-                    >{{this.firstName}}</a></h5>
-                  <p>Registered</p>
-                  <p class="text-muted">500m away</p>
-                </div>
-                <div class="col-md-3 col-sm-3">
-                  <button class="btn btn-primary pull-right">Remove</button>
-                  <br />
-                  <br />
-                  <button class="btn btn-primary pull-right">Meal Plans</button>
+  <div class="container">
+    <H3> Registered Users:</H3>
+    <div class="row">
+      <div class="col-md-8">
+        <div class="people-nearby">
+          {{#if users.length}}
+            {{#each users}}
+              <div class="nearby-user">
+                <div class="row">
+                  <div class="col-md-2 col-sm-2">
+                    <img
+                      src="https://bootdey.com/img/Content/avatar/avatar7.png"
+                      alt="user"
+                      class="profile-photo-lg"
+                    />
+                  </div>
+                  <div class="col-md-7 col-sm-7">
+                    <h5><a
+                        href="#"
+                        class="profile-link"
+                      >{{this.firstName}}</a></h5>
+                    <p>Registered</p>
+                    <p class="text-muted">500m away</p>
+                  </div>
+                  <div class="col-md-3 col-sm-3">
+                    <button class="btn btn-primary pull-right">Remove</button>
+                    <br />
+                    <br />
+                    <button class="btn btn-primary pull-right">Meal Plans</button>
+                  </div>
                 </div>
               </div>
-            </div>
-          {{/each}}
-        {{else}}
-          <li>No Users to display.</li>
-        {{/if}}
+            {{/each}}
+          {{else}}
+            <li>No Users to display.</li>
+          {{/if}}
+        </div>
       </div>
     </div>
   </div>
-</div>
+
+{{/if}}

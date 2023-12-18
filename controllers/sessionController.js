@@ -522,3 +522,46 @@ export const toggleSessionActivation = async (req, res) => {
     res.status(500).json({ errors: ["Internal Server Error"] });
   }
 };
+
+export const rateSession = async (req, res) => {
+  try {
+    const sessionId = req.params.sessionId;
+    const userId = req.user.id;
+    const isRegisteredUser = await Session.exists({
+      _id: sessionId,
+      "registeredUsers.userId": userId,
+    });
+
+    if (!isRegisteredUser) {
+      return res
+        .status(403)
+        .json({ errors: ["User is not registered for the session"] });
+    }
+
+    const rating = req.params.rating;
+
+    const existingRating = await Session.findOne({
+      _id: sessionId,
+      "ratings.ratedBy": userId,
+    });
+
+    if (existingRating) {
+      existingRating.ratings.find((r) => r.ratedBy.equals(userId)).rating =
+        rating;
+      await existingRating.save();
+    } else {
+      await Session.updateOne(
+        { _id: sessionId },
+        {
+          $push: {
+            ratings: { rating: rating, ratedBy: userId },
+          },
+        }
+      );
+    }
+    res.status(200).json({ message: "Rating added/updated successfully" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};

@@ -8,8 +8,6 @@ import multer from "multer";
 import { checkId } from "../../Helpers.js";
 const router = Router();
 import * as help from "../../Helpers.js";
-import { generateUploadURL } from "../../utils/s3.js";
-import multer from "multer";
 
 axios.defaults.withCredentials = true;
 import * as userController from "../../controllers/userController.js";

@@ -25,8 +25,15 @@ export const renderTrainerSessions = async (req, res) => {
       layout: "trainerHome",
     });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Internal Server Error" });
+    res.render("trainer/trainerSessions", {
+      trainer: req.trainer.toObject(),
+      trainerId: req.trainer._id.toString(),
+      errors: [
+        "Some error occured during loading trainer sessions page, Please contact Administator!",
+      ],
+      type: "trainer",
+      layout: "trainerHome",
+    });
   }
 };
 
@@ -58,8 +65,15 @@ export const renderTrainerMealPlans = async (req, res) => {
       layout: "trainerHome",
     });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Internal Server Error" });
+    res.render("trainer/trainerMealPlans", {
+      trainer: req.trainer.toObject(),
+      trainerId: req.trainer._id.toString(),
+      type: "trainer",
+      layout: "trainerHome",
+      errors: [
+        "Some error occured during loading meal plans page, Please contact Administator!",
+      ],
+    });
   }
 };
 
@@ -82,6 +96,7 @@ export const renderTrainerMealPlansCreate = async (req, res) => {
       _id: { $in: sessionIds },
       isActive: true,
     }).lean();
+
     res.render("trainer/createMealPlan", {
       trainer: trainer.toObject(),
       trainerId: trainer._id.toString(),
@@ -91,31 +106,36 @@ export const renderTrainerMealPlansCreate = async (req, res) => {
       layout: "trainerHome",
     });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Internal Server Error" });
+    res.render("trainer/createMealPlan", {
+      trainer: req.trainer.toObject(),
+      trainerId: req.trainer._id.toString(),
+      type: "trainer",
+      layout: "trainerHome",
+      errors: [
+        "Error occured loading create meal plan page, please contact administrator!",
+      ],
+    });
   }
 };
 
-export const renderTrainerMealPlansEdit = async (req, res) => {
+export const renderTrainerMealPlanDelete = async (req, res) => {
   try {
     const trainer = req.trainer;
     const sessionIds = trainer.sessions;
+    const mealPlanId = req.params.mealplanId;
+
+    await MealPlan.findByIdAndDelete(mealPlanId);
+
     const mealPlanIds = trainer.mealPlans;
     const mealplans = await MealPlan.find({
       _id: { $in: mealPlanIds },
     }).lean();
 
-    for (const meal of mealplans) {
-      const user = await User.findOne({
-        _id: meal.assignedTo.toString(),
-      }).lean();
-      if (user) meal.assignedTo = user.userName;
-    }
     const activeSessions = await Session.find({
       _id: { $in: sessionIds },
       isActive: true,
     }).lean();
-    res.render("trainer/createMealPlan", {
+    res.render("trainer/trainerMealPlans", {
       trainer: trainer.toObject(),
       trainerId: trainer._id.toString(),
       mealplans,
@@ -124,8 +144,13 @@ export const renderTrainerMealPlansEdit = async (req, res) => {
       layout: "trainerHome",
     });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Internal Server Error" });
+    res.render("trainer/trainerMealPlans", {
+      trainer: req.trainer.toObject(),
+      trainerId: req.trainer._id.toString(),
+      type: "trainer",
+      layout: "trainerHome",
+      deleteErrors: ["Error pre-populating form values"],
+    });
   }
 };
 
@@ -143,9 +168,9 @@ export const renderTrainerDashboard = async (req, res) => {
         totalRegisteredUsersCount + ss.registeredUsers.length;
     }
 
-    const mealPlans = await MealPlan.find({});
+    const mealPlans = await MealPlan.find({ assignedBy: trainer._id });
 
-    let sessionsByWeekdayAndSlot = await getCurrentWeekSchedule();
+    let sessionsByWeekdayAndSlot = await getCurrentWeekSchedule(trainer);
     const weekdays = Object.keys(sessionsByWeekdayAndSlot);
     const timeSlots = [
       ...new Set(
@@ -155,6 +180,8 @@ export const renderTrainerDashboard = async (req, res) => {
       ),
     ];
 
+    const { users, trainers, gyms } = trainer.followers;
+    const totalFollowers = users.length + trainers.length + gyms.length;
     res.render("trainer/trainerDashboard", {
       trainer: trainer.toObject(),
       activeSessions,
@@ -162,7 +189,7 @@ export const renderTrainerDashboard = async (req, res) => {
         activeSessionsCount: activeSessions.length,
         totalRegisteredUsersCount,
         totalMealPlans: mealPlans.length,
-        totalFollowers: 0,
+        totalFollowers,
       },
       sessionsByWeekdayAndSlot,
       weekdays,
@@ -171,8 +198,14 @@ export const renderTrainerDashboard = async (req, res) => {
       layout: "trainerHome",
     });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Internal Server Error" });
+    res.render("trainer/trainerDashboard", {
+      trainer: req.trainer.toObject(),
+      type: "trainer",
+      layout: "trainerHome",
+      errors: [
+        "Some error occured during loading dashboard page, Please contact Administator!",
+      ],
+    });
   }
 };
 
@@ -201,8 +234,61 @@ export const renderTrainerSessionUsers = async (req, res) => {
       layout: "trainerHome",
     });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Internal Server Error" });
+    res.render("trainer/trainerSessionUsers", {
+      trainer: req.trainer.toObject(),
+      trainerId: req.trainer._id.toString(),
+      type: "trainer",
+      layout: "trainerHome",
+      errors: [
+        "Error occured loading session users info, please contact administator!",
+      ],
+    });
+  }
+};
+
+export const renderTrainerProfile = async (req, res) => {
+  try {
+    const trainer = req.trainer;
+
+    res.render("trainer/trainerProfile", {
+      trainer: trainer.toObject(),
+      trainerId: trainer._id.toString(),
+      type: "trainer",
+      layout: "trainerHome",
+    });
+  } catch (error) {
+    res.render("trainer/trainerProfile", {
+      trainer: req.trainer.toObject(),
+      trainerId: req.trainer._id.toString(),
+      type: "trainer",
+      layout: "trainerHome",
+      errors: [
+        "Error occured loading session users info, please contact administator!",
+      ],
+    });
+  }
+};
+
+export const renderTrainerProfileInfo = async (req, res) => {
+  try {
+    const trainer = req.trainer;
+
+    res.render("trainer/trainerProfileInfo", {
+      trainer: trainer.toObject(),
+      trainerId: trainer._id.toString(),
+      type: "trainer",
+      layout: "trainerHome",
+    });
+  } catch (error) {
+    res.render("trainer/trainerProfileInfo", {
+      trainer: req.trainer.toObject(),
+      trainerId: req.trainer._id.toString(),
+      type: "trainer",
+      layout: "trainerHome",
+      errors: [
+        "Error occured loading session users info, please contact administator!",
+      ],
+    });
   }
 };
 
@@ -379,7 +465,7 @@ export const getSessionsOfTrainer = async (req, res) => {
   }
 };
 
-async function getCurrentWeekSchedule() {
+async function getCurrentWeekSchedule(trainer) {
   const today = new Date();
   const startOfWeek = new Date(today);
   startOfWeek.setDate(today.getDate() - today.getDay());
@@ -388,6 +474,7 @@ async function getCurrentWeekSchedule() {
   endOfWeek.setDate(startOfWeek.getDate() + 6);
 
   const sessions = await Session.find({
+    _id: { $in: trainer.sessions },
     startDate: { $lte: endOfWeek },
     endDate: { $gte: startOfWeek },
     isActive: true,
@@ -474,3 +561,33 @@ function isTimeInRange(time, startTime, endTime) {
 
   return timeToCheck >= rangeStartTime && timeToCheck <= rangeEndTime;
 }
+
+export const updateTrainerProfile = async (req, res) => {
+  try {
+    const trainer = req.trainer;
+
+    trainer.firstName = req.body.firstName;
+    trainer.lastName = req.body.lastName;
+    trainer.email = req.body.email;
+    trainer.address.street = req.body.street;
+    trainer.address.city = req.body.city;
+    trainer.address.state = req.body.state;
+    trainer.address.zip = req.body.zip;
+    trainer.phone = req.body.phone;
+
+    trainer.workoutType = req.body.workoutType;
+
+    await trainer.save();
+
+    res.redirect("/trainer/profile/info");
+  } catch (error) {
+    res.render("trainer/trainerProfile", {
+      layout: "trainerHome",
+      trainer: req.trainer.toObject(),
+      hasErrors: true,
+      errors: [
+        "An error occurred while updating the profile. Please try again.",
+      ],
+    });
+  }
+};

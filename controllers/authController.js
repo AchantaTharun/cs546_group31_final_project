@@ -345,6 +345,7 @@ export const trainerSignup = async (req, res) => {
     const {
       firstName,
       lastName,
+      trainerName,
       email,
       password,
       passwordConfirm,
@@ -358,7 +359,7 @@ export const trainerSignup = async (req, res) => {
     const newTrainer = new Trainer({
       firstName,
       lastName,
-      trainerName: firstName + " " + lastName,
+      trainerName: trainerName.toLowerCase(),
       email,
       password,
       passwordConfirm,
@@ -370,6 +371,18 @@ export const trainerSignup = async (req, res) => {
       },
       phone,
     });
+
+    const existingTrainer = await Trainer.findOne({
+      trainerName: `${trainerName.toLowerCase()}`,
+    });
+    if (existingTrainer) {
+      return res.render("trainer/trainerSignUp", {
+        errors: ["Username already taken"],
+        hasErrors: true,
+        formData: req.body,
+      });
+    }
+
     if (password !== passwordConfirm) {
       return res.render("trainer/trainerSignUp", {
         errors: ["Password and passwordConfirm should match"],
@@ -399,7 +412,7 @@ export const trainerSignup = async (req, res) => {
 
     const token = signJWT(createdTrainer._id, "trainer");
 
-    res.redirect("/login");
+    res.redirect("/trainer/login");
   } catch (err) {
     if (err.code === 11000) {
       if (err.keyPattern.email) {

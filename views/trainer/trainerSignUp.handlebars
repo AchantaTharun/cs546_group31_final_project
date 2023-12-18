@@ -2,7 +2,7 @@
   <h1 class="mt-5">Trainer Sign up</h1>
 
   {{#if hasErrors}}
-    <div class="alert alert-danger mt-3">
+    <div class="alert alert-danger mt-3" id="backendError">
       <ul>
         {{#each errors}}
           <li>{{this}}</li>
@@ -27,6 +27,12 @@
         <label for="lastName">Last Name:</label>
         <input type="text" class="form-control" id="lastName" name="lastName" value="{{#if hasErrors}}{{formData.lastName}}{{/if}}" required>
         <div class="invalid-feedback">Last Name must be between 3 to 50 characters long.</div>
+      </div>
+
+      <div class="col-md-4">
+        <label for="trainerName">User Name:</label>
+        <input type="text" class="form-control" id="trainerName" name="trainerName" value="{{#if hasErrors}}{{formData.trainerName}}{{/if}}" required>
+        <div class="invalid-feedback">User Name must be between 3 to 50 characters long.</div>
       </div>
 
       <div class="col-md-4">
@@ -106,4 +112,5 @@
   </form>
 </div>
 
+<script id="getCoord" src="/public/js/user/getCoord.js"></script>
  <script src="/public/js/trainer/trainerSignUpClient.js"></script>
