@@ -31,7 +31,7 @@ const checkTokenValid = (passwordChangedAt, tokenIssuedAt) => {
 export const protectRoute = async (req, res, next) => {
   try {
     let token;
-    console.log(req.cookies);
+    //console.log(req.cookies);
     if (!req.cookies.jwt) {
       return res.redirect("/");
     }
