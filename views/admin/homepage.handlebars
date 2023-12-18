@@ -1,7 +1,7 @@
 <div class="container">
   <aside class="left-panel">
     <h2 class="big-heading">{{title}}</h2>
-    <a href="/api/v1/admin/createEvent">NEW EVENT</a>
+
     <a href="/api/v1/admin/changePassword">CHANGE PASSWORD</a>
     <a href="/api/v1/admin/manage">SYSTEM MANAGEMENT</a>
     <a href="/api/v1/admin/rejectedRequests">REJECTED REQUESTS</a>
@@ -11,21 +11,22 @@
     <h2 class="heading">PENDING SIGN UP REQUESTS</h2>
     <div class="window">
       <ol class="list">
-            {{#each data}}
-            <li><a href="/api/v1/admin/signupRequests/{{requestType}}/{{requestedBy}}">
-            <div class="request-info">
-              <div class="tile">
-                <h3>{{requestType}}</h3><h4>ID: {{requestedBy}}</h4>
+        {{#each data}}
+          <li><a
+              href="/api/v1/admin/signupRequests/{{requestType}}/{{requestedBy}}"
+            >
+              <div class="request-info">
+                <div class="tile">
+                  <h3>{{requestType}}</h3><h4>ID: {{requestedBy}}</h4>
+                </div>
               </div>
-            </div>
             </a></li>
-            {{/each}}
+        {{/each}}
       </ol>
     </div>
     <p class="error">{{error}}</p>
   </div>
 </div>
-
 
 {{!-- <h1>{{title}}</h1>
 <div class="container">
@@ -44,5 +45,3 @@
 <a href="/api/v1/admin/manage">SYSTEM MANAGEMENT</a>
 <a href="/api/v1/admin/rejectedRequests">REJECTED REQUESTS</a>
 <a href="/api/v1/admin/logout">LOGOUT</a> --}}
-
-

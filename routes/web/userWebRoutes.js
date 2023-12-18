@@ -133,7 +133,7 @@ router.get(
   async (req, res) => {
     return res.render("user/userCreateEvent", {
       layout: "userCreateEvent.layout.handlebars",
-      user: req.user.toObject(),
+      user: req.user,
     });
   }
 );
@@ -165,7 +165,7 @@ router.post(
       return res.render("user/userCreateEvent", {
         layout: "userHome.layout.handlebars",
         errors: err.response.data.errors,
-        user: user.toObject(),
+        user: user,
       });
     }
   }
@@ -223,14 +223,14 @@ router.get(
       return res.render("user/userEventDetails", {
         layout: "userHome.layout.handlebars",
         event,
-        user: user.toObject(),
+        user: user,
         isEventCreator,
       });
     } catch (err) {
       return res.render("user/userEventDetails", {
         layout: "userHome.layout.handlebars",
-        errors: err.response.data.errors,
-        user: user.toObject(),
+        errors: ["Some error has occured"],
+        user: user,
       });
     }
   }
@@ -602,14 +602,14 @@ router.get(
       return res.render("user/userEventDetails", {
         layout: "userHome.layout.handlebars",
         event,
-        user: user.toObject(),
+        user: user,
         isEventCreator,
       });
     } catch (err) {
       return res.render("user/userEventDetails", {
         layout: "userHome.layout.handlebars",
         errors: err.response.data.errors,
-        user: user.toObject(),
+        user: user,
       });
     }
   }
@@ -1083,7 +1083,6 @@ router.get("/post/:id", authController.protectRoute, async (req, res) => {
   } catch (e) {
     return res.render("user/postEntity", {
       layout: "userHome.layout.handlebars",
-      post,
       hasData: true,
       error: "ID seems to be invalid, this shouldn't be possible",
     });
