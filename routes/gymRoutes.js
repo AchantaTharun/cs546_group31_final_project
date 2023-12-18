@@ -14,11 +14,11 @@ router
 	.patch(authController.protectRoute, gymController.updateGym)
 	.delete(authController.protectRoute, gymController.deleteGym);
 
-router.route("/search").get(authController.protectRoute, gymController.search);
+// router.route("/search").get(authController.protectRoute, gymController.search);
 
-router.post(
-	"/addMembers",
-	authController.protectRoute,
-	gymController.addMembers
-);
+// router.post(
+// 	"/addMembers",
+// 	authController.protectRoute,
+// 	gymController.addMembers
+// );
 export default router;
