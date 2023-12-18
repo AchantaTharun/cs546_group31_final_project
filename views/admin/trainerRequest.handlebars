@@ -46,9 +46,9 @@
         </form>
         {{/if}}
     </div>
-    {{#unless hasData}}
+
     <p id="error">{{error}}</p>
-    {{/unless}}
+
 
         {{#if hasData}}
         <form action="/api/v1/admin/signupRequests/trainer/{{objectId}}" method="POST" id="trainer-submit" novalidate>
@@ -71,3 +71,4 @@
     </div>
 </div>
 
+<script src="/public/js/approvalrejectionvalidation.js"></script>
