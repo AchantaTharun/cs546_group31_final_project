@@ -18,6 +18,12 @@ export const createSession = async (req, res) => {
 
     const trainer = req.trainer;
 
+    if (trainer.status !== "approved") {
+      return res.status(400).json({
+        errors: ["Your account is not approved, Please contact Admin"],
+      });
+    }
+
     const newSession = new Session({
       name: sessionName,
       place: sessionPlace,
