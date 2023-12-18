@@ -269,6 +269,29 @@ export const renderTrainerProfile = async (req, res) => {
   }
 };
 
+export const renderTrainerProfileInfo = async (req, res) => {
+  try {
+    const trainer = req.trainer;
+
+    res.render("trainer/trainerProfileInfo", {
+      trainer: trainer.toObject(),
+      trainerId: trainer._id.toString(),
+      type: "trainer",
+      layout: "trainerHome",
+    });
+  } catch (error) {
+    res.render("trainer/trainerProfileInfo", {
+      trainer: req.trainer.toObject(),
+      trainerId: req.trainer._id.toString(),
+      type: "trainer",
+      layout: "trainerHome",
+      errors: [
+        "Error occured loading session users info, please contact administator!",
+      ],
+    });
+  }
+};
+
 export const getTrainerDetails = async (req, res) => {
   try {
     const trainer = await Trainer.findById(req.params.trainerId);
@@ -538,3 +561,33 @@ function isTimeInRange(time, startTime, endTime) {
 
   return timeToCheck >= rangeStartTime && timeToCheck <= rangeEndTime;
 }
+
+export const updateTrainerProfile = async (req, res) => {
+  try {
+    const trainer = req.trainer;
+
+    trainer.firstName = req.body.firstName;
+    trainer.lastName = req.body.lastName;
+    trainer.email = req.body.email;
+    trainer.address.street = req.body.street;
+    trainer.address.city = req.body.city;
+    trainer.address.state = req.body.state;
+    trainer.address.zip = req.body.zip;
+    trainer.phone = req.body.phone;
+
+    trainer.workoutType = req.body.workoutType;
+
+    await trainer.save();
+
+    res.redirect("/trainer/profile/info");
+  } catch (error) {
+    res.render("trainer/trainerProfile", {
+      layout: "trainerHome",
+      trainer: req.trainer.toObject(),
+      hasErrors: true,
+      errors: [
+        "An error occurred while updating the profile. Please try again.",
+      ],
+    });
+  }
+};

@@ -2,7 +2,7 @@
   <h1 class="mt-5">Trainer Sign up</h1>
 
   {{#if hasErrors}}
-    <div class="alert alert-danger mt-3">
+    <div class="alert alert-danger mt-3" id="backendError">
       <ul>
         {{#each errors}}
           <li>{{this}}</li>

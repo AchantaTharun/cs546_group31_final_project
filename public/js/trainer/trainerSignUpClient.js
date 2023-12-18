@@ -16,10 +16,13 @@
       var stateInput = document.getElementById("state");
       var zipInput = document.getElementById("zip");
       var phoneInput = document.getElementById("phone");
+      var backendError = document.getElementById("backendError");
+
       var validation = Array.prototype.filter.call(forms, function (form) {
         form.addEventListener(
           "submit",
           function (event) {
+            if (backendError) backendError.hidden = true;
             if (form.checkValidity() === false) {
               event.preventDefault();
               event.stopPropagation();

@@ -91,6 +91,9 @@ app.engine(
       eq: function (arg1, arg2, options) {
         return arg1 === arg2 ? options.fn(this) : options.inverse(this);
       },
+      isSelected: function (value, selectedValues) {
+        return selectedValues && selectedValues.includes(value);
+      },
     },
   })
 );

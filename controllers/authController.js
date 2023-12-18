@@ -359,7 +359,7 @@ export const trainerSignup = async (req, res) => {
     const newTrainer = new Trainer({
       firstName,
       lastName,
-      trainerName,
+      trainerName: trainerName.toLowerCase(),
       email,
       password,
       passwordConfirm,
@@ -373,7 +373,7 @@ export const trainerSignup = async (req, res) => {
     });
 
     const existingTrainer = await Trainer.findOne({
-      trainerName: `${trainerName}`,
+      trainerName: `${trainerName.toLowerCase()}`,
     });
     if (existingTrainer) {
       return res.render("trainer/trainerSignUp", {
@@ -412,7 +412,7 @@ export const trainerSignup = async (req, res) => {
 
     const token = signJWT(createdTrainer._id, "trainer");
 
-    res.redirect("/login");
+    res.redirect("/trainer/login");
   } catch (err) {
     if (err.code === 11000) {
       if (err.keyPattern.email) {
