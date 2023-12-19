@@ -1,0 +1,41 @@
+
+<div class="container">
+  
+  <div class="text-center mb-5">
+
+    <h3>Followers</h3>
+
+  </div>
+
+  
+  {{#if errors}}<div class="alert alert-danger mt-3">
+      <ul>
+        {{#each errors}}
+          <li>{{this}}</li>
+        {{/each}}
+      </ul>
+    </div>
+  {{else}}
+    {{#if followers.length}}
+      {{#each followers}}
+        <div class="card mb-3">
+          <div class="card-body">
+            <div class="d-flex flex-column flex-lg-row">
+              <span class="avatar avatar-text rounded-3 me-4 mb-2"></span>
+              <div class="row flex-fill">
+                <div class="col-sm-5">
+                  <h4 class="h5">{{this.userName}}</h4>
+                  <small>{{this.email}}</small><br>
+                  <div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      {{/each}}
+    {{else}}
+
+      <p class="text-center">No followers to display</p>
+    {{/if}}
+  {{/if}}
+</div>

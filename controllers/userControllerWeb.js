@@ -3,6 +3,7 @@ import Trainer from "../models/trainerModel.js";
 import Gym from "../models/gymModel.js";
 import mongoose from "mongoose";
 import Session from "../models/sessionModel.js";
+import MealPlan from "../models/mealPlanModel.js"
 export const getHomePage = async (req, res) => {
   try {
     const user = req.user;
@@ -14,7 +15,6 @@ export const getHomePage = async (req, res) => {
       });
     }
     const coords = user.location.coordinates;
-    console.log(coords);
     let users = await User.aggregate([
       {
         $geoNear: {
@@ -100,7 +100,6 @@ export const getHomePage = async (req, res) => {
         }
       });
     });
-    console.log(trainers);
     trainers.forEach((trainer) => {
       trainer.followers.users.forEach((follower) => {
         if (follower.toString() === req.user._id.toString()) {
@@ -108,7 +107,6 @@ export const getHomePage = async (req, res) => {
         }
       });
     });
-    console.log(gyms);
     gyms.forEach((gym) => {
       gym.followers.users.forEach((follower) => {
         if (follower.toString() === req.user._id.toString()) {
@@ -133,7 +131,6 @@ export const search = async (req, res) => {
   try {
     const user = req.user;
     const { selectUser, favoriteWorkout, state } = req.query;
-    console.log({ selectUser, favoriteWorkout, state });
 
     if (!selectUser) {
       throw new Error("Please select a user type");
@@ -212,7 +209,6 @@ export const search = async (req, res) => {
         });
       });
     }
-    console.log({ users, gyms, trainers });
     return res.render("user/userSearch", {
       layout: "userHome.layout.handlebars",
       users,
@@ -297,7 +293,6 @@ export const getTrainerSessionsPage = async (req, res) => {
         }
       });
     });
-    console.log(sessions);
     return res.render("user/trainerProfile", {
       layout: "trainerProfilePage.layout.handlebars",
       sessions: trainer.sessions,
@@ -334,7 +329,6 @@ export const getTrainerFollowingPage = async (req, res) => {
     let followingUsers = following.users;
     let followingGyms = following.gyms;
     let followingTrainers = following.trainers;
-    console.log(following.users);
     return res.render("user/trainerProfile", {
       layout: "trainerProfilePage.layout.handlebars",
       hasFollowing: true,
@@ -379,12 +373,10 @@ export const updateUser = async (req, res) => {
         zip: req.body.zip,
       },
     };
-    console.log({ updatedFields });
     const updatedUser = await User.findByIdAndUpdate(user._id, updatedFields, {
       new: true,
       runValidators: true,
     }).lean();
-    console.log({ updatedUser });
     if (!updatedUser) {
       return res.status(404).json({
         status: "fail",
@@ -408,14 +400,12 @@ export const getEditProfile = async (req, res) => {
   try {
     const user = Object.assign(req.user);
     const findUser = await User.findById(user._id).lean();
-    console.log(findUser);
     if (!user) {
       return res.status(404).json({
         status: "fail",
         message: "No user found with that ID",
       });
     }
-    console.log(user);
     return res.render("user/userEditProfile", {
       layout: "userEditProfile.layout.handlebars",
       user,
@@ -468,7 +458,6 @@ export const getGymProfilePage = async (req, res) => {
       });
     }
     const id = req.params.id;
-    console.log(id);
     const gym = await Gym.findById(id).lean();
     if (!gym) {
       return res.status(404).json({
@@ -504,7 +493,6 @@ export const getGymFollowersPage = async (req, res) => {
     const followerUsers = followers.users;
     const followerTrainers = followers.trainers;
     const followerGyms = followers.gyms;
-    console.log({ gym });
     return res.render("user/gymProfile", {
       layout: "gymProfilePage.layout.handlebars",
       hasFollowers: true,
@@ -522,7 +510,6 @@ export const getGymFollowersPage = async (req, res) => {
 export const followUser = async (req, res) => {
   try {
     const { userId, userType } = req.params;
-    console.log({ userId, userType });
     let loggedInUserId = req.user._id;
 
     let userToUpdate;
@@ -601,7 +588,6 @@ export const unFollowUser = async (req, res) => {
       { $pull: { followers: loggedInUserId } },
       { new: true }
     );
-    console.log(userToUnFollow);
     if (!userToUnFollow) {
       return res.status(404).json({ message: "User not found" });
     }
@@ -610,7 +596,6 @@ export const unFollowUser = async (req, res) => {
       { $pull: { following: userToUnFollow._id } },
       { new: true }
     );
-    console.log(loggedInUser);
     res.status(200).json({ message: "You are no longer following this user" });
   } catch (err) {
     console.error(err);
@@ -622,7 +607,6 @@ export const getTrainerFollowersPage = async (req, res) => {
   try {
     const user = req.user;
     const trainerName = req.params.trainerName;
-    console.log(trainerName);
     const trainer = await Trainer.findOne({ trainerName: trainerName })
       .populate("followers.users")
       .populate("followers.gyms")
@@ -638,7 +622,6 @@ export const getTrainerFollowersPage = async (req, res) => {
     let followerUsers = followers.users;
     let followerGyms = followers.gyms;
     let followerTrainers = followers.trainers;
-    console.log(followers.users);
     return res.render("user/trainerProfile", {
       layout: "trainerProfilePage.layout.handlebars",
       hasFollowers: true,
@@ -656,7 +639,6 @@ export const getTrainersPostsPage = async (req, res) => {
   try {
     const user = req.user;
     const trainerName = req.params.trainerName;
-    console.log(trainerName);
     const trainer = await Trainer.findOne({ trainerName: trainerName })
       .populate("posts")
       .lean();
@@ -667,7 +649,6 @@ export const getTrainersPostsPage = async (req, res) => {
       });
     }
     let posts = trainer.posts;
-    console.log(posts);
     return res.render("user/trainerProfile", {
       layout: "trainerProfilePage.layout.handlebars",
       hasPosts: true,
@@ -692,7 +673,6 @@ export const getMYFollowersPage = async (req, res) => {
     const followerUsers = followers.users;
     const followerTrainers = followers.trainers;
     const followerGyms = followers.gyms;
-    console.log({ populatedUser: req.user });
 
     return res.render("user/userProfile", {
       layout: "userProfile.layout.handlebars",
@@ -720,7 +700,6 @@ export const getMYFollowingPage = async (req, res) => {
     const followingUsers = following.users;
     const followingTrainers = following.trainers;
     const followingGyms = following.gyms;
-    console.log({ populatedUser: req.user });
     return res.render("user/userProfile", {
       layout: "userProfile.layout.handlebars",
       hasFollowing: true,
@@ -740,7 +719,6 @@ export const getMYSessionsPage = async (req, res) => {
     const mySessions = await Session.find({
       registeredUsers: { $elemMatch: { userId: user._id } },
     }).lean();
-    console.log(mySessions);
     return res.render("user/userProfile", {
       layout: "userProfile.layout.handlebars",
       hasSessions: true,
@@ -752,10 +730,26 @@ export const getMYSessionsPage = async (req, res) => {
   }
 };
 
+export const getMYMealsPage = async (req, res) => {
+  try {
+    const user = req.user;
+    const mmeals = await MealPlan.find({
+      assignedTo: user._id }
+    ).lean();
+    return res.render("user/userProfile", {
+      layout: "userProfile.layout.handlebars",
+      hasMeals: true,
+      mmeals: mmeals,
+      user,
+    });
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
 export const getUserFollowersPage = async (req, res) => {
   const user = req.user;
   const userName = req.params.userName;
-  console.log(userName);
   try {
     const populatedUser = await User.findOne({ userName: userName })
       .populate("followers.users")
@@ -767,7 +761,6 @@ export const getUserFollowersPage = async (req, res) => {
     const followerUsers = followers.users;
     const followerTrainers = followers.trainers;
     const followerGyms = followers.gyms;
-    console.log({ populatedUser: populatedUser });
 
     return res.render("user/userPage", {
       layout: "userPage.layout.handlebars",
@@ -796,7 +789,6 @@ export const getUserFollowingPage = async (req, res) => {
     const followingUsers = following.users;
     const followingTrainers = following.trainers;
     const followingGyms = following.gyms;
-    console.log({ populatedUser: req.user });
     return res.render("user/userPage", {
       layout: "userPage.layout.handlebars",
       hasFollowing: true,

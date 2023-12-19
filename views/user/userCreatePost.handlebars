@@ -1,3 +1,5 @@
+
+<div class="container">
 {{#unless hasData}}
 <a href="/user/create/newPosts">CLICK HERE TO TRY AGAIN</a>
 {{/unless}}
@@ -28,9 +30,14 @@
 {{/if}}
 
 
-<p id="error">{{error}}</p>
+
 
 
 <a href="/user/posts">GO BACK TO POSTS PAGE</a>
 
+
+<p id="error" class="alert alert-danger" hidden>{{error}}</p>
+
+
 <script src="/public/js/user/validatePostCreation.js"> </script>
+</div>

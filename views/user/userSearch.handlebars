@@ -4,8 +4,7 @@
     <div class="row">
         {{#if users.length}}
             <div>
-                <button class="btn btn-primary m-3"><a href="/user/home" class="text-white">
-                        Go Back</a></button>
+                <a href="/user/home" class="text-white">Go Back</a>
             </div>
             <div>
                 <h2 class="m-3">Search Results...</h2>
@@ -25,9 +24,7 @@
                                 <hr>
 
                                 <div class="d-flex justify-content-between">
-                                    <button class="btn btn-primary"><a
-                                            href="/user/userProfile/{{this.userName}}/followers" class="text-white">View
-                                            Profile</a></button>
+                                    <a href="/user/userProfile/{{this.userName}}/followers" class="text-white">View Profile</a>
                                     {{#if this.isFollowing}}
                                         <p>Following</p>
                                     {{else}}
@@ -61,10 +58,7 @@
                                 <hr>
 
                                 <div class="d-flex justify-content-between">
-                                    <button class="btn btn-success"><a
-                                            href="/user/trainerProfile/{{this.trainerName}}/followers"
-                                            class="text-white">View
-                                            Profile</a></button>
+                                <a href="/user/trainerProfile/{{this.trainerName}}/followers" class="text-white">View Profile</a>
                                     {{#if this.isFollowing}}
                                         <p>Following</p>
                                     {{else}}
@@ -98,9 +92,7 @@
                                 <hr>
 
                                 <div class="d-flex justify-content-between">
-                                    <button class="btn btn-warning"><a href="/user/gymProfile/{{this._id}}/followers"
-                                            class="text-white">View
-                                            Profile</a></button>
+                                    <a href="/user/gymProfile/{{this._id}}/followers" class="text-white">View Profile</a>
                                     {{#if this.isFollowing}}
                                         <p>Following</p>
                                     {{else}}
@@ -116,13 +108,9 @@
         {{else}}
             <div>
                 <div>
-                    <button class="btn btn-primary m-3"><a href="/user/home" class="text-white">
-                            Go Back</a></button>
+                    <a href="/user/home" class="text-white"> Go Back</a>
                 </div>
             </div>
         {{/if}}
     </div>
-</div>
-
-
 </div>

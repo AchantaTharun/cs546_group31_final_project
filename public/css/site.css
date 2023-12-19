@@ -9,9 +9,10 @@ body {
 
 .wrapper {
   position: relative;
+  margin-top: 150px;
   max-width: 50%;
   width: 20%;
-  margin: 0 auto;
+  
   padding: 20px;
   background-color: #2a2a2a;
   border-radius: 8px;
@@ -49,7 +50,7 @@ input[type='submit']:hover {
   background-color: #0f52ba;
 }
 
-/* Error message style */
+
 .error-message {
   margin-top: 20px;
   padding: 10px;
@@ -61,17 +62,16 @@ input[type='submit']:hover {
   text-align: left;
 }
 
-/* Adjustments for file input */
+
 input[type='file'] {
   padding: 6px;
 }
 
-/* Styling for labels */
+
 label {
   font-weight: bold;
 }
 
-/* Optional: Increase contrast for active/focused elements */
 input[type='text']:focus,
 input[type='email']:focus,
 input[type='password']:focus,

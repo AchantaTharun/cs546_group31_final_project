@@ -12,7 +12,7 @@ function getRandomWorkoutType() {
     "flexibility",
     "sports",
     "crossFit",
-    "body Weight",
+    "bodyWeight",
   ];
 
   const randomIndex = Math.floor(Math.random() * workoutTypes.length);
@@ -20,8 +20,8 @@ function getRandomWorkoutType() {
   return workoutTypes[randomIndex];
 }
 function generateRandomAddress() {
-  const street = generateRandomString(3, 50);
-  const city = generateRandomString(3, 50);
+  const street = generateRandomString(4, 50);
+  const city = generateRandomString(4, 50);
   const state = generateRandomState();
   const zip = generateRandomZip();
 
@@ -99,7 +99,6 @@ function generateRandomState() {
     "WA",
     "WV",
     "WI",
-    "WY",
   ];
 
   return states[Math.floor(Math.random() * states.length)];
@@ -352,8 +351,8 @@ const trainers = [
 ];
 
 (async () => {
-  await Trainer.deleteMany();
-  await SignUpRequest.deleteMany();
+  // await Trainer.deleteMany();
+  // await SignUpRequest.deleteMany();
   async function seedTrainersNearMe() {
     try {
       for (const trainer of trainers) {

@@ -70,10 +70,13 @@
                     </p>
                     <div class="btn-group" role="group" aria-label="Session Buttons">
                         {{#if this.isRegistered}}
-                            <button type="button" class="btn btn-primary" disabled>Registered</button>
+                            <button type="button" class="btn btn-primary" disabled="">Registered</button>
                         {{else}}
-                            <button type="button" class="btn btn-primary register-btn"
-                                data-sessionid="{{this._id}}">Register</button>
+                        {{#if this.isActive}}
+                            <button type="button" class="btn btn-primary register-btn" data-sessionid="{{this._id}}">Register</button>
+                            {{else}}
+                            <button type="button" class="btn btn-primary register-btn"  disabled>Session is Inactive</button>
+                            {{/if}}
                         {{/if}}
                     </div>
                 </div>
@@ -150,4 +153,4 @@
             </div>
         {{/each}}
     {{/if}}
-</div>
+</div></div></div></div></div></div></div>

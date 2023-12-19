@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <title>Workout Planner</title>
+
+    </head>
+
+    <body>
+
+        <h1 class="mb-5">Create Your Workout</h1>
+
+        <form action="/submit_workout" class="row g-3" method="post">
+            <div class="col-md-6">
+                <label for="Days" class="form-label">Days</label>
+                <select id="Days" class="form-select">
+                    <option selected disabled>Choose...</option>
+                    <option value="Sunday">Sunday</option>
+                    <option value="Monday">Monday</option>
+                    <option value="Tuesday">Tuesday</option>
+                    <option value="Wednesday">Wednesday</option>
+                    <option value="Thursday">Thursday</option>
+                    <option value="Friday">Friday</option>
+                    <option value="Saturday">Saturday</option>
+
+                </select>
+            </div>
+
+            <div class="col-md-6">
+                <label for="Type" class="form-label">Type</label>
+                <select id="Type" class="form-select">
+                    <option selected disabled>Choose...</option>
+                    <option value="Cardio">Cardio</option>
+                    <option value="Strength">Strength</option>
+                    <option value="Flexibility">Flexibility</option>
+                    <option value="Sports">Sports</option>
+                    <option value="CrossFit">CrossFit</option>
+                    <option value="Body Weight">Body Weight</option>
+
+                </select>
+            </div>
+
+        </form>
+
+    </body>
+
+</html>

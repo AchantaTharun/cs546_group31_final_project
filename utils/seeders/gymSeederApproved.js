@@ -3,7 +3,6 @@ import Trainer from "../../models/trainerModel.js";
 import SignUpRequest from "../../models/signUpRequestModel.js";
 import Gym from "../../models/gymModel.js";
 
-//This comment is to hide the last delete env commit on github
 mongoose.connect("mongodb://localhost:27017/GymMate", {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -353,7 +352,7 @@ const gyms = [
 ];
 
 (async () => {
-  // await Gym.deleteMany();
+  await Gym.deleteMany();
   await SignUpRequest.deleteMany();
 
   async function seedGymsNearMe() {
@@ -370,25 +369,22 @@ const gyms = [
         const newgym = new Gym({
           ownerFName: gym.ownerFName,
           ownerLName: gym.ownerLName,
-          gymName: "1" + gym.ownerLName + "Gym",
+          gymName: "1" + gym.ownerLName + "gym",
 
-          email: "1" + gym.email + "Gym",
-          password: "1" + gym.password + "Gym",
-          passwordConfirm: "1" + gym.password + "Gym",
+          email: "1" + gym.email + "gym",
+          password: "1" + gym.password + "gym",
+          passwordConfirm: "1" + gym.password + "gym",
           location: location,
           workoutType,
           address,
           phone,
+          status:"approved",
         });
 
         await newgym.save();
-        await SignUpRequest.create({
-          requestType: "gym",
-          requestedBy: newgym._id,
-        });
       }
 
-      console.log("5. Gyms near me seeded successfully!");
+      console.log("1. Approved Gyms near me seeded successfully!");
     } catch (err) {
       console.error("Error seeding Trainers:", err);
     }
@@ -397,7 +393,7 @@ const gyms = [
   async function seedGymsUSA() {
     try {
       for (const gym of gyms) {
-        for (let i = 2; i <= 10; i++) {
+        for (let i = 11; i <= 20; i++) {
           const location = generateRandomCoordinatesUSA();
           const workoutType = [
             getRandomWorkoutType(),
@@ -409,24 +405,21 @@ const gyms = [
           const newgym = new Gym({
             ownerFName: gym.ownerFName,
             ownerLName: gym.ownerLName,
-            gymName: `${i}` + gym.ownerLName + "Gym",
-            email: `${i}` + gym.email + "Gym",
-            password: `${i}` + gym.password + "Gym",
-            passwordConfirm: `${i}` + gym.password + "Gym",
+            gymName: `${i}` + gym.ownerLName + "gym",
+            email: `${i}` + gym.email + "gym",
+            password: `${i}` + gym.password + "gym",
+            passwordConfirm: `${i}` + gym.password + "gym",
             location: location,
             workoutType,
             address,
             phone,
+            status:"approved",
           });
 
           await newgym.save();
-          await SignUpRequest.create({
-            requestType: "gym",
-            requestedBy: newgym._id,
-          });
         }
       }
-      console.log("6. USA Gyms seeded successfully!");
+      console.log("2. Approved USA Gyms seeded successfully!");
     } catch (err) {
       console.error("Error seeding Gyms:", err);
     }

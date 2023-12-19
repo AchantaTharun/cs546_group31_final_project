@@ -46,8 +46,8 @@
             <legend class="col-form-label col-sm-2 pt-0">Gender</legend>
             <div class="col-sm-10">
                 <div class="form-check">
-                    <input class="form-check-input gridRadios" type="radio" name="gender" id="male" value="male" {{#eq
-                        user.gender "male" }} checked {{/eq}}>
+                    <input class="form-check-input gridRadios" type="radio" name="gender" id="male" value="male" 
+                       {{#eq user.gender "male" }} checked {{/eq}}>
                     <label class="form-check-label" for="male">
                         Male
                     </label>
@@ -60,8 +60,8 @@
                     </label>
                 </div>
                 <div class="form-check disabled">
-                    <input class="form-check-input gridRadios" type="radio" name="gender" id="other" value="other" {{#eq
-                        user.gender "other" }} checked {{/eq}}>
+                    <input class="form-check-input gridRadios" type="radio" name="gender" id="other" value="other" 
+                    {{#eq user.gender "other" }} checked {{/eq}}>
                     <label class="form-check-label" for="other">
                         Other
                     </label>
@@ -91,7 +91,7 @@
     </div>
     <div class="col-md-3">
         <label for="wUnit" class="form-label">wUnit</label>
-        <select id="wUnit" name="wUnit" class="form-select">
+        <select id="wUnit" name="wUnit" class="form-select" multiple>
             <option selected disabled>Choose...</option>
             <option value="lb" {{#eq user.wUnit "lb" }}selected {{/eq}}>lb</option>
             <option value="kg" {{#eq user.wUnit "kg" }}selected {{/eq}}>kg</option>
@@ -135,7 +135,7 @@
 
     <div class="col-md-4">
         <label for="state" class="form-label">State</label>
-        <select id="state" name="state" class="form-select">
+        <select id="state" name="state" class="form-select" multiple>
             <option selected disabled>Choose...</option>
             <option value="AL" {{#eq user.address.state "AL" }} selected {{/eq}}>Alabama</option>
             <option value="AK" {{#eq user.address.state "AK" }} selected {{/eq}}>Alaska</option>

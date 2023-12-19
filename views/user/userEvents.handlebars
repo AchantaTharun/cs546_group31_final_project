@@ -7,9 +7,8 @@
 {{/if}}
 
 <div class="container">
-    <button type="button" class="btn btn-success" data-mdb-ripple-init>
         <a href="/user/events/createEvent">+ Create Event</a>
-    </button>
+
 <br>
 <br>
     <div class="row row-cols-1 row-cols-md-3 g-4">
@@ -18,7 +17,7 @@
                 <a href="/user/events/details/{{this._id}}">
                 <div class="card h-100">
                     <!--  TODO: replace the src with your event image source -->
-                    <img src="https://mdbcdn.b-cdn.net/img/new/standard/city/044.webp" class="card-img-top" alt="{{this.title}}"/>
+                    <img src="https://mdbcdn.b-cdn.net/img/new/standard/city/044.webp" class="card-img-top" alt="{{this.title}}">
 
                     <div class="card-body">
                         <h5 class="card-title">{{this.title}}</h5>

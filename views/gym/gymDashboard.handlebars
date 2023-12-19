@@ -1,7 +1,3 @@
-{{! <div class="main-dashboard-content">
-	<h1>I dont have shit to display here</h1>
-</div> }}
-
 <div class="container mt-4">
 	{{#if message}}
 		<h1>{{message}}</h1>
@@ -11,22 +7,15 @@
 			<div class="col-md-2">
 				<label for="searchType" class="form-label">Search Type</label>
 				<select id="searchType" name="searchType" class="form-select">
-					<option selected disabled>Choose...</option>
+					<option selected="" disabled="">Choose...</option>
 					<option value="phone">Phone</option>
-					{{! <option value="Names">Names</option> }}
 					<option value="email">Email</option>
 				</select>
 			</div>
 
 			<div class="col-md-5">
 				<label for="search" class="form-label">Search</label>
-				<input
-					type="text"
-					name="search"
-					class="form-control"
-					id="search"
-					placeholder="Search"
-				/>
+				<input type="text" name="search" class="form-control" id="search" placeholder="Search">
 			</div>
 			<div class="col-md-1 mt-5">
 				<button type="submit" class="btn btn-primary">Add Members</button>
@@ -37,11 +26,6 @@
 			<div class="nearby-user">
 				<div class="row">
 					<div class="col-md-2 col-sm-2">
-						{{! <img
-					src="https://bootdey.com/img/Content/avatar/avatar6.png"
-					alt="user"
-					class="profile-photo-lg"
-				/> }}
 					</div>
 					<div class="col-md-7 col-sm-7">
 						<h5><a href="#" class="profile-link">{{this.firstName}}
@@ -50,14 +34,10 @@
 						<p class="text-muted">{{this.phone}}</p>
 					</div>
 					<div class="col-md-3 col-sm-3">
-						{{! <button class="btn btn-primary pull-right">remove</button> }}
 					</div>
 				</div>
 			</div>
 		{{/each}}
-		{{! <h1>GymMates</h1>
-	<button onclick="addMemberForm()" class="btn btn-primary">Add Members</button> }}
-
 		<div id="formContainer"></div>
 	{{/if}}
 </div>

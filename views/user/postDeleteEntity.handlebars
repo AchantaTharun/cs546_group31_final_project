@@ -1,29 +1,31 @@
+<div class="container">
 <h4 class="mb-4"><a href="/user/get/myPosts">BACK TO MY POSTS</a></h4>
 <hr>
 {{#if hasData}}
-<form action="/user/delete/post" method="POST" id="entity-delete" novalidate>
+<form action="/user/delete/post" method="POST" id="entity-delete" novalidate="">
     <label for="title">
         POST TITLE :                                                 
-        <input type="text" name="title" id="title" value="{{post.title}}" readonly>
+        <input type="text" name="title" id="title" value="{{post.title}}" readonly="">
     </label>
     <br>
+     <img src="{{post.img}}" id="imageInput" alt="Image Not Found" class="profile-image">
     <label for="img">
-        IMAGE :                                                 
-        <input type="text" name="img" value="{{post.img}}" id="img" readonly>
+                                          
+        <input type="text" name="img" value="{{post.img}}" id="img" readonly="" hidden>
     </label>
     <br>
     <label for="description">
          DESCRIPTION:                                                 
-        <input type="text" name="description" value="{{post.description}}" id="description"readonly>
+        <input type="text" name="description" value="{{post.description}}" id="description" readonly="">
     </label>
     <br>
     <label for="createdAt">
         CREATED AT :                                                 
-        <input type="text" name="createdAt" value="{{post.createdAt}}" id="createdAt" readonly>
+        <input type="text" name="createdAt" value="{{post.createdAt}}" id="createdAt" readonly="">
     </label>
     <br>
         <label for="id">
-        <input name="id" id="id" value="{{post._id}}" readonly hidden></input>
+        <input name="id" id="id" value="{{post._id}}" readonly="" hidden="">
     </label>
     <br>
     <button type="submit">DELETE</button>
@@ -72,3 +74,4 @@
 {{/each}}
 {{/if}}
 
+</div>

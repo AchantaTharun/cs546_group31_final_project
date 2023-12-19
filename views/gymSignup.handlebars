@@ -1,68 +1,79 @@
+<div class="container">{{#if hasErrors}}
+    <div class="alert alert-danger mt-3" id="backendError">
+      <ul>
+        {{#each errors}}
+          <li>{{this}}</li>
+        {{/each}}
+        {{#if sendToLogin}}
+        <a href="/trainer/login"> Go to Log in page</a>
+        {{/if}}
+      </ul>
+    </div>
+  {{/if}}
 <form action="/gym/signup" method="POST">
 	<label for="gymName">Gym Name:</label>
-	<input type="text" id="gymName" name="gymName" />
+	<input type="text" id="gymName" name="gymName" value="{{formData.gymName}}">
 	<!-- Add error message placeholder if needed: -->
 	<!-- <p class="error-message">{{errorMessages.gymName}}</p> -->
 
 	<label for="email">Email:</label>
-	<input type="email" id="email" name="email" />
+	<input type="email" id="email" name="email" value="{{formData.email}}">
 	<!-- Add error message placeholder if needed: -->
 	<!-- <p class="error-message">{{errorMessages.email}}</p> -->
 
 	<label for="password">Password:</label>
-	<input type="password" id="password" name="password" />
+	<input type="password" id="password" name="password">
 	<!-- Add error message placeholder if needed: -->
 	<!-- <p class="error-message">{{errorMessages.password}}</p> -->
 
 	<label for="passwordConfirm">Confirm Password:</label>
-	<input type="password" id="passwordConfirm" name="passwordConfirm" />
+	<input type="password" id="passwordConfirm" name="passwordConfirm">
 	<!-- Add error message placeholder if needed: -->
 	<!-- <p class="error-message">{{errorMessages.passwordConfirm}}</p> -->
 
 	<label for="street">Street Address:</label>
-	<input type="text" id="street" name="street" />
+	<input type="text" id="street" name="street" value="{{formData.street}}">
 	<!-- Add error message placeholder if needed: -->
 	<!-- <p class="error-message">{{errorMessages.address.street}}</p> -->
 
 	<label for="city">City:</label>
-	<input type="text" id="city" name="city" />
+	<input type="text" id="city" name="city" value="{{formData.city}}">
 	<!-- Add error message placeholder if needed: -->
 	<!-- <p class="error-message">{{errorMessages.address.city}}</p> -->
 
 	<label for="state">State:</label>
-	<input type="text" id="state" name="state" />
+	<input type="text" id="state" name="state" value="{{formData.state}}">
 	<!-- Add error message placeholder if needed: -->
 	<!-- <p class="error-message">{{errorMessages.address.state}}</p> -->
 
 	<label for="zip">Zip:</label>
-	<input type="text" id="zip" name="zip" />
+	<input type="text" id="zip" name="zip" value="{{formData.zip}}">
 	<!-- Add error message placeholder if needed: -->
 	<!-- <p class="error-message">{{errorMessages.address.zip}}</p> -->
 
 	<label for="phone">Phone Number:</label>
-	<input type="text" id="phone" name="phone" />
+	<input type="text" id="phone" name="phone" value="{{formData.phone}}">
 	<!-- Add error message placeholder if needed: -->
 	<!-- <p class="error-message">{{errorMessages.phone}}</p> -->
 
 	<label for="ownerFName">Owner's First Name:</label>
-	<input type="text" id="ownerFName" name="ownerFName" />
+	<input type="text" id="ownerFName" name="ownerFName" value="{{formData.ownerFName}}">
 	<!-- Add error message placeholder if needed: -->
 	<!-- <p class="error-message">{{errorMessages.ownerFName}}</p> -->
 
 	<label for="ownerLName">Owner's Last Name:</label>
-	<input type="text" id="ownerLName" name="ownerLName" />
+	<input type="text" id="ownerLName" name="ownerLName" value="{{formData.ownerLName}}">
 	<!-- Add error message placeholder if needed: -->
 	<!-- <p class="error-message">{{errorMessages.ownerLName}}</p> -->
 
   {{!-- <label for="businessLicense">Business License:</label> 
-  <input
-    type="file"
-    id="businessLicense"
-    name="businessLicense"
-    accept="image/*"
-  /> --}}
+  <input type="file" id="businessLicense" name="businessLicense" accept="image/*"> --}}
   <!-- Add error message placeholder if needed: -->
   <!-- <p class="error-message">{{errorMessages.businessLicense}}</p> -->
 
-	<input type="submit" value="Sign Up" />
+	<input type="submit" value="Sign Up">
+
+	<br>
+		<a href="/">Go to home page</a>
 </form>
+</div>
