@@ -987,6 +987,12 @@ router.get(
   authController.protectRoute,
   userControllerWeb.getMYSessionsPage
 );
+
+router.get(
+  "/profile/mealplans",
+  authController.protectRoute,
+  userControllerWeb.getMYMealsPage
+);
 router.get(
   "/profile/:userName",
   authController.protectRoute,

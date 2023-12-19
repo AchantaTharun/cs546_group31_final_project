@@ -351,8 +351,8 @@ const trainers = [
 ];
 
 (async () => {
-  // await Trainer.deleteMany();
-  // await SignUpRequest.deleteMany();
+  await Trainer.deleteMany();
+  await SignUpRequest.deleteMany();
   async function seedTrainersNearMe() {
     try {
       for (const trainer of trainers) {
@@ -367,24 +367,21 @@ const trainers = [
         const newTrainer = new Trainer({
           firstName: trainer.firstName,
           lastName: trainer.lastName,
-          trainerName: "1" + trainer.trainerName + "Trainer",
-          email: "1" + trainer.email + "Trainer",
-          password: "1" + trainer.password + "Trainer",
-          passwordConfirm: "1" + trainer.password + "Trainer",
+          trainerName: "1" + trainer.trainerName + "trainer",
+          email: "1" + trainer.email + "trainer",
+          password: "1" + trainer.password + "trainer",
+          passwordConfirm: "1" + trainer.password + "trainer",
           location: location,
           workoutType,
           address,
           phone,
+          status:"approved",
         });
 
         await newTrainer.save();
-        await SignUpRequest.create({
-          requestType: "trainer",
-          requestedBy: newTrainer._id,
-        });
       }
 
-      //console.log("Trainers seeded successfully!");
+      console.log("3. Approved Trainers near me seeded successfully!");
     } catch (err) {
       console.error("Error seeding Trainers:", err);
     }
@@ -405,24 +402,21 @@ const trainers = [
           const newTrainer = new Trainer({
             firstName: trainer.firstName,
             lastName: trainer.lastName,
-            trainerName: `${i}` + trainer.trainerName + "Trainer",
-            email: `${i}` + trainer.email + "Trainer",
-            password: `${i}` + trainer.password + "Trainer",
-            passwordConfirm: `${i}` + trainer.password + "Trainer",
+            trainerName: `${i}` + trainer.trainerName + "trainer",
+            email: `${i}` + trainer.email + "trainer",
+            password: `${i}` + trainer.password + "trainer",
+            passwordConfirm: `${i}` + trainer.password + "trainer",
             location: location,
             workoutType,
             address,
             phone,
+            status:"approved",
           });
 
           await newTrainer.save();
-          await SignUpRequest.create({
-            requestType: "trainer",
-            requestedBy: newTrainer._id,
-          });
         }
       }
-      //console.log("Trainers seeded successfully!");
+      console.log("4. Approved USA Trainers seeded successfully!");
     } catch (err) {
       console.error("Error seeding Trainers:", err);
     }

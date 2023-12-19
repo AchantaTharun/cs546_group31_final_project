@@ -40,3 +40,79 @@ Our website will be invaluable to users in several ways:Easy Partner/Trainer Fin
 -   Workout Equipment Inventory: Users can list and share their available workout equipment,
     helping others find suitable partners for specific workouts.
 -   User-Generated Challenges: Enable users to create and participate in fitness challenges with others.
+
+
+
+
+
+# GymMate - Fitness Partner Finder App
+
+GymMate is a fitness management application that helps users, trainers, and administrators manage their fitness activities, sessions, and more.
+
+## Steps to Start the Project:
+
+### Step 1: Clone the Repository
+
+```bash
+git clone https://github.com/AchantaTharun/cs546_group31_final_project
+```
+
+### Step 2: Rename Environment File
+```Rename the env file to .env```
+
+### Step 3: Install Dependencies
+
+```npm install```
+
+### Step 4: Run Seeder Command
+Run the following command to seed the database. This may take around 10 minutes due to a large amount of data.
+
+```npm run seed```
+Have some snacks while the seeding process completes.
+
+### Step 5: Start the Application
+
+```npm run start```
+
+The application will be available at http://localhost:3000/
+
+### Step 6: Access the Admin Panel
+
+To access the Admin Panel, use http://localhost:3000/api/v1/admin/login
+
+
+email and password formats : 
+======= USERS ===============
+user email = 1-30 in string + email from users object from user seeder
+user password= 1-30 in string + password from users object from user seeders
+
+user email =   email from users object from user seeder + 2-30 + USA
+user password= password from users object from user seeders +2-30+USA
+
+
+email and password formats : 
+============= Trainers ===================
+approved
+i from 2-20 and 1
+
+`${i}` + trainer.email + "trainer",
+`${i}` + trainer.password + "trainer",
+
+non approved
+i from 2-20 and 1
+`${i}` + trainer.email + "Trainer",
+`${i}` + trainer.password + "Trainer",
+
+email and password formats : 
+============= Gyms ===================
+
+for approved gyms
+i= 1  or between 11-20
+`${i}` + gym.email + "gym",
+`${i}` + gym.password + "gym"
+
+
+for pending gyms
+i= 1  or between 11-20
+`${i}` + gym.email + "Gym",
+`${i}` + gym.password + "Gym"

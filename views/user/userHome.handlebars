@@ -24,7 +24,7 @@
 
         <div class="col-md-4">
             <label for="state" class="form-label">State</label>
-            <select id="state" name="state" class="form-select">
+            <select id="state" name="state" class="form-select" multiple>
                 <option selected disabled>Choose...</option>
 
                 <option value="AL" {{#eq user.address.state "AL" }} selected {{/eq}}>Alabama</option>
@@ -108,9 +108,9 @@
                             </div>
                             <hr>
                             <div class="d-flex justify-content-between">
-                                <button class="btn btn-primary"><a href="/user/userProfile/{{this.userName}}/followers"
+                                <a href="/user/userProfile/{{this.userName}}/followers"
                                         class="text-white">View
-                                        Profile</a></button>
+                                        Profile</a>
                                 {{#if this.isFollowing}}
                                     <p>Following</p>
                                 {{else}}
@@ -144,9 +144,9 @@
                             <hr>
 
                             <div class="d-flex justify-content-between">
-                                <button class="btn btn-success"><a href="/user/trainerProfile/{{this.trainerName}}"
+                                <a href="/user/trainerProfile/{{this.trainerName}}"
                                         class="text-white">View
-                                        Profile</a></button>
+                                        Profile</a>
                                 {{#if this.isFollowing}}
                                     <p>Following</p>
                                 {{else}}
@@ -179,9 +179,9 @@
                             <hr>
 
                             <div class="d-flex justify-content-between">
-                                <button class="btn btn-warning"><a href="/user/gymProfile/{{this._id}}"
+                                <a href="/user/gymProfile/{{this._id}}"
                                         class="text-white">View
-                                        Profile</a></button>
+                                        Profile</a>
                                 {{#if this.isFollowing}}
                                     <p>Following</p>
                                 {{else}}

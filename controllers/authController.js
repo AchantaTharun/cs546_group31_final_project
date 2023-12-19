@@ -277,7 +277,7 @@ export const gymSignup = async (req, res) => {
       ownerLName,
     } = req.body;
     let address = { street: street, city: city, state: state, zip: zip };
-    const newGym = await Gym.create({
+    const newGym = await Gym({
       gymName,
       email,
       password,
@@ -287,6 +287,18 @@ export const gymSignup = async (req, res) => {
       ownerFName,
       ownerLName,
     });
+
+    const validationErrors = newGym.validateSync();
+    if (validationErrors) {
+      const errors = Object.values(validationErrors.errors).map(
+        (error) => error.message
+      );
+      return res.render("gymSignUp", {
+        errors,
+        hasErrors: true,
+        formData: req.body,
+      });
+    }
     const signUpRequest = await SignUpRequest.create({
       requestedBy: newGym._id,
       requestType: "gym",
@@ -302,9 +314,10 @@ export const gymSignup = async (req, res) => {
     // 	},
     // });
   } catch (err) {
-    res.status(400).json({
-      status: "fail",
-      message: err.message,
+    return res.render("gymSignUp", {
+      errors : [err.message],
+      hasErrors: true,
+      formData: req.body,
     });
   }
 };

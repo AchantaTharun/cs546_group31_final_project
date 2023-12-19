@@ -1,54 +1,30 @@
 <form class="row g-3" action="/gym/profile/edit" method="post">
 	<div class="mx-auto p-2 m-3">
-		<img
-			class="profile"
-			src="https://bootdey.com/img/Content/avatar/avatar3.png"
-			alt=""
-		/>
+		<img class="profile" src="https://bootdey.com/img/Content/avatar/avatar3.png" alt="">
 	</div>
 	<h3>Gym Information:</h3>
-	{{! <div class="col-md-12">
-		<label for="bio" class="form-label">Bio</label>
-		<input type="text" class="form-control" id="bio" />
-	</div> }}
 	<div class="col-md-6">
 		<label for="gymName" class="form-label">Gym Name</label>
-		<input type="text" class="form-control" id="gymName" name="gymName" />
+		<input type="text" class="form-control" id="gymName" name="gymName">
 	</div>
 
 	<div class="col-md-6">
 		<label for="email" class="form-label">Email</label>
-		<input type="email" class="form-control" id="email" name="email" />
+		<input type="email" class="form-control" id="email" name="email">
 	</div>
 	<h3 class="mt-5">Address:</h3>
 	<div class="col-12">
 		<label for="street" class="form-label">Street</label>
-		<input
-			type="text"
-			class="form-control"
-			id="street"
-			placeholder="1234 Main St"
-			name="street"
-		/>
+		<input type="text" class="form-control" id="street" placeholder="1234 Main St" name="street">
 	</div>
-	{{! <div class="col-12">
-		<label for="apartment" class="form-label">Apartment or Suit</label>
-		<input
-			type="text"
-			class="form-control"
-			id="apartment"
-			placeholder="Apartment, studio, or floor"
-			name="apartment"
-		/>
-	</div> }}
 	<div class="col-md-6">
 		<label for="city" class="form-label">City</label>
-		<input type="text" class="form-control" id="city" name="city" />
+		<input type="text" class="form-control" id="city" name="city">
 	</div>
 	<div class="col-md-4">
 		<label for="state" class="form-label">State</label>
 		<select id="state" class="form-select" name="state">
-			<option selected disabled>Choose...</option>
+			<option selected="" disabled="">Choose...</option>
 			<option value="AL">Alabama</option>
 			<option value="AK">Alaska</option>
 			<option value="AZ">Arizona</option>
@@ -104,7 +80,7 @@
 	</div>
 	<div class="col-md-2">
 		<label for="zip" class="form-label">Zip</label>
-		<input type="text" class="form-control" id="zip" name="zip" />
+		<input type="text" class="form-control" id="zip" name="zip">
 	</div>
 	<div class="col-12">
 		<button type="submit" class="btn btn-primary">Submit</button>

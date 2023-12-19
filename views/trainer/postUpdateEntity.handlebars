@@ -5,11 +5,11 @@
 {{#if hasData}}
         <h4>IMAGE :</h4>                                          
         <img src="{{post.img}}" id="imageInput" class="profile-image" alt="IMAGE NOT FOUND">
-<form action="/trainer/update/post" method="POST" id="entity-update" novalidate>
+<form action="/trainer/update/post" method="POST" id="entity-update" novalidate="">
     <br>
     <label for="title">
         POST TITLE :                                                 
-        <input type="text" name="title" id="title" value="{{post.title}}" >
+        <input type="text" name="title" id="title" value="{{post.title}}">
     </label>
     <br>
     
@@ -19,19 +19,19 @@
     </label>
     <br>
     <label for="id">
-        <input name="id" id="id" value="{{post._id}}" readonly hidden>
+        <input name="id" id="id" value="{{post._id}}" readonly="" hidden="">
     </label>
     <br>
     <label for="titleOld">
-        <input name="titleOld" id="titleOld" value="{{post.title}}" readonly hidden>
+        <input name="titleOld" id="titleOld" value="{{post.title}}" readonly="" hidden="">
     </label>
     <br>
     <label for="descriptionOld">
-        <input name="descriptionOld" id="descriptionOld" value="{{post.description}}" readonly hidden>
+        <input name="descriptionOld" id="descriptionOld" value="{{post.description}}" readonly="" hidden="">
     </label>
     <br>
     <label for="imageSrc">                                           
-        <input value="{{post.img}}" name="imageSrc" id="imageSrc" readonly hidden>
+        <input value="{{post.img}}" name="imageSrc" id="imageSrc" readonly="" hidden="">
     </label>
     <button type="submit">UPDATE POST</button>
 </form>

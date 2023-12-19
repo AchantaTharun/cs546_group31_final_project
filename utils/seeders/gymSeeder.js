@@ -15,16 +15,15 @@ function getRandomWorkoutType() {
     "flexibility",
     "sports",
     "crossFit",
-    "body Weight",
+    "bodyWeight",
   ];
-
   const randomIndex = Math.floor(Math.random() * workoutTypes.length);
-
   return workoutTypes[randomIndex];
 }
+
 function generateRandomAddress() {
-  const street = generateRandomString(3, 50);
-  const city = generateRandomString(3, 50);
+  const street = generateRandomString(4, 50);
+  const city = generateRandomString(4, 50);
   const state = generateRandomState();
   const zip = generateRandomZip();
 
@@ -102,7 +101,6 @@ function generateRandomState() {
     "WA",
     "WV",
     "WI",
-    "WY",
   ];
 
   return states[Math.floor(Math.random() * states.length)];
@@ -354,7 +352,7 @@ const gyms = [
 ];
 
 (async () => {
-  await Gym.deleteMany();
+  // await Gym.deleteMany();
   await SignUpRequest.deleteMany();
 
   async function seedGymsNearMe() {
@@ -389,7 +387,7 @@ const gyms = [
         });
       }
 
-      console.log("Gyms seeded successfully!");
+      console.log("5. Gyms near me seeded successfully!");
     } catch (err) {
       console.error("Error seeding Trainers:", err);
     }
@@ -411,9 +409,9 @@ const gyms = [
             ownerFName: gym.ownerFName,
             ownerLName: gym.ownerLName,
             gymName: `${i}` + gym.ownerLName + "Gym",
-            email: `${i}` + gym.email + "gym",
-            password: `${i}` + gym.password + "gym",
-            passwordConfirm: `${i}` + gym.password + "gym",
+            email: `${i}` + gym.email + "Gym",
+            password: `${i}` + gym.password + "Gym",
+            passwordConfirm: `${i}` + gym.password + "Gym",
             location: location,
             workoutType,
             address,
@@ -427,7 +425,7 @@ const gyms = [
           });
         }
       }
-      console.log("Gyms seeded successfully!");
+      console.log("6. USA Gyms seeded successfully!");
     } catch (err) {
       console.error("Error seeding Gyms:", err);
     }

@@ -37,7 +37,7 @@ const userSchema = new mongoose.Schema({
 			"Please enter a valid user name, user name can only contain letters and numbers",
 		],
 		minLength: [2, "User name must be at least 2 characters long"],
-		maxLength: [20, "User name must be less than 20 characters long"],
+		maxLength: [25, "User name must be less than 25 characters long"],
 	},
 	email: {
 		type: String,
@@ -66,7 +66,7 @@ const userSchema = new mongoose.Schema({
 		required: [true, "Please enter your password"],
 		trim: true,
 		minLength: [8, "Password must be at least 8 characters long"],
-		maxLength: [20, "Password must be less than 20 characters long"],
+		maxLength: [25, "Password must be less than 25 characters long"],
 		select: false,
 	},
 	passwordConfirm: {

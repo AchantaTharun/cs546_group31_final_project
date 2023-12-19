@@ -117,11 +117,29 @@
                         {{/each}}
                     </p>
                     <div class="btn-group" role="group" aria-label="Session Buttons">
-                        <button type="button" class="btn btn-danger remove-btn"
-                            data-sessionid="{{this._id}}">Remove</button>
+                        <button type="button" class="btn btn-danger remove-btn" data-sessionid="{{this._id}}">Remove</button>
                     </div>
                 </div>
             </div>
         {{/each}}
     {{/if}}
-</div>
+
+    {{#if hasMeals}}
+        {{#each mmeals}}
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Meal: {{ this.title }}</h5>
+                    <p class="card-text">
+                        Description: {{ this.description }}
+                    </p>
+                    <p class="card-text">
+                        Meals:<br>
+                        {{#each this.meals}}
+                            {{ this.name }}: {{ this.description }}<br>
+                        {{/each}}
+                    </p>
+                </div>
+            </div>
+        {{/each}}
+    {{/if}}
+</div></div></div></div></div></div></div>

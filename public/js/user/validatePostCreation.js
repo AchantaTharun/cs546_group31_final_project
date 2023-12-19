@@ -13,7 +13,7 @@ if(postForm){
         comment = comment.value;
         let error = document.getElementById('error');
         let missingFields = "";
-    
+        error.hidden = true;
         if(!title)
         {
  
@@ -33,6 +33,7 @@ if(postForm){
         if(missingFields!=="")
         {
             error.innerHTML = `These fileds are missing : ${missingFields}`;
+            error.hidden = false;
             return false;
         }
 
@@ -43,6 +44,7 @@ if(postForm){
         }catch(e)
         {
             error.innerHTML = e;
+            error.hidden = false;
             return false;
         }
         postForm.submit();

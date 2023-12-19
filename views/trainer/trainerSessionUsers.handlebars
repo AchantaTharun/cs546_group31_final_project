@@ -8,17 +8,15 @@
     </ul>
   </div>
 {{else}}
-  <H3> Session Info:</H3>
+  <h3> Session Info:</h3>
   <div class="card mb-3">
     <div class="card-body">
       <div class="d-flex flex-column flex-lg-row">
-        <span class="avatar avatar-text rounded-3 me-4 mb-2"><i
-            class="icon-calendar icon-2x"
-          ></i></span>
+        <span class="avatar avatar-text rounded-3 me-4 mb-2"><i class="icon-calendar icon-2x"></i></span>
         <div class="row flex-fill">
           <div class="col-sm-5">
             <h4 class="h5">{{session.name}}</h4>
-            <small>Place : {{session.place}}</small><br />
+            <small>Place : {{session.place}}</small><br>
             <div>
               <medium>Workout Type : {{session.workoutType}}</medium></div>
           </div>
@@ -33,7 +31,7 @@
   </div>
 
   <div class="container">
-    <H3> Registered Users:</H3>
+    <h3> Registered Users:</h3>
     <div class="row">
       <div class="col-md-8">
         <div class="people-nearby">
@@ -42,19 +40,13 @@
               <div class="nearby-user">
                 <div class="row">
                   <div class="col-md-2 col-sm-2">
-                    <img
-                      src="https://bootdey.com/img/Content/avatar/avatar7.png"
-                      alt="user"
-                      class="profile-photo-lg"
-                    />
+                    <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="user" class="profile-photo-lg">
                   </div>
                   <div class="col-md-7 col-sm-7">
-                    <h5><a
-                        href="#"
-                        class="profile-link"
-                      >{{this.firstName}}</a></h5>
+                    <h5>User Name : {{this.userName}}</h5>
                     <p>Registered</p>
-                    <p class="text-muted">500m away</p>
+                    <p class="text-muted">Email : {{this.email}}</p>
+                    <p class="text-muted">Phone :{{this.phone}}</p>
                   </div>
                 </div>
               </div>

@@ -78,6 +78,54 @@ function generateRandomAddress() {
     "NC",
     "MI",
     "WA",
+    "AL",
+    "AK",
+    "AZ",
+    "AR",
+    "CA",
+    "CO",
+    "CT",
+    "DE",
+    "FL",
+    "GA",
+    "HI",
+    "ID",
+    "IL",
+    "IN",
+    "IA",
+    "KS",
+    "KY",
+    "LA",
+    "ME",
+    "MD",
+    "MA",
+    "MI",
+    "MS",
+    "MO",
+    "MT",
+    "NE",
+    "NV",
+    "NH",
+    "NJ",
+    "NM",
+    "NY",
+    "NC",
+    "ND",
+    "OH",
+    "OK",
+    "OR",
+    "PA",
+    "RI",
+    "SC",
+    "SD",
+    "TN",
+    "TX",
+    "UT",
+    "VT",
+    "VA",
+    "WA",
+    "WV",
+    "WI",
   ];
 
   const randomStreet =
@@ -272,124 +320,125 @@ const users = [
     passwordConfirm: "mortypassword",
     bio: "Constantly dragged into interdimensional adventures by his genius grandfather, Rick.",
   },
-  {
-    firstName: "Saul",
-    lastName: "Goodman",
-    userName: "bettercallsaul",
-    email: "saul@example.com",
-    password: "saulpassword",
-    passwordConfirm: "saulpassword",
-    bio: "Savvy lawyer with a penchant for morally ambiguous cases and colorful suits.",
-  },
-  {
-    firstName: "Anthony",
-    lastName: "SopranoJr",
-    userName: "ajsoprano",
-    email: "aj@example.com",
-    password: "ajpassword",
-    passwordConfirm: "ajpassword",
-    bio: "Son of Tony Soprano, navigating life under the shadow of organized crime.",
-  },
-  {
-    firstName: "Tyrion",
-    lastName: "Soprano",
-    userName: "tyrionjr",
-    email: "tyrionjr@example.com",
-    password: "tyrionpassword",
-    passwordConfirm: "tyrionpassword",
-    bio: "Clever and strategic member of the Soprano family, handling complex situations.",
-  },
-  {
-    firstName: "Daenerys",
-    lastName: "Targaryen",
-    userName: "motherofdragons",
-    email: "daenerys@example.com",
-    password: "daeneryspassword",
-    passwordConfirm: "daeneryspassword",
-    bio: "Last surviving Targaryen, aiming to reclaim the Iron Throne with her dragons.",
-  },
-  {
-    firstName: "Hank",
-    lastName: "Schrader",
-    userName: "minerals",
-    email: "hank@example.com",
-    password: "hankpassword",
-    passwordConfirm: "hankpassword",
-    bio: "Dedicated DEA agent with a passion for collecting minerals as a hobby.",
-  },
-  {
-    firstName: "Beth",
-    lastName: "Smith",
-    userName: "spacevet",
-    email: "beth@example.com",
-    password: "bethpassword",
-    passwordConfirm: "bethpassword",
-    bio: "Veterinarian with a penchant for intergalactic adventures alongside her eccentric family.",
-  },
-  {
-    firstName: "Seth",
-    lastName: "Bullock",
-    userName: "marshalbullock",
-    email: "seth@example.com",
-    password: "sethpassword",
-    passwordConfirm: "sethpassword",
-    bio: "Honor-bound lawman in the rough and tumble town of Deadwood.",
-  },
-  {
-    firstName: "Paulie",
-    lastName: "Gualtieri",
-    userName: "paulieWalnuts",
-    email: "paulie@example.com",
-    password: "pauliepassword",
-    passwordConfirm: "pauliepassword",
-    bio: "Soprano crime family capo known for his loyal and sometimes unpredictable nature.",
-  },
-  {
-    firstName: "Arya",
-    lastName: "Stark",
-    userName: "needleBearer",
-    email: "arya@example.com",
-    password: "aryapassword",
-    passwordConfirm: "aryapassword",
-    bio: "Fearless and vengeful assassin seeking justice and reclaiming her identity.",
-  },
-  {
-    firstName: "Gus",
-    lastName: "Fring",
-    userName: "lospolloshermanos",
-    email: "gus@example.com",
-    password: "guspassword",
-    passwordConfirm: "guspassword",
-    bio: "Meticulous and calculating drug lord with a front in the fast-food industry.",
-  },
-  {
-    firstName: "Summer",
-    lastName: "Smith",
-    userName: "summersmith",
-    email: "summer@example.com",
-    password: "summerpassword",
-    passwordConfirm: "summerpassword",
-    bio: "Adventure-loving teenager, often caught up in her family's chaotic escapades.",
-  },
-  {
-    firstName: "Calamity",
-    lastName: "Jane",
-    userName: "wildwestjane",
-    email: "calamity@example.com",
-    password: "calamitypassword",
-    passwordConfirm: "calamitypassword",
-    bio: "Wild and adventurous frontierswoman with a knack for getting into trouble.",
-  },
-  {
-    firstName: "Junior",
-    lastName: "Soprano",
-    userName: "juniorsoprano",
-    email: "junior@example.com",
-    password: "juniorpassword",
-    passwordConfirm: "juniorpassword",
-    bio: "Tony Soprano's uncle, navigating life within the complex dynamics of the Soprano family.",
-  },
 ];
+//   {
+//     firstName: "Saul",
+//     lastName: "Goodman",
+//     userName: "bettercallsaul",
+//     email: "saul@example.com",
+//     password: "saulpassword",
+//     passwordConfirm: "saulpassword",
+//     bio: "Savvy lawyer with a penchant for morally ambiguous cases and colorful suits.",
+//   },
+//   {
+//     firstName: "Anthony",
+//     lastName: "SopranoJr",
+//     userName: "ajsoprano",
+//     email: "aj@example.com",
+//     password: "ajpassword",
+//     passwordConfirm: "ajpassword",
+//     bio: "Son of Tony Soprano, navigating life under the shadow of organized crime.",
+//   },
+//   {
+//     firstName: "Tyrion",
+//     lastName: "Soprano",
+//     userName: "tyrionjr",
+//     email: "tyrionjr@example.com",
+//     password: "tyrionpassword",
+//     passwordConfirm: "tyrionpassword",
+//     bio: "Clever and strategic member of the Soprano family, handling complex situations.",
+//   },
+//   {
+//     firstName: "Daenerys",
+//     lastName: "Targaryen",
+//     userName: "motherofdragons",
+//     email: "daenerys@example.com",
+//     password: "daeneryspassword",
+//     passwordConfirm: "daeneryspassword",
+//     bio: "Last surviving Targaryen, aiming to reclaim the Iron Throne with her dragons.",
+//   },
+//   {
+//     firstName: "Hank",
+//     lastName: "Schrader",
+//     userName: "minerals",
+//     email: "hank@example.com",
+//     password: "hankpassword",
+//     passwordConfirm: "hankpassword",
+//     bio: "Dedicated DEA agent with a passion for collecting minerals as a hobby.",
+//   },
+//   {
+//     firstName: "Beth",
+//     lastName: "Smith",
+//     userName: "spacevet",
+//     email: "beth@example.com",
+//     password: "bethpassword",
+//     passwordConfirm: "bethpassword",
+//     bio: "Veterinarian with a penchant for intergalactic adventures alongside her eccentric family.",
+//   },
+//   {
+//     firstName: "Seth",
+//     lastName: "Bullock",
+//     userName: "marshalbullock",
+//     email: "seth@example.com",
+//     password: "sethpassword",
+//     passwordConfirm: "sethpassword",
+//     bio: "Honor-bound lawman in the rough and tumble town of Deadwood.",
+//   },
+//   {
+//     firstName: "Paulie",
+//     lastName: "Gualtieri",
+//     userName: "paulieWalnuts",
+//     email: "paulie@example.com",
+//     password: "pauliepassword",
+//     passwordConfirm: "pauliepassword",
+//     bio: "Soprano crime family capo known for his loyal and sometimes unpredictable nature.",
+//   },
+//   {
+//     firstName: "Arya",
+//     lastName: "Stark",
+//     userName: "needleBearer",
+//     email: "arya@example.com",
+//     password: "aryapassword",
+//     passwordConfirm: "aryapassword",
+//     bio: "Fearless and vengeful assassin seeking justice and reclaiming her identity.",
+//   },
+//   {
+//     firstName: "Gus",
+//     lastName: "Fring",
+//     userName: "lospolloshermanos",
+//     email: "gus@example.com",
+//     password: "guspassword",
+//     passwordConfirm: "guspassword",
+//     bio: "Meticulous and calculating drug lord with a front in the fast-food industry.",
+//   },
+//   {
+//     firstName: "Summer",
+//     lastName: "Smith",
+//     userName: "summersmith",
+//     email: "summer@example.com",
+//     password: "summerpassword",
+//     passwordConfirm: "summerpassword",
+//     bio: "Adventure-loving teenager, often caught up in her family's chaotic escapades.",
+//   },
+//   {
+//     firstName: "Calamity",
+//     lastName: "Jane",
+//     userName: "wildwestjane",
+//     email: "calamity@example.com",
+//     password: "calamitypassword",
+//     passwordConfirm: "calamitypassword",
+//     bio: "Wild and adventurous frontierswoman with a knack for getting into trouble.",
+//   },
+//   {
+//     firstName: "Junior",
+//     lastName: "Soprano",
+//     userName: "juniorsoprano",
+//     email: "junior@example.com",
+//     password: "juniorpassword",
+//     passwordConfirm: "juniorpassword",
+//     bio: "Tony Soprano's uncle, navigating life within the complex dynamics of the Soprano family.",
+//   },
+
 
 (async () => {
   await User.deleteMany();
@@ -422,13 +471,13 @@ const users = [
         await newUser.save();
       }
 
-      //console.log("Users seeded successfully!");
+      console.log("7. Users near me seeded successfully!");
     } catch (err) {
       console.error("Error seeding users:", err);
     }
   }
 
-  async function seedUsersUSANearPoint(num, location) {
+  async function seedUsersUSANearPoint(num, location, count) {
     try {
       for (const user of users) {
         const newLoc = generateRandomCoordinates(
@@ -438,15 +487,15 @@ const users = [
         );
         let parts = user.email.split("@");
         let newEmail =
-          parts[0] + "@example" + num + "." + parts[1].split(".")[1];
+          parts[0] + count.toString() + "@example" + num + "." + parts[1].split(".")[1];
         const favoriteWorkout = getRandomWorkoutType();
         const newUser = new User({
           firstName: user.firstName,
           lastName: user.lastName,
-          userName: "1" + user.userName + num,
-          email: "1" + newEmail,
-          password: "1" + user.password + num,
-          passwordConfirm: "1" + user.password + num,
+          userName: user.userName + num + "USA" + count.toString(),
+          email: newEmail + "USA",
+          password: user.password + num + "USA",
+          passwordConfirm: user.password + num + "USA",
           location: newLoc,
           favoriteWorkout,
           gender: getRandomGender(),
@@ -463,15 +512,16 @@ const users = [
         await newUser.save();
       }
 
-      // console.log("User seeded successfully!");
+      // console.log("2.Users in USA seeded successfully!");
     } catch (err) {
       console.error("Error seeding users:", err);
     }
   }
   async function seedUsersUSA() {
     try {
+      let count=1000;
       for (const user of users) {
-        for (let i = 2; i <= 30; i++) {
+        for (let i = 2; i <= 5; i++) {
           const location = generateRandomCoordinatesUSA();
           const favoriteWorkout = getRandomWorkoutType();
           const newUser = new User({
@@ -493,13 +543,13 @@ const users = [
             dateOfBirth: generateRandomBirthdate(),
             bio: user.bio,
           });
-
+          count-=1;
           await newUser.save();
-          // await seedUsersUSANearPoint(i, location);
+          await seedUsersUSANearPoint(i, location,count);
         }
       }
 
-      //console.log("Users seeded successfully!");
+      console.log("8. USA Users seeded successfully!");
     } catch (err) {
       console.error("Error seeding users:", err);
     }

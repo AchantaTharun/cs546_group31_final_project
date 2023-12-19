@@ -77,6 +77,36 @@ export const renderTrainerMealPlans = async (req, res) => {
   }
 };
 
+export const renderTrainerFollowers = async (req, res) => {
+  try {
+    const trainer = req.trainer;
+    const followersId = trainer.followers.users;
+    
+    const followers = await User.find({
+      _id: { $in: followersId },
+    }).lean();
+
+    
+    res.render("trainer/trainerFollowers", {
+      trainer: trainer.toObject(),
+      trainerId: trainer._id.toString(),
+      followers,
+      type: "trainer",
+      layout: "trainerHome",
+    });
+  } catch (error) {
+    res.render("trainer/trainerFollowers", {
+      trainer: req.trainer.toObject(),
+      trainerId: req.trainer._id.toString(),
+      type: "trainer",
+      layout: "trainerHome",
+      errors: [
+        "Some error occured during loading followers page, Please contact Administator!",
+      ],
+    });
+  }
+};
+
 export const renderTrainerMealPlansCreate = async (req, res) => {
   try {
     const trainer = req.trainer;

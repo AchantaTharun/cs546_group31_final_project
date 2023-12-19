@@ -1,24 +1,24 @@
 <div class="container">
 {{#if hasData}}
-<form id="entity-display" novalidate>
+<form id="entity-display" novalidate="">
     <label for="title">
         POST TITLE :                                                 
-        <input type="text" name="title" id="title" value="{{post.title}}" readonly>
+        <input type="text" name="title" id="title" value="{{post.title}}" readonly="">
     </label>
     <br>
     <label>
         IMAGE :                                                 
-        <img id="img" class="profile-image"  src="{{post.img}}"  alt="IMAGE NOT FOUND">
+        <img id="img" class="profile-image" src="{{post.img}}" alt="IMAGE NOT FOUND">
     </label>
     <br>
     <label for="description">
          DESCRIPTION:                                                 
-        <input type="text" name="description" value="{{post.description}}" id="description" readonly>
+        <input type="text" name="description" value="{{post.description}}" id="description" readonly="">
     </label>
     <br>
     <label for="createdAt">
         CREATED AT :                                                 
-        <input type="text" name="createdAt" value="{{post.createdAt}}" id="createdAt" readonly>
+        <input type="text" name="createdAt" value="{{post.createdAt}}" id="createdAt" readonly="">
     </label>
     <br>
 </form>
@@ -29,12 +29,12 @@
 
 
 {{#if hasData}}
-<form action="/trainer/post/addComment" method="POST" id="entity-submit" novalidate>
+<form action="/trainer/post/addComment" method="POST" id="entity-submit" novalidate="">
     <label for="comment"> 
         <textarea name="comment" id="comment" placeholder="Add Your comments.." rows="4" cols="40"></textarea>
     </label>
     <label for="id">
-        <input name="id" id="id" value="{{post._id}}" readonly hidden>
+        <input name="id" id="id" value="{{post._id}}" readonly="" hidden="">
     </label>
     <br>
     <button type="submit">ADD COMMENTS</button>

@@ -20,14 +20,14 @@ async function createMealPlan(trainerId) {
     const mealSlots = Array.from(
       mealSlotsContainer.getElementsByClassName("mealSlotGroup")
     ).map((group) => {
-      const name = group.querySelector('[name="mealName[]"]').value;
-      const description = group.querySelector(
+      const mname = group.querySelector('[name="mealName[]"]').value;
+      const mdescription = group.querySelector(
         '[name="mealDescription[]"]'
       ).value;
-      if (!name.trim() || !description.trim()) {
+      if (!mname.trim() || !mdescription.trim()) {
         errors.push("Please enter name and description of each meal section");
       }
-      return { name: name.trim(), description: description.trim };
+      return { name: mname.trim(), description: mdescription.trim() };
     });
 
     if (!title) {

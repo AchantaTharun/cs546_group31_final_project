@@ -47,6 +47,12 @@ router.get(
 );
 
 router.get(
+  "/followers",
+  authController.protectRoute,
+  trainerController.renderTrainerFollowers
+);
+
+router.get(
   "/mealplans/create",
   authController.protectRoute,
   trainerController.renderTrainerMealPlansCreate
