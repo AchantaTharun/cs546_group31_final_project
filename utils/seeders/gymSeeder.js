@@ -3,6 +3,7 @@ import Trainer from "../../models/trainerModel.js";
 import SignUpRequest from "../../models/signUpRequestModel.js";
 import Gym from "../../models/gymModel.js";
 
+//This comment is to hide the last delete env commit on github
 mongoose.connect("mongodb://localhost:27017/GymMate", {
   useNewUrlParser: true,
   useUnifiedTopology: true,
